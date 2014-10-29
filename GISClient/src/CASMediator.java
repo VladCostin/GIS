@@ -9,6 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
 
+import AALComponent.AALComponent;
 import GIS.GISComponent;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
@@ -22,8 +23,7 @@ public class CASMediator implements MediatorIF, ActionListener{
 	/**
 	 * the list of components that collaborate using the MediatorIf
 	 */
-	ArrayList<ComponentIf> components;
-	// Gis, 
+	ArrayList<ComponentIf> components; 
 	
 	
 	/**
@@ -49,6 +49,7 @@ public class CASMediator implements MediatorIF, ActionListener{
 	public void initComponents() {
 		components = new ArrayList<ComponentIf>();
 		components.add(new GISComponent());
+		components.add(new AALComponent());
 		
 	}
 
@@ -79,6 +80,7 @@ public class CASMediator implements MediatorIF, ActionListener{
 		group = new ButtonGroup();
 		menuItemGIS = new JRadioButtonMenuItem("GIS");
 		menuItemGPS = new JRadioButtonMenuItem("GPS");
+		menuItemGPS = new JRadioButtonMenuItem("AAL");
 		
 		
 		menuItemGIS.addActionListener(this);
@@ -106,13 +108,20 @@ public class CASMediator implements MediatorIF, ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		
 		JRadioButtonMenuItem menuItem = (JRadioButtonMenuItem) e.getSource();
+		String text = menuItem.getText();
 		if(menuItem.getText().equals("GIS"))
 		{
 			System.out.println("intra aici");
-			m_frame.setContentPane(components.get(0).getShape());
+			m_frame.setContentPane(components.get(0).getPanel());
 			m_frame.validate();
 			m_frame.repaint();
 			
+		}
+		if(menuItem.getText().equals("AAL"))
+		{
+			m_frame.setContentPane(components.get(1).getPanel());
+			m_frame.validate();
+			m_frame.repaint();
 		}
 
 		

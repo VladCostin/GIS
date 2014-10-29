@@ -539,7 +539,7 @@ public class  GISComponent
   }
 
   @Override
-  public Panel getShape() {
+  public Panel getPanel() {
 	  // TODO Auto-generated method stub
 	  return _panel;
   }
