@@ -2,7 +2,7 @@ package ContextModel;
 
 public enum ElementType {
 
-	LOCATION_CONTEXT,
+	Location,
 	
 	TEMPORAL_CONTEXT,
 	

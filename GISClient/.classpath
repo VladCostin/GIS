@@ -8,5 +8,7 @@
 	<classpathentry kind="lib" path="libs/jsde91_sdk.jar"/>
 	<classpathentry kind="lib" path="libs/postgresql-9.3-1102.jdbc3.jar"/>
 	<classpathentry kind="lib" path="libs/postgis.jar"/>
+	<classpathentry kind="lib" path="libs/kxml2-2.3.0.jar"/>
+	<classpathentry kind="lib" path="libs/xerces.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

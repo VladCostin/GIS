@@ -29,7 +29,7 @@ public class LocationContext extends ContextElement{
 	 * @param _longitude 
 	 * @param _latitude
 	 */
-	LocationContext(double _longitude, double _latitude)
+	public LocationContext(double _longitude, double _latitude)
 	{
 		m_latitude = _latitude;
 		m_longitude = _longitude;

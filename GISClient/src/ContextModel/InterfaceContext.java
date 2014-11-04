@@ -13,4 +13,6 @@ public interface InterfaceContext {
 	 * when the event should be triggered
 	 */
 	public boolean checkCompatibility(InterfaceContext _context);
+	
+	public void setM_data(MetadataContext m_data);
 }

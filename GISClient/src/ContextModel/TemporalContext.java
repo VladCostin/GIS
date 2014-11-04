@@ -26,6 +26,12 @@ public class TemporalContext extends ContextElement{
 		// TODO Auto-generated constructor stub
 	}
 	
+	public TemporalContext(int _hour, int _minute)
+	{
+		m_hour = _hour;
+		m_minute = _minute;
+	}
+	
 	public TemporalContext(int _day, int _hour, int _minute)
 	{
 		m_day = _day;

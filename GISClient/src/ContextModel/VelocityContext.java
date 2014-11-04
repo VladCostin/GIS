@@ -6,6 +6,22 @@ package ContextModel;
  */
 public class VelocityContext extends ContextElement{
 
+	/**
+	 * the value the user is moving
+	 */
+	int m_speed;
+	
+	public VelocityContext() {
+		
+	}
+	/**
+	 * @param _speed : the speed received from xml
+	 */
+	public VelocityContext(int _speed)
+	{
+		m_speed = _speed;
+	}
+	
 	
 	
 }
