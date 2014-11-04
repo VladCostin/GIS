@@ -131,7 +131,8 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	}
 
 	@Override
-	public void communicateGeoObject(GeoObject[] _obj) {
+	public void communicateGeoObject(GeoObject[] _obj)
+	{
 		
 		
 		
@@ -139,7 +140,8 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	}
 
 	@Override
-	public void communicateContext(ContextElement[] _obj) {
+	public void communicateContext(ContextElement[] _obj) 
+	{
 		
 		
 	}
