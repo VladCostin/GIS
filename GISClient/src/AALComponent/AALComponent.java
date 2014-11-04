@@ -51,4 +51,10 @@ public class AALComponent implements ComponentIf, ActionListener{
 		m_parser.factoryMethod();
 	}
 
+	@Override
+	public void update() {
+		
+		
+	}
+
 }

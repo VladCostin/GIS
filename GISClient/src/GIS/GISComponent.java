@@ -543,6 +543,11 @@ public class  GISComponent
 	  // TODO Auto-generated method stub
 	  return _panel;
   }
+
+  @Override
+  public void update() {
+	  // TODO Auto-generated method stub	
+  }
 }
 
 /**

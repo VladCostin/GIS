@@ -10,15 +10,18 @@ import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
 
 import AALComponent.AALComponent;
+import ContextModel.ContextElement;
 import GIS.GISComponent;
+import GIS.GeoObject;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
+import Mediator.Subject;
 
 /**
  * @author Vlad Herescu
  *
  */
-public class CASMediator implements MediatorIF, ActionListener{
+public class CASMediator implements MediatorIF, ActionListener, Subject{
 
 	/**
 	 * the list of components that collaborate using the MediatorIf
@@ -124,6 +127,20 @@ public class CASMediator implements MediatorIF, ActionListener{
 			m_frame.repaint();
 		}
 
+		
+	}
+
+	@Override
+	public void communicateGeoObject(GeoObject[] _obj) {
+		
+		
+		
+		
+	}
+
+	@Override
+	public void communicateContext(ContextElement[] _obj) {
+		
 		
 	}
 	
