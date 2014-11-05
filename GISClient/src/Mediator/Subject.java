@@ -24,4 +24,5 @@ public interface Subject {
 	 * @param _obj : the context elements received by the system from the environment
 	 */
 	public void communicateContext(ContextElement[] _obj);
+	
 }

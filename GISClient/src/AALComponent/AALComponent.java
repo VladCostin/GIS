@@ -12,7 +12,11 @@ import java.awt.event.ItemListener;
 
 import java.util.HashMap;
 
+import ContextModel.ContextElement;
+import ContextModel.InterfaceContext;
 import Mediator.ComponentIf;
+import Mediator.Notification;
+import Mediator.Subject;
 
 /**
  * the component which show the parsed data
@@ -37,11 +41,19 @@ public class AALComponent implements ComponentIf, ItemListener{
 	 */
 	HashMap<String, InterfaceParser> m_concrete_parsers;
 
+	/**
+	 * the instance of the mediator, that will share all the data from each observer 
+	 */
+	Subject m_subject;
 
 	
-	public AALComponent() {
+	/**
+	 * @param _subject : the instance of CASMediator, that receives all the data and then shares it
+	 */
+	public AALComponent(Subject _subject) {
 		m_concrete_parsers = new HashMap<String,InterfaceParser>();
 		m_panel = initGUI();
+		m_subject = _subject;
 	}
 	
 	  /**
@@ -86,21 +98,21 @@ public class AALComponent implements ComponentIf, ItemListener{
 	}
 
 
-	@Override
-	public void update() {
-		
-		
-	}
+
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		
 		System.out.println(e.getItem().toString());
-		m_concrete_parsers.get(e.getItem().toString()).factoryMethod();
+		InterfaceContext context = m_concrete_parsers.get(e.getItem().toString()).factoryMethod();
 		
+		m_subject.communicateContext(new ContextElement[5]);
 		
-	//	m_parser = new FileSystemParser();
-	//	m_parser.factoryMethod();
+	}
+
+	@Override
+	public void update(Notification _notification) {
+		// TODO Auto-generated method stub
 		
 	}
 

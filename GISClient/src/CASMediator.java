@@ -15,7 +15,9 @@ import GIS.GISComponent;
 import GIS.GeoObject;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
+import Mediator.Notification;
 import Mediator.Subject;
+import POIComponent.POIComponent;
 
 /**
  * @author Vlad Herescu
@@ -26,7 +28,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	/**
 	 * the list of components that collaborate using the MediatorIf
 	 */
-	ArrayList<ComponentIf> components; 
+	ArrayList<ComponentIf> m_components; 
 	
 	
 	/**
@@ -50,9 +52,10 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	 * specifying the components of the 
 	 */
 	public void initComponents() {
-		components = new ArrayList<ComponentIf>();
-		components.add(new GISComponent());
-		components.add(new AALComponent());
+		m_components = new ArrayList<ComponentIf>();
+		m_components.add(new GISComponent(this));
+		m_components.add(new AALComponent(this));
+		m_components.add(new POIComponent());
 		
 	}
 
@@ -82,8 +85,8 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		menu = new JMenu("Options");
 		group = new ButtonGroup();
 		menuItemGIS = new JRadioButtonMenuItem("GIS");
-		menuItemGPS = new JRadioButtonMenuItem("GPS");
 		menuItemGPS = new JRadioButtonMenuItem("AAL");
+		menuItemGPS = new JRadioButtonMenuItem("POI");
 		
 		
 		menuItemGIS.addActionListener(this);
@@ -115,16 +118,20 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		if(menuItem.getText().equals("GIS"))
 		{
 			System.out.println("intra aici");
-			m_frame.setContentPane(components.get(0).getPanel());
+			m_frame.setContentPane(m_components.get(0).getPanel());
 			m_frame.validate();
 			m_frame.repaint();
 			
 		}
 		if(menuItem.getText().equals("AAL"))
 		{
-			m_frame.setContentPane(components.get(1).getPanel());
+			m_frame.setContentPane(m_components.get(1).getPanel());
 			m_frame.validate();
 			m_frame.repaint();
+		}
+		if(menuItem.getText().equals("POI"))
+		{
+			
 		}
 
 		
@@ -133,7 +140,12 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	@Override
 	public void communicateGeoObject(GeoObject[] _obj)
 	{
+		 
 		
+		for(ComponentIf component : m_components)
+		{
+			component.update(Notification.GEO_OBJECT);
+		}
 		
 		
 		
@@ -143,6 +155,12 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	public void communicateContext(ContextElement[] _obj) 
 	{
 		
+		System.out.println( _obj.getClass().getSimpleName());
+		
+		for(ComponentIf component : m_components)
+		{
+			component.update(Notification.CONTEXT_ELEMENT);
+		}
 		
 	}
 	

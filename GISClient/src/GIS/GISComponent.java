@@ -44,6 +44,8 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 
 import Mediator.ComponentIf;
+import Mediator.Notification;
+import Mediator.Subject;
 
 /** 
  * A class organizing the UI of this GIS client
@@ -109,12 +111,20 @@ public class  GISComponent
 	GeoServerInterface _currentInterface;
 	
 	public Panel _panel;
+	
+	
+	Subject m_subject; 
 
 
-  public GISComponent() {
+	/**
+	 * @param _subject
+	 */
+	public GISComponent(Subject _subject) {
 	  
-	_mapOptionsServer = new HashMap<String,GeoServerInterface>();  
-	_panel = initGUI();
+		_mapOptionsServer = new HashMap<String,GeoServerInterface>();  
+		_panel = initGUI();
+	
+		m_subject = _subject;
 	
 	  
  //   m_frame = new Frame("a test frame");
@@ -518,9 +528,9 @@ public class  GISComponent
   }
 
 
-  public static void main(String[] _argv) {
-  	GISComponent test = new GISComponent();
-  }
+  //public static void main(String[] _argv) {
+  //	GISComponent test = new GISComponent();
+  //}
 
   @Override
   public void itemStateChanged(ItemEvent e) {
@@ -545,7 +555,7 @@ public class  GISComponent
   }
 
   @Override
-  public void update() {
+  public void update(Notification _notification) {
 	  // TODO Auto-generated method stub	
   }
 }

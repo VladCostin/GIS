@@ -15,9 +15,11 @@ public interface ComponentIf {
 	public Panel getPanel();
 	
 	
+
 	/**
-	 * receives the data from the Mediator such as the context elements, geo objects, etc 
+	 * @param _notification : the notification sent by the subject
 	 */
-	public void update();
+	public void update(Notification _notification);
+	
 
 }
