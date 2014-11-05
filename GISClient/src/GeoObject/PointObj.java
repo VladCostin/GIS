@@ -1,10 +1,13 @@
-package GIS;
+package GeoObject;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+
+import GIS.GeoTransformationMatrix;
+import GIS.ObjectTeil;
 
 
 /**
@@ -20,14 +23,16 @@ public class PointObj extends ObjectTeil {
 	/**
 	 * the coordinate x of the point in Gaus Kruger system
 	 */
-	int _mx;
+	private int _mx;
 	
 	/**
 	 * the coordinate y of the point in Gaus Kruger system
 	 */
-	int _my;
+	private int _my;
 	
-	int _multiply_mx, _multiply_my;
+	private int _multiply_mx;
+
+	private int _multiply_my;
 	
 	
 	/**
@@ -50,12 +55,12 @@ public class PointObj extends ObjectTeil {
 	}
 
 	
-	@Override
+	/*@Override
 	public void multiply(GeoTransformationMatrix _matrix) {
 		Point p_m = _matrix.multiply(new Point(_mx, _my));
 		_multiply_mx = p_m.x;
 		_multiply_my = p_m.y;
-	}
+	}*/
 
 	@Override
 	public Rectangle getBounds() {
@@ -69,6 +74,38 @@ public class PointObj extends ObjectTeil {
 	
 		_g.setColor(fill);
 		_g.fillOval(_multiply_mx, _multiply_my, 10, 10);
+	}
+
+	public int get_my() {
+		return _my;
+	}
+
+	public void set_my(int _my) {
+		this._my = _my;
+	}
+
+	public int get_mx() {
+		return _mx;
+	}
+
+	public void set_mx(int _mx) {
+		this._mx = _mx;
+	}
+
+	public int get_multiply_mx() {
+		return _multiply_mx;
+	}
+
+	public void set_multiply_mx(int _multiply_mx) {
+		this._multiply_mx = _multiply_mx;
+	}
+
+	public int get_multiply_my() {
+		return _multiply_my;
+	}
+
+	public void set_multiply_my(int _multiply_my) {
+		this._multiply_my = _multiply_my;
 	}
 
 }

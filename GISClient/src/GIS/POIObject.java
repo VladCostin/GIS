@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 import java.awt.Image;
 import java.awt.Panel;
 
+import GeoObject.GeoObject;
+
 /**
  * a rudimentary class to represent point of interst objects
  */
