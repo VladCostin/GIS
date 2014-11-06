@@ -35,6 +35,15 @@ public class POIObject extends GeoObject {
    
   }
   
+  
+  public POIObject(String _id, int _type, Point _pt)
+  {
+	  super(_id, _type, null);
+	  m_point = _pt;
+	  
+  }
+  
+  
 /*  public POIObject(String _id, int _type) {
 		super(_id, _type);
 		// TODO Auto-generated constructor stub

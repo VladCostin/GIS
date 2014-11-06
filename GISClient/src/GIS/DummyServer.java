@@ -18,6 +18,10 @@ import de.intergis.JavaClient.comm.CgIGeoPart;
 
 
 
+
+
+
+
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
@@ -26,6 +30,12 @@ import java.awt.Rectangle;
 
 
 
+
+
+
+
+import GeoObject.AreaObj;
+import GeoObject.GeoObject;
 import de.intergis.JavaClient.gui.IgcConnection;
 
 public class DummyServer implements GeoServerInterface{

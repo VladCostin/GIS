@@ -1,5 +1,7 @@
 package GIS;
 
+import GeoObject.GeoObject;
+
 import com.esri.sde.sdk.client.SeConnection;
 import com.esri.sde.sdk.client.SeException;
 import com.esri.sde.sdk.client.SeLayer;

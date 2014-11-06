@@ -1,7 +1,9 @@
-package GIS;
+package GeoObject;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+
+import GIS.GeoTransformationMatrix;
 
 
 /**
@@ -20,7 +22,7 @@ public interface InterfaceDraw {
 	/**
 	 * @param _matrix : the matrix used to bring the data to the frame dimensions
 	 */
-	void multiply(GeoTransformationMatrix _matrix);
+	//void multiply(GeoTransformationMatrix _matrix);
 	
 	/**
 	 * @return : the bounds of the object

@@ -43,6 +43,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
+import GeoObject.GeoObject;
 import Mediator.ComponentIf;
 import Mediator.Notification;
 import Mediator.Subject;

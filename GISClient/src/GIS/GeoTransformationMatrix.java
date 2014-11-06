@@ -3,6 +3,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Polygon;
 
+import GeoObject.AreaObj;
+import GeoObject.InterfaceDraw;
+import GeoObject.LineObj;
+import GeoObject.PointObj;
+
 public class GeoTransformationMatrix {
 	
   /// Zelle(1,1) der 3x3-Matrix
@@ -123,6 +128,44 @@ public class GeoTransformationMatrix {
     rect.add(convRT);
     
     return rect;
+  }
+  
+  /**
+   * @param _interfaceDraw : the component of the geo object that must have it's member multipled
+   */
+  public void multiplyInterfaceDraw(InterfaceDraw _interfaceDraw)
+  {
+	  if(_interfaceDraw instanceof AreaObj)
+	  {
+		  AreaObj obj = (AreaObj) _interfaceDraw;
+		  obj._polyMultipled =  multiply(obj.get_polygon());
+		  return;
+	  }
+	  if(_interfaceDraw instanceof PointObj)
+	  {
+		  PointObj obj = (PointObj) _interfaceDraw;
+		  Point p_m = multiply(new Point(obj.get_mx(), obj.get_my()));
+		  obj.set_multiply_mx(p_m.x);
+		  obj.set_multiply_my(p_m.y);
+		  return;
+	  }
+	  if(_interfaceDraw instanceof LineObj)
+	  {
+		  int i;
+		  LineObj obj = (LineObj) _interfaceDraw;
+		  obj.setX(new int[obj.get_points().size()]);
+		  obj.setY(new int[obj.get_points().size()]);
+			
+		  for(i = 0; i < obj.get_points().size(); i++)
+		  {
+				Point point = multiply(obj.get_points().get(i));
+				obj.getX()[i] = point.x;
+				obj.getY()[i] = point.y;
+		  }
+		  
+		  return;
+	  }
+	  
   }
 
 	/**

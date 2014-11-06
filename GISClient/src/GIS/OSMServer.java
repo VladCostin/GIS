@@ -12,12 +12,23 @@ import java.util.List;
 import java.util.Vector;
 
 
+
+
+
+
+
+
 import org.postgis.Geometry;
 import org.postgis.LineString;
 import org.postgis.MultiLineString;
 import org.postgis.MultiPolygon;
 import org.postgis.PGgeometry;
 import org.postgresql.PGConnection;
+
+import GeoObject.AreaObj;
+import GeoObject.GeoObject;
+import GeoObject.LineObj;
+import GeoObject.PointObj;
 
 /**
  * @author Vlad Herescu
@@ -106,8 +117,9 @@ public class OSMServer implements GeoServerInterface{
 				
 				s.execute(" SELECT UpdateGeometrySRID('"+table.toString() + "','geom',4326)");
 				whereClause = createWhereClause(_types, _area, table.toString());
-		//		if(whereClause.equals(""))
-		//			continue;
+
+				
+				
 				queryForm = createSelectStatement(table) + createFromStatement(table) +  whereClause;
 				System.out.println(queryForm);
 
@@ -142,6 +154,9 @@ public class OSMServer implements GeoServerInterface{
 						case Geometry.POINT:
 							
 							org.postgis.Point point = (org.postgis.Point) g;
+							
+							System.out.println(point.x + " " + point.y);
+							
 							object._components.add(new PointObj((int)  point.x,(int) point.y));
 							break;
 						

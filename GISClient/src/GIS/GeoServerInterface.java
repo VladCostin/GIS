@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import GeoObject.GeoObject;
+
 
 /**
  * interface implemented by each class which loads data from a server

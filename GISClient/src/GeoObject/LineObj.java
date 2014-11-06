@@ -1,4 +1,4 @@
-package GIS;
+package GeoObject;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,6 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+
+import GIS.GeoTransformationMatrix;
+import GIS.ObjectTeil;
 
 
 
@@ -19,7 +22,7 @@ public class LineObj extends ObjectTeil{
 	/**
 	 * the points representing the line
 	 */
-	private ArrayList<Point> _points;
+	ArrayList<Point> _points;
 	
 	/**
 	 * the points made after multiplying
@@ -29,12 +32,12 @@ public class LineObj extends ObjectTeil{
 	/**
 	 * the set of coordinates x of the points 
 	 */
-	int x[];
+	private int x[];
 	
 	/**
 	 * the set of coordinates y of the points
 	 */
-	int y[];
+	private int y[];
 
 	@Override
 	public void setColorObject(Graphics _g, Color fill, Color border) {
@@ -69,7 +72,7 @@ public class LineObj extends ObjectTeil{
 		
 	}
 
-	@Override
+/*	@Override
 	public void multiply(GeoTransformationMatrix _matrix) {
 		
 		int i;
@@ -85,12 +88,9 @@ public class LineObj extends ObjectTeil{
 			y[i] = point.y;
 		}
 		
-		/*for(Point _point : _points)
-		{
-			_points_multiply.add(_matrix.multiply(_point));
-		}*/
+
 		
-	}
+	}*/
 
 	@Override
 	public Rectangle getBounds() {
@@ -123,6 +123,22 @@ public class LineObj extends ObjectTeil{
 
 	public void set_points(ArrayList<Point> _points) {
 		this._points = _points;
+	}
+
+	public int[] getX() {
+		return x;
+	}
+
+	public void setX(int x[]) {
+		this.x = x;
+	}
+
+	public int[] getY() {
+		return y;
+	}
+
+	public void setY(int y[]) {
+		this.y = y;
 	}
 	
 

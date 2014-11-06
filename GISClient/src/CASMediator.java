@@ -12,7 +12,7 @@ import javax.swing.JRadioButtonMenuItem;
 import AALComponent.AALComponent;
 import ContextModel.ContextElement;
 import GIS.GISComponent;
-import GIS.GeoObject;
+import GeoObject.GeoObject;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
 import Mediator.Notification;
@@ -78,24 +78,28 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	public void setTheMenu() {
 		JMenuBar menuBar;
 		JMenu menu;
-		JRadioButtonMenuItem menuItemGIS, menuItemGPS;
+		JRadioButtonMenuItem menuItemGIS, menuItemAAL, menuItemPOI;
 		ButtonGroup group;
 		
 		menuBar = new JMenuBar();
 		menu = new JMenu("Options");
 		group = new ButtonGroup();
 		menuItemGIS = new JRadioButtonMenuItem("GIS");
-		menuItemGPS = new JRadioButtonMenuItem("AAL");
-		menuItemGPS = new JRadioButtonMenuItem("POI");
+		menuItemAAL = new JRadioButtonMenuItem("AAL");
+		menuItemPOI = new JRadioButtonMenuItem("POI");
 		
 		
 		menuItemGIS.addActionListener(this);
-		menuItemGPS.addActionListener(this);
+		menuItemAAL.addActionListener(this);
+		menuItemPOI.addActionListener(this);
 		
 		menu.add(menuItemGIS);
-		menu.add(menuItemGPS);
-		group.add(menuItemGPS);
+		menu.add(menuItemAAL);
+		menu.add(menuItemPOI);
+		
+		group.add(menuItemAAL);
 		group.add(menuItemGIS);
+		group.add(menuItemPOI);
 		
 		menuBar.add(menu);
 		
@@ -131,7 +135,9 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		}
 		if(menuItem.getText().equals("POI"))
 		{
-			
+			m_frame.setContentPane(m_components.get(2).getPanel());
+			m_frame.validate();
+			m_frame.repaint();
 		}
 
 		

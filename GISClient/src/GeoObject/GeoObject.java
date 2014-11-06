@@ -1,4 +1,4 @@
-package GIS;
+package GeoObject;
 
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -23,7 +23,7 @@ public class GeoObject {
   * the main object containing other small objects
   * it can be a polygon containing other polygons
   */
-  ArrayList<InterfaceDraw> _components;
+  public ArrayList<InterfaceDraw> _components;
   
   /**
    * Constructor

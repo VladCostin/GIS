@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import GeoObject.InterfaceDraw;
+
 
 /**
  * represents a part of a GeoObject

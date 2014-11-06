@@ -10,6 +10,8 @@ import java.awt.Toolkit;
 import java.io.InputStream;
 import java.util.Vector;
 
+import GeoObject.GeoObject;
+
 
 
 

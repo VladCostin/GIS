@@ -1,7 +1,7 @@
 package Mediator;
 
 import ContextModel.ContextElement;
-import GIS.GeoObject;
+import GeoObject.GeoObject;
 
 /**
  * specifing the methods of the subject pattern. 

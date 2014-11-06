@@ -1,4 +1,4 @@
-package GIS;
+package Mediator;
 
 /**
  * it contains the id for each type of object

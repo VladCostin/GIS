@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 
 import org.postgis.Polygon;
 
+import Mediator.ConstantsId;
+
 
 /**
  * contains the types for each table/server, the colors associated

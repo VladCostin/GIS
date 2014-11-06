@@ -3,6 +3,9 @@ package GIS;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import GeoObject.GeoObject;
+import GeoObject.InterfaceDraw;
+
 
 
 /**
@@ -35,7 +38,8 @@ public class DrawingContext {
   		type = _obj.getType();
   		for(InterfaceDraw draw : _obj._components)
   		{	
-  	    	draw.multiply(_matrix);
+  	    	//draw.multiply(_matrix);
+  			_matrix.multiplyInterfaceDraw(draw); 
   	    	
   	    	if(CoreData._hashMapFillColor.get(type) == null)
   	    		draw.setColorObject(_g, Color.black,null);

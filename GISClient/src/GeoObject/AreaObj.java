@@ -1,8 +1,11 @@
-package GIS;
+package GeoObject;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+
+import GIS.GeoTransformationMatrix;
+import GIS.ObjectTeil;
 
 
 /**
@@ -19,7 +22,7 @@ public class AreaObj extends ObjectTeil{
 	/**
 	 * the polygon obtained after multiplying with the GeoTransformationMatrix
 	 */
-	Polygon _polyMultipled;
+	public Polygon _polyMultipled;
 	
 
 	@Override
@@ -34,11 +37,11 @@ public class AreaObj extends ObjectTeil{
 		
 	}
 
-	@Override
+	/*@Override
 	public void multiply(GeoTransformationMatrix _matrix) {
 		_polyMultipled = _matrix.multiply(_polygon);
 		
-	}
+	}*/
 
 	@Override
 	public Rectangle getBounds() {
