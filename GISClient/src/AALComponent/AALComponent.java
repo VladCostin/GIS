@@ -3,6 +3,8 @@ package AALComponent;
 import java.awt.BorderLayout;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
+import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -11,6 +13,10 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import common.Notifications;
 import ContextModel.InterfaceContext;
@@ -54,6 +60,13 @@ public class AALComponent implements ComponentIf, ItemListener{
 	HashMap<TypesNotification, ArrayList<Notifications>> m_notifications;
 	
 	/**
+	 * the context elements received from the parser
+	 */
+	ArrayList<Notifications> m_contextElements;
+	
+	
+	
+	/**
 	 * @param _subject : the instance of CASMediator, that receives all the data and then shares it
 	 */
 	public AALComponent(Subject _subject) {
@@ -71,9 +84,43 @@ public class AALComponent implements ComponentIf, ItemListener{
 		
 		Panel gui = new Panel(new BorderLayout());
 	    gui.add(initOptionsParser(),      BorderLayout.NORTH);
+	    gui.add(initCOntextElementsPanel(), BorderLayout.CENTER);
 		return gui;
 	}
 	
+	/**
+	 * @return : the panel where the data about the context element is shown
+	 */
+	public JPanel initCOntextElementsPanel() {
+		
+		JPanel panel = new JPanel(); 
+		panel.setLayout(new GridLayout(6, 2));
+		JButton buton = new JButton("Next Context element");
+		JLabel  type, id, value, description, unit;
+		JLabel  type_value, id_value, value_value, description_value, unit_value;
+		
+		id = new JLabel(" ID : "); 
+		type = new JLabel(" TYPE : ");
+		value = new JLabel(" VALUE : ");
+		description = new JLabel(" DESCRIPTION : ");
+		unit = new JLabel(" UNIT : ");
+		
+		
+		panel.add(id);
+		panel.add(type);
+		panel.add(value);
+		panel.add(description);
+		panel.add(unit);
+		panel.add(buton);
+
+		
+		return panel;
+		
+		
+		// TODO Auto-generated method stub
+		//return null;
+	}
+
 	/**
 	 * @return the map of expected notifications initialized
 	 */
@@ -121,7 +168,13 @@ public class AALComponent implements ComponentIf, ItemListener{
 	public void itemStateChanged(ItemEvent e) {
 		
 		System.out.println(e.getItem().toString());
-		InterfaceContext context = m_concrete_parsers.get(e.getItem().toString()).factoryMethod();
+		m_contextElements = m_concrete_parsers.get(e.getItem().toString()).factoryMethod();
+		
+		for(Notifications not : m_contextElements)
+		{
+			InterfaceContext context = (InterfaceContext) not;
+			context.checkValue();
+		}
 		
 		//m_subject.communicateContext(new ContextElement[5]);
 		

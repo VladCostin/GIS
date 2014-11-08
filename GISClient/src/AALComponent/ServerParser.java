@@ -3,9 +3,12 @@ package AALComponent;
 import org.kxml2.io.KXmlParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import common.Notifications;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 
 import ContextModel.InterfaceContext;
 import ContextModel.LocationContext;
@@ -21,12 +24,13 @@ import ContextModel.VelocityContext;
 public class ServerParser extends Parser{
 
 	@Override
-	public InterfaceContext factoryMethod()
+	public ArrayList<Notifications> factoryMethod()
 	{
 		
 		InterfaceContext contextElement = null;
-		Reader dataReader = new InputStreamReader( ClassLoader.getSystemResourceAsStream("xml/velocity_context_element.xml"));
+		Reader dataReader = new InputStreamReader( ClassLoader.getSystemResourceAsStream("xml/time_context_element.xml"));
 		KXmlParser myParser = new KXmlParser();
+		ArrayList<Notifications> contextElements = new ArrayList<Notifications>();
 		String type;
 		
 	    try {
@@ -110,9 +114,9 @@ public class ServerParser extends Parser{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		return contextElement;
+		contextElements.add(contextElement);
+		return contextElements;
+
 	}
 	
 	/**

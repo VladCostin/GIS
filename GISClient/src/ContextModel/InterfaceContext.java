@@ -1,11 +1,13 @@
 package ContextModel;
 
+import common.Notifications;
+
 /**
  * interface developed by each context instance
  * @author Vlad Herescu
  *
  */
-public interface InterfaceContext {
+public interface InterfaceContext extends Notifications{
 
 	/**
 	 * @param _context : another context element of the same type 
@@ -19,4 +21,7 @@ public interface InterfaceContext {
 	 * @param m_data : the metadata obtained from the xml file
 	 */
 	public void setM_data(MetadataContext m_data);
+	
+	
+	public void checkValue();
 }

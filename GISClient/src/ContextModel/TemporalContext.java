@@ -53,5 +53,11 @@ public class TemporalContext extends ContextElement{
 		
 		m_minute = _minute;
 	}
+	
+	@Override
+	public void checkValue() {
+		System.out.println("sunt temporal");
+		
+	}
 
 }

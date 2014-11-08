@@ -14,6 +14,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import common.Notifications;
+
 import ContextModel.InterfaceContext;
 import ContextModel.LocationContext;
 import ContextModel.MetadataContext;
@@ -50,10 +52,11 @@ public class FileSystemParser extends Parser{
 
 	
 	@Override
-	public InterfaceContext factoryMethod() {
+	public ArrayList<Notifications> factoryMethod() {
 		
 		String idValue, keyValue;
 		InterfaceContext contextElement = null;
+		ArrayList<Notifications> contextElements = new ArrayList<Notifications>();
 		
 		
 		try {
@@ -121,8 +124,8 @@ public class FileSystemParser extends Parser{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return contextElement;
+		contextElements.add(contextElement);
+		return contextElements;
 		
 	}
 
@@ -177,6 +180,8 @@ public class FileSystemParser extends Parser{
 	 */
 	public String getValueFromNode(NodeList _node,int _position)
 	{
+		
+		
 		return _node.item(_position).getChildNodes().item(0).getNodeValue();
 	}
 	

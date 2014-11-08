@@ -7,7 +7,7 @@ import common.Notifications;
  * @author Vlad Herescu
  *
  */
-public class ContextElement implements InterfaceContext, Notifications {
+public abstract class ContextElement implements InterfaceContext {
 	
 	/**
 	 * information describing the context element

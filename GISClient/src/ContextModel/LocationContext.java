@@ -34,5 +34,13 @@ public class LocationContext extends ContextElement{
 		m_latitude = _latitude;
 		m_longitude = _longitude;
 	}
+
+	@Override
+	public void checkValue() {
+		System.out.println("sunt location");
+		
+	}
+	
+	
 	
 }

@@ -25,6 +25,10 @@ public class VelocityContext extends ContextElement{
 		m_speed = _speed;
 	}
 	
-	
+	@Override
+	public void checkValue() {
+		System.out.println("sunt velocity");
+		
+	}
 	
 }
