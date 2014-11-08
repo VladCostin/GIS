@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
+import GISCalculation.GeoTransformationMatrix;
+
 
 /**
  * represents a polygon on the map
@@ -34,11 +36,11 @@ public class AreaObj extends ObjectTeil{
 		
 	}
 
-	/*@Override
+	@Override
 	public void multiply(GeoTransformationMatrix _matrix) {
 		_polyMultipled = _matrix.multiply(_polygon);
 		
-	}*/
+	}
 
 	@Override
 	public Rectangle getBounds() {

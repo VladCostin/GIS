@@ -40,8 +40,8 @@ public class DrawingContext {
   		type = _obj.getType();
   		for(InterfaceDraw draw : _obj._components)
   		{	
-  	    	//draw.multiply(_matrix);
-  			_matrix.multiplyInterfaceDraw(draw); 
+  	    	draw.multiply(_matrix);
+  			//_matrix.multiplyInterfaceDraw(draw); 
   	    	
   	    	if(CoreData._hashMapFillColor.get(type) == null)
   	    		draw.setColorObject(_g, Color.black,null);

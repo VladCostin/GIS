@@ -49,7 +49,7 @@ public class LineObj extends ObjectTeil{
 		
 	}
 
-/*	@Override
+	@Override
 	public void multiply(GeoTransformationMatrix _matrix) {
 		
 		int i;
@@ -63,11 +63,8 @@ public class LineObj extends ObjectTeil{
 			Point point = _matrix.multiply(_points.get(i));
 			x[i] = point.x;
 			y[i] = point.y;
-		}
-		
-
-		
-	}*/
+		}	
+	}
 
 	@Override
 	public Rectangle getBounds() {

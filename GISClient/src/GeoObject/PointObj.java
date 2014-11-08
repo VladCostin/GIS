@@ -1,6 +1,7 @@
 package GeoObject;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 
@@ -52,12 +53,12 @@ public class PointObj extends ObjectTeil {
 	}
 
 	
-	/*@Override
+	@Override
 	public void multiply(GeoTransformationMatrix _matrix) {
 		Point p_m = _matrix.multiply(new Point(_mx, _my));
 		_multiply_mx = p_m.x;
 		_multiply_my = p_m.y;
-	}*/
+	}
 
 	@Override
 	public Rectangle getBounds() {

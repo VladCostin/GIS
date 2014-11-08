@@ -135,7 +135,7 @@ public class GeoTransformationMatrix {
   /**
    * @param _interfaceDraw : the component of the geo object that must have it's member multipled
    */
-  public void multiplyInterfaceDraw(InterfaceDraw _interfaceDraw)
+ /* public void multiplyInterfaceDraw(InterfaceDraw _interfaceDraw)
   {
 	  if(_interfaceDraw instanceof AreaObj)
 	  {
@@ -173,7 +173,7 @@ public class GeoTransformationMatrix {
 		  return;
 	  }
 	  
-  }
+  }*/
 
 	/**
 	 * Multipliziert ein Polygon mit der Matrix und liefert das 

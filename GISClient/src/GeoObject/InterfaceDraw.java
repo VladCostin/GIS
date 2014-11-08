@@ -22,7 +22,7 @@ public interface InterfaceDraw {
 	/**
 	 * @param _matrix : the matrix used to bring the data to the frame dimensions
 	 */
-	//void multiply(GeoTransformationMatrix _matrix);
+	void multiply(GeoTransformationMatrix _matrix);
 	
 	/**
 	 * @return : the bounds of the object
