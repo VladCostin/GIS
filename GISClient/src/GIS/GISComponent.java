@@ -32,8 +32,10 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.io.*;
 
@@ -42,6 +44,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+
+import common.Notifications;
 
 import GeoObject.GeoObject;
 import Mediator.ComponentIf;
@@ -115,6 +119,12 @@ public class  GISComponent
 	
 	
 	Subject m_subject; 
+	
+	
+	/**
+	 * the notifications the gis component is interested in
+	 */
+	static HashMap<Notification, ArrayList<Notifications>> m_notifications;
 
 
 	/**
@@ -124,29 +134,24 @@ public class  GISComponent
 	  
 		_mapOptionsServer = new HashMap<String,GeoServerInterface>();  
 		_panel = initGUI();
+		m_notifications = initNotifications();
 	
 		m_subject = _subject;
 	
 	  
- //   m_frame = new Frame("a test frame");
- //   m_frame.setSize(480,320);
     
- //   m_frame.addWindowListener(this);
-
-	// initialize UI (buttons and canvas) and organize on one Panel
-//	Panel gui = initGUI();
-
-	
-	
-	// integrate UI into frame
-//    m_frame.setLayout(new BorderLayout());  
-//	m_frame.add(gui, BorderLayout.CENTER);
- //   m_frame.setVisible(true);
-    
-    new CoreData();
-  }
+		new CoreData();
+	}
   
-  /**
+	
+	private HashMap<Notification, ArrayList<Notifications>> initNotifications() {
+		HashMap<Notification, ArrayList<Notifications>> notifications = new HashMap<Notification, ArrayList<Notifications>>();
+		
+		notifications.put(Notification.POI_OBJECT, new ArrayList<Notifications>());
+		return notifications;
+	}
+
+/**
    * Initialize UI in one Panel
    */
   public Panel initGUI() {
@@ -556,8 +561,26 @@ public class  GISComponent
   }
 
   @Override
-  public void update(Notification _notification) {
+  public void update() {
 	  // TODO Auto-generated method stub	
+  }
+
+   @Override
+   public Set<Notification> getNotificationsTypes() {
+		return m_notifications.keySet();
+  }
+
+  @Override
+  public void update(Notification _notification) {
+	  
+	  System.out.println("intra si aici, in GISCompoent " + _notification);
+	  
+	 if(m_notifications.keySet().contains(_notification))
+	 {
+		 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
+	 }
+	 
+	 System.out.println(m_notifications.get(_notification));
   }
 }
 

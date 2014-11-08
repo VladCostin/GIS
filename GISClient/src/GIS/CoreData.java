@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 
 import org.postgis.Polygon;
 
-import Mediator.ConstantsId;
+import common.ConstantsId;
 
 
 /**
@@ -37,6 +37,9 @@ public class CoreData {
 	 * associate for each table the name of the column where the type is mentioned
 	 */
 	static HashMap<Tables_Austria_OSM, String> _hashMapTypeColumn;
+	
+	
+	static HashMap<Integer,String> m_hashMapTypePOI_NameMarker;
 
 	/**
 	 * initializing the Hashmap
@@ -47,11 +50,28 @@ public class CoreData {
 		_hashMapFillColor = new HashMap<Integer, Color>();
 		_hashMapBorderColor = new HashMap<Integer, Color>();
 		_hashMapTypeColumn = new HashMap<Tables_Austria_OSM, String>();
+		m_hashMapTypePOI_NameMarker = new HashMap<Integer, String>();
 
 		init_type();
 		init_FillColor();
 		init_BorderColor();
 		init_TypeColumn();
+		init_POIMarkers();
+	}
+
+
+
+	/**
+	 * associates to each type the name of the marker to be loaded
+	 */
+	public void init_POIMarkers() {
+		
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.bank, "bank.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.school, "school.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.pharmacy, "hospital.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.post_office, "post.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.police, "police.png");
+		
 	}
 
 

@@ -98,8 +98,14 @@ public class GeoTransformationMatrix {
 	 *         Multiplikation repraesentiert
 	 */
   public Point multiply(Point _pt) {
+	  
+	System.out.println(" inainte  : " +  _pt.x + "  " + _pt.y);
+	  
     double x = _pt.x * matrix11 + _pt.y * matrix12 + matrix13;
     double y = _pt.y * matrix21 + _pt.y * matrix22 + matrix23;
+    
+    System.out.println(" dupa  : " +  ((int)x) + "  " +  ((int)y));
+    
     return new Point((int)x,(int)y);
   }
 
@@ -144,9 +150,13 @@ public class GeoTransformationMatrix {
 	  if(_interfaceDraw instanceof PointObj)
 	  {
 		  PointObj obj = (PointObj) _interfaceDraw;
+		 
 		  Point p_m = multiply(new Point(obj.get_mx(), obj.get_my()));
 		  obj.set_multiply_mx(p_m.x);
 		  obj.set_multiply_my(p_m.y);
+		  
+		  
+		 
 		  return;
 	  }
 	  if(_interfaceDraw instanceof LineObj)
@@ -161,6 +171,7 @@ public class GeoTransformationMatrix {
 				Point point = multiply(obj.get_points().get(i));
 				obj.getX()[i] = point.x;
 				obj.getY()[i] = point.y;
+
 		  }
 		  
 		  return;

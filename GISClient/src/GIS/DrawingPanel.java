@@ -8,9 +8,13 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Vector;
 
+import common.Notifications;
+
 import GeoObject.GeoObject;
+import Mediator.Notification;
 
 
 
@@ -67,7 +71,8 @@ public class DrawingPanel extends Panel {
 		// load the image representing the poi on the map
 	    MediaTracker tracker = new MediaTracker(this);
 	    InputStream  in      =
-	      this.getClass().getResourceAsStream("location.gif");
+	      //this.getClass().getResourceAsStream("poi_bank.png");
+	    		this.getClass().getResourceAsStream("location.gif");
 	    if (in == null) {
 	      System.err.println("Image (buddy.gif) not found");
 	    } else {
@@ -310,25 +315,75 @@ public class DrawingPanel extends Panel {
 	 *
 	 * @see java.awt.Graphics
 	 */
-  public void paint(Graphics _g) {
+  public void paint(Graphics _g) 
+  {
   	if (m_objects != null && m_matrix != null) 
   	{
+  		ArrayList<Notifications> objects = GISComponent.m_notifications.get(Notification.POI_OBJECT);
+  		Image img;
   		_g.clearRect(0, 0, getWidth(), getHeight());
   		
-  		// takes every object saved in m_objects and sets the color of the
-  		// border of the object and the filling color
+
   		for (int i = 0 ; i < m_objects.size() ; i++) 
   		{
   			GeoObject obj = (GeoObject)m_objects.elementAt(i);
   			DrawingContext.drawObject(obj, _g, m_matrix);
   		} 
   		
-  		if (m_pois != null) {
+  		
+  		for(Notifications object :  objects)
+  		{
+  			POIObject poiObject = (POIObject) object;
+  			img = getImage(poiObject);
+  	
+  			poiObject.setM_image(img); 
+  			DrawingContext.drawObject(poiObject,_g,m_matrix);
+  		}
+  		
+  		
+  	/*	if (m_pois != null) {
   			for (int j = 0 ; j < m_pois.size() ; j++) {
   				GeoObject obj = (GeoObject) m_pois.elementAt(j);
   				DrawingContext.drawObject(obj,_g,m_matrix);
   			} // for j
-  		} // if m_pois
+  		}*/ /// if m_pois
   	} // if poly and matrix
   }
+  
+  
+  /**
+   * @param poiObject : the POI to be drawn
+   * @return : the image associated to the POI depending on the POI type
+   */
+  public Image getImage(POIObject poiObject)
+  {
+	  
+	  MediaTracker tracker = new MediaTracker(this);
+	  Image img  = null;
+      InputStream  in;
+	  
+	  in = this.getClass().getResourceAsStream(CoreData.m_hashMapTypePOI_NameMarker.get(poiObject.getType()));
+	  if (in == null)
+		      System.err.println("Image (buddy.gif) not found");
+	  else
+	  {
+		  byte[] buffer = null;
+		   try
+		   {
+				buffer = new byte[in.available()];
+				in.read(buffer);
+				System.out.println("IMAGinea a fost gasita");
+				img = Toolkit.getDefaultToolkit().createImage(buffer);
+				tracker.addImage(img,1);
+				tracker.waitForAll();
+			} 
+		   catch (Throwable _e)
+		   {
+			      _e.printStackTrace();
+		   }
+	  }
+		 
+	  return img;
+  }
+  
 }

@@ -1,6 +1,8 @@
 package Mediator;
 
 import java.awt.Panel;
+import java.util.ArrayList;
+import java.util.Set;
 
 
 /**
@@ -19,7 +21,17 @@ public interface ComponentIf {
 	/**
 	 * @param _notification : the notification sent by the subject
 	 */
-	public void update(Notification _notification);
+	public void update();
+	/**
+	 * @param _notification : the notification send my the mediator,
+	 * used by the component to check if the data would be useful for it
+	 */
+	public void update(Notification _notification); 
+	
+	/**
+	 * @return : the notifications that the component is interested in;
+	 */
+	public Set<Notification> getNotificationsTypes();
 	
 
 }

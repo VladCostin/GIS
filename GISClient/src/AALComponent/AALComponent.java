@@ -10,7 +10,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+
+import common.Notifications;
 
 import ContextModel.ContextElement;
 import ContextModel.InterfaceContext;
@@ -48,24 +52,38 @@ public class AALComponent implements ComponentIf, ItemListener{
 
 	
 	/**
+	 * each component receives from the subject a list of data that implement the interface notifications
+	 * I useNotification as a key to know the type of the values
+	 */
+	HashMap<Notification, ArrayList<Notifications>> m_notifications;
+	
+	/**
 	 * @param _subject : the instance of CASMediator, that receives all the data and then shares it
 	 */
 	public AALComponent(Subject _subject) {
 		m_concrete_parsers = new HashMap<String,InterfaceParser>();
+		m_notifications = initNotifications();
 		m_panel = initGUI();
 		m_subject = _subject;
 	}
 	
 	  /**
 	   * Initialize UI in one Panel
+	 * @return : the main panel containing the other panels
 	   */
 	public Panel initGUI() {
+		
 		Panel gui = new Panel(new BorderLayout());
-
-
-
 	    gui.add(initOptionsParser(),      BorderLayout.NORTH);
 		return gui;
+	}
+	
+	/**
+	 * @return the map of expected notifications initialized
+	 */
+	public HashMap<Notification, ArrayList<Notifications>> initNotifications() {
+		HashMap<Notification, ArrayList<Notifications>> notifications = new HashMap<Notification, ArrayList<Notifications>>();
+		return notifications;
 	}
 	
 	public Panel initOptionsParser()
@@ -106,7 +124,7 @@ public class AALComponent implements ComponentIf, ItemListener{
 		System.out.println(e.getItem().toString());
 		InterfaceContext context = m_concrete_parsers.get(e.getItem().toString()).factoryMethod();
 		
-		m_subject.communicateContext(new ContextElement[5]);
+		//m_subject.communicateContext(new ContextElement[5]);
 		
 	}
 
@@ -114,6 +132,17 @@ public class AALComponent implements ComponentIf, ItemListener{
 	public void update(Notification _notification) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Set<Notification> getNotificationsTypes() {
+		return m_notifications.keySet();
 	}
 
 }

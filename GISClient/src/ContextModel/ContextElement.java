@@ -1,11 +1,13 @@
 package ContextModel;
 
+import common.Notifications;
+
 /**
  * the class father of every context element types
  * @author Vlad Herescu
  *
  */
-public class ContextElement implements InterfaceContext {
+public class ContextElement implements InterfaceContext, Notifications {
 	
 	/**
 	 * information describing the context element

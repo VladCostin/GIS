@@ -12,18 +12,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-
-import GIS.DummyServer;
-import GIS.InterfaceConstants;
-import GIS.OSMServer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import GIS.POIObject;
-import GIS.SDEServer;
 import Mediator.ComponentIf;
-import Mediator.ConstantsId;
 import Mediator.Notification;
 import Mediator.Subject;
 
 import java.awt.Point;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+
+import common.ConstantsId;
+import common.Notifications;
 
 /**
  * manages and distributes at least two different types of POI objects (point objects
@@ -41,7 +45,7 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	/**
 	 * the list of Point of objects hardcoded/ later in the database
 	 */
-	ArrayList<POIObject> m_poi;
+	ArrayList<Notifications> m_poi;
 	
 	/**
 	 * the user selects the types of the POI to be shown on the map
@@ -54,29 +58,85 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	 */
 	Subject m_subject;
 	
+	/**
+	 * each component receives from the subject a list of data that implement the interface notifications
+	 * I useNotification as a key to know the type of the values
+	 */
+	HashMap<Notification, ArrayList<Notifications>> m_notifications;
 	
-	public POIComponent() 
+	
+	/**
+	 * in the user interface the user sees the types of POI that can be shwon on the map
+	 * for each name an ID is associated 
+	 */
+	HashMap<String, Integer> m_POINames_ID;
+	
+	/**
+	 * the list contained in the panel where the user can select his types of POI to be shown
+	 */
+	JList<String> m_list;
+	
+	
+	/**
+	 * @param _subject : the subject the POI is interested in , the mediator
+	 */
+	public POIComponent(Subject _subject) 
 	{
+		m_POINames_ID = initGUIPoi();
 		m_panel = initGUI();
 		m_poi = initPOI();
 		m_panelSelect = initPanelSelect();
+		m_notifications = initNotifications();
+		m_subject = _subject;
+		
 	}
 	
 	/**
-	 * hard codes the list of points of interest
-	 * @return
+	 * @return : the map typeName-idType that identify the POI
 	 */
-	public ArrayList<POIObject> initPOI() {
+	public HashMap<String, Integer> initGUIPoi()
+	{
+		
+		HashMap<String, Integer> POINames_ID = new HashMap<String,Integer>();
+		POINames_ID.put("School", ConstantsId.school);
+		POINames_ID.put("Bank", ConstantsId.bank);
+		POINames_ID.put("Police", ConstantsId.police);
+		POINames_ID.put("Post Office", ConstantsId.post_office);
+		return POINames_ID;
+		
+	}
 
-		ArrayList<POIObject> points = new ArrayList<POIObject>();
+	/**
+	 * @return : the map containing the set of notifications the POI Component is interested in and the notifications received
+	 */
+	public HashMap<Notification, ArrayList<Notifications>> initNotifications()
+	{
+	
+		HashMap<Notification, ArrayList<Notifications>> notifications = new HashMap<Notification, ArrayList<Notifications>>();
+		return notifications;
+	}
+
+	/**
+	 * hard codes the list of points of interest
+	 * @return : the hardcoded POI
+	 */
+	public ArrayList<Notifications> initPOI()
+	{
+
+		ArrayList<Notifications> points = new ArrayList<Notifications>();
 		
 		points.add(new POIObject("Linz Universitat", ConstantsId.school, new Point(3891659,5366608 ) ));
-		points.add(new POIObject("Reiffeisen bank", ConstantsId.bank, new Point(3891659,5366608 ) ));
+		points.add(new POIObject("Reiffeisen bank", ConstantsId.bank, new Point(3891720,5366012 ) ));
+		points.add(new POIObject("Polizei", ConstantsId.police, new Point(3891600,5366400 ) ));
+		points.add(new POIObject("Die Post Linz", ConstantsId.post_office, new Point(3892400,5367400 ) ));
 		
 		return points;
 		
 	}
 
+	/**
+	 * @return : the main Panel of the window, the container for the other panels
+	 */
 	public Panel initGUI() 
 	{
 		
@@ -87,6 +147,9 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	
 	
 
+	/**
+	 * @return : the panel from which the user can select the operation : to delete, to load or to add
+	 */
 	public Component initOptionsParser() {
 		
 		
@@ -115,9 +178,22 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	{
 		Panel select = new Panel(new FlowLayout());
 		Button buttonSelect = new Button(InterfaceOptionsManagePOI.buttonLoad);
+		DefaultListModel<String> model = new DefaultListModel<String>(); 
+		m_list = new JList<String>(model);
+		JScrollPane pane = new JScrollPane(m_list);
+		
 		buttonSelect.addActionListener(this); 
 		buttonSelect.setSize(200, 30);
 		select.add(buttonSelect);
+		  
+		  
+		
+		  
+		for (String type : m_POINames_ID.keySet())
+			  model.addElement(type);
+		
+		select.add(pane);
+		
 		
 		return select;
 		
@@ -132,21 +208,20 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	}
 
 	@Override
-	public void update(Notification _notification) {
+	public void update() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void itemStateChanged(ItemEvent e) {
+	public void itemStateChanged(ItemEvent e)
+	{
 		
 		System.out.println("intra aici");
 		switch(e.getItem().toString())
 		{
 			case InterfaceOptionsManagePOI.optionSelect :
 				
-				
-				System.out.println("intra aici");
 				m_panel.add(m_panelSelect,      BorderLayout.CENTER);
 
 				break;
@@ -159,15 +234,44 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) 
+	{
 		
 		switch( e.getActionCommand() )
 		{
 			case InterfaceOptionsManagePOI.buttonLoad :
 				
+				List<String> selectedItemsNames =  m_list.getSelectedValuesList();
+				List<Integer> selectedItemsId = new ArrayList<Integer>();
+				ArrayList<Notifications> sendPOI = new ArrayList<Notifications>();
 				
+				for(String selectedItem : selectedItemsNames)
+					selectedItemsId.add( m_POINames_ID.get(selectedItem));
+				
+				for( Notifications notification : m_poi)
+				{
+						POIObject poi = (POIObject) notification;
+						if(selectedItemsId.contains(poi.getType()))
+							sendPOI.add(poi);
+				}
+				
+				
+				m_subject.communicatePOI(sendPOI);
+				break;
+					
 		}
 		
+		
+	}
+
+	@Override
+	public Set<Notification> getNotificationsTypes() {
+		return m_notifications.keySet();
+	}
+
+	@Override
+	public void update(Notification _notification) {
+		// TODO Auto-generated method stub
 		
 	}
 

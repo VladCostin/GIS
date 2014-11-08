@@ -1,46 +1,11 @@
 package AALComponent;
 
 import java.io.IOException;
-import java.io.InputStream;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -48,7 +13,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.xmlpull.v1.XmlPullParserException;
 
 import ContextModel.InterfaceContext;
 import ContextModel.LocationContext;
@@ -68,7 +32,6 @@ public class FileSystemParser extends Parser{
 	
 	public FileSystemParser() {
 		DocumentBuilderFactory factory =DocumentBuilderFactory.newInstance();
-	//	DocumentBuilderFactoryImpl factory = new DocumentBuilderFactoryImpl();
 	
 		try {
 				builder =  factory.newDocumentBuilder();
@@ -77,8 +40,6 @@ public class FileSystemParser extends Parser{
 				e.printStackTrace();
 			}
 
-
-		
 	}
 
 	

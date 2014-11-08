@@ -72,6 +72,9 @@ public class PointObj extends ObjectTeil {
 	@Override
 	public void setColorObject(Graphics _g, Color fill, Color border) {
 	
+		
+		System.out.println(_multiply_mx + " aaaaaaaaa " + _multiply_my);
+		
 		_g.setColor(fill);
 		_g.fillOval(_multiply_mx, _multiply_my, 10, 10);
 	}

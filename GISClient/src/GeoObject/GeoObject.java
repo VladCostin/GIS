@@ -4,11 +4,14 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import common.Notifications;
+
+
 /**
  * The class is a first very "rudimentary" representation 
  * of a geo object
  */
-public class GeoObject {
+public class GeoObject implements Notifications{
 
   /**
  * the id of the object
@@ -69,6 +72,7 @@ public class GeoObject {
    * @see java.awt.Rectangle
    */
   public Rectangle getBoundingBox() {
+	  
 	  
 	 Rectangle r= _components.get(0).getBounds();
 	 for(InterfaceDraw draw : _components)

@@ -2,12 +2,15 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
+
+import common.Notifications;
 
 import AALComponent.AALComponent;
 import ContextModel.ContextElement;
@@ -37,6 +40,9 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	
 	JFrame m_frame;
 	
+	
+	HashMap<Notification,ArrayList<Notifications>> m_notifications;
+	
 	/**
 	 * initializing the window and the components of the mediator 
 	 */
@@ -46,6 +52,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		
 		initFrame();
 		initComponents();
+		m_notifications = new HashMap<Notification, ArrayList<Notifications>>();
 	}
 	
 	/**
@@ -55,7 +62,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		m_components = new ArrayList<ComponentIf>();
 		m_components.add(new GISComponent(this));
 		m_components.add(new AALComponent(this));
-		m_components.add(new POIComponent());
+		m_components.add(new POIComponent(this));
 		
 	}
 
@@ -144,9 +151,9 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	}
 
 	@Override
-	public void communicateGeoObject(GeoObject[] _obj)
+	public void communicateGeoObject(ArrayList<Notifications> _geoObjects)
 	{
-		 
+		 m_notifications.put(Notification.GEO_OBJECT, _geoObjects);
 		
 		for(ComponentIf component : m_components)
 		{
@@ -158,16 +165,36 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	}
 
 	@Override
-	public void communicateContext(ContextElement[] _obj) 
+	public void communicateContext(ArrayList<Notifications> _contextElements) 
 	{
-		
-		System.out.println( _obj.getClass().getSimpleName());
-		
+
+		m_notifications.put(Notification.CONTEXT_ELEMENT, _contextElements);
 		for(ComponentIf component : m_components)
 		{
 			component.update(Notification.CONTEXT_ELEMENT);
 		}
 		
+	}
+
+	@Override
+	public void communicatePOI(ArrayList<Notifications> _POIObjects) {
+		
+		
+		System.out.println("intra aici");
+		
+		m_notifications.put(Notification.POI_OBJECT, _POIObjects);
+		for(ComponentIf component : m_components)
+		{
+			component.update(Notification.POI_OBJECT);
+		}
+		
+	}
+
+	@Override
+	public ArrayList<Notifications> communicateNotifications(
+			Notification _notification) {
+		// TODO Auto-generated method stub
+		return m_notifications.get(_notification);
 	}
 	
 }

@@ -158,6 +158,8 @@ public class OSMServer implements GeoServerInterface{
 							System.out.println(point.x + " " + point.y);
 							
 							object._components.add(new PointObj((int)  point.x,(int) point.y));
+							
+							
 							break;
 						
 					}
