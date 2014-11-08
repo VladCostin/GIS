@@ -22,6 +22,13 @@ public interface InterfaceContext extends Notifications{
 	 */
 	public void setM_data(MetadataContext m_data);
 	
+	public String getValue();
 	
-	public void checkValue();
+	public String getType();
+	
+	public String getId();
+	
+	public MetadataContext getM_data();
+	
+	public void setId(int id);
 }

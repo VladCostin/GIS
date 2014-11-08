@@ -53,11 +53,18 @@ public class TemporalContext extends ContextElement{
 		
 		m_minute = _minute;
 	}
-	
+
 	@Override
-	public void checkValue() {
-		System.out.println("sunt temporal");
-		
+	public String getValue() {
+		// TODO Auto-generated method stub
+		return Integer.toString(m_day)+":"+ Integer.toString(m_hour)+":"+Integer.toString(m_minute);
 	}
+
+	@Override
+	public String getType() {
+		return ElementType.TEMPORAL_CONTEXT.name();
+	}
+
+	
 
 }

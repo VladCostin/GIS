@@ -36,10 +36,17 @@ public class LocationContext extends ContextElement{
 	}
 
 	@Override
-	public void checkValue() {
-		System.out.println("sunt location");
-		
+	public String getValue() {
+		return Double.toString(m_latitude) + " " + Double.toString(m_longitude);
 	}
+
+	@Override
+	public String getType() {
+		return ElementType.LOCATION.name();
+	}
+
+
+
 	
 	
 	

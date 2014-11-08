@@ -35,6 +35,7 @@ public class FileSystemParser extends Parser{
 	DocumentBuilder builder;
 	
 	
+
 	/**
 	 * instantiating the DocumentBuilder
 	 */
@@ -43,10 +44,17 @@ public class FileSystemParser extends Parser{
 	
 		try {
 				builder =  factory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
+		} 
+		catch (ParserConfigurationException e) 
+		{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+		}
+		m_fileNames = new ArrayList<String>();
+		m_fileNames.add("xml/time_context_element.xml");
+		m_fileNames.add("xml/location_context_element.xml");
+		m_fileNames.add("xml/velocity_context_element.xml");
+		
 
 	}
 
@@ -57,74 +65,78 @@ public class FileSystemParser extends Parser{
 		String idValue, keyValue;
 		InterfaceContext contextElement = null;
 		ArrayList<Notifications> contextElements = new ArrayList<Notifications>();
+		for(String fileName : m_fileNames)
+		{
 		
-		
-		try {
-			Document document =builder.parse(
-					 ClassLoader.getSystemResourceAsStream("xml/time_context_element.xml"));
-			Node nodeId, nodeKey, nodeValue, nodeMetadata;
-			
-			
+			try {
+				Document document =builder.parse(
+						ClassLoader.getSystemResourceAsStream(fileName));
+				Node nodeId, nodeKey, nodeValue, nodeMetadata;
 
-			Element root = document.getDocumentElement();
-			nodeId = root.getElementsByTagName("contextId").item(0);
-			//idValue = nodeId.getChildNodes().item(0).getNodeValue();
+				Element root = document.getDocumentElement();
+				nodeId = root.getElementsByTagName("contextId").item(0);
 			
 			
-			nodeKey = root.getElementsByTagName("contextKey").item(0);
-			keyValue = nodeKey.getChildNodes().item(0).getNodeValue();
+				nodeKey = root.getElementsByTagName("contextKey").item(0);
+				keyValue = nodeKey.getChildNodes().item(0).getNodeValue();
 
 			
-			nodeValue = root.getElementsByTagName("contextValue").item(0);
+				nodeValue = root.getElementsByTagName("contextValue").item(0);
 			
-			switch(keyValue)
-			{
-				case "Location" :
+				switch(keyValue)
+				{
+					case "Location" :
 					
-					double lat, lon;
+						double lat, lon;
 					
-					NodeList position = ((Element) nodeValue).getElementsByTagName("value");
-					lat = Double.parseDouble(getValueFromNode(position, 0).replace("\"", "")); 
-					lon = Double.parseDouble(getValueFromNode(position, 1).replace("\"", ""));
-					contextElement = new LocationContext(lat,lon); 
+						NodeList position = ((Element) nodeValue).getElementsByTagName("value");
+						lat = Double.parseDouble(getValueFromNode(position, 0).replace("\"", "")); 
+						lon = Double.parseDouble(getValueFromNode(position, 1).replace("\"", ""));
+						contextElement = new LocationContext(lat,lon); 
 					
 					break;
 					
-				case "Time" :
+					case "Time" :
 					
-					int hour, minute;
+						int hour, minute;
 					
-					NodeList time = ((Element) nodeValue).getElementsByTagName("value");
-					hour = Integer.parseInt(getValueFromNode(time, 0).replace("\"", ""));   
-					minute = Integer.parseInt(getValueFromNode(time, 1).replace("\"", "")); 
-					contextElement = new TemporalContext(hour, minute);
+						NodeList time = ((Element) nodeValue).getElementsByTagName("value");
+						hour = Integer.parseInt(getValueFromNode(time, 0).replace("\"", ""));   
+						minute = Integer.parseInt(getValueFromNode(time, 1).replace("\"", "")); 
+						contextElement = new TemporalContext(hour, minute);
 					
 					break;
 					
-				case "Velocity" :
+					case "Velocity" :
 					
-					int speed;
+						int speed;
 					
-					NodeList velocity = ((Element) nodeValue).getElementsByTagName("value");
-					speed = Integer.parseInt(getValueFromNode(velocity, 0).replace("\"", "")); 
-					contextElement = new VelocityContext(speed);
+						NodeList velocity = ((Element) nodeValue).getElementsByTagName("value");
+						speed = Integer.parseInt(getValueFromNode(velocity, 0).replace("\"", "")); 
+						contextElement = new VelocityContext(speed);
 					
 					break;
 					
 					
 			}
 			
-			nodeMetadata  = root.getElementsByTagName("contextMetadata").item(0);
-			contextElement.setM_data(parseMetadata(nodeMetadata));
+				nodeMetadata  = root.getElementsByTagName("contextMetadata").item(0);
+				contextElement.setM_data(parseMetadata(nodeMetadata));
+				
+				nodeId = root.getElementsByTagName("contextId").item(0);
+				idValue = nodeId.getChildNodes().item(0).getNodeValue();
+				contextElement.setId(Integer.parseInt(idValue));
+
 			
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			contextElements.add(contextElement);
 		}
-		contextElements.add(contextElement);
 		return contextElements;
 		
 	}
@@ -154,7 +166,7 @@ public class FileSystemParser extends Parser{
 		System.out.println(metadata.getM_version());
 		System.out.println(metadata.getM_unit());
 		
-		return null;
+		return metadata;
 	}
 	
 	/**

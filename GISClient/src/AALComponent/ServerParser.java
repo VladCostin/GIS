@@ -22,99 +22,122 @@ import ContextModel.VelocityContext;
  *
  */
 public class ServerParser extends Parser{
+	
+	/**
+	 * initializing the list of files to be parsed
+	 */
+	public ServerParser() 
+	{
+		 m_fileNames = new ArrayList<String>();
+		 m_fileNames.add("xml/time_context_element.xml");
+		 m_fileNames.add("xml/location_context_element.xml");
+	     m_fileNames.add("xml/velocity_context_element.xml");
+	}
+	
 
 	@Override
 	public ArrayList<Notifications> factoryMethod()
 	{
-		
-		InterfaceContext contextElement = null;
-		Reader dataReader = new InputStreamReader( ClassLoader.getSystemResourceAsStream("xml/time_context_element.xml"));
-		KXmlParser myParser = new KXmlParser();
 		ArrayList<Notifications> contextElements = new ArrayList<Notifications>();
+		KXmlParser myParser = new KXmlParser();
 		String type;
+		Reader dataReader;
 		
-	    try {
-	    	// metadata of the context element
+		for(String fileName : m_fileNames)
+		{
+		
+			InterfaceContext contextElement = null;
+			int id;
+			dataReader = new InputStreamReader( ClassLoader.getSystemResourceAsStream(fileName));
+			
+			try {
 	    	
-			myParser.setInput(dataReader);
-			myParser.nextTag();
-			myParser.nextTag();
-			System.out.println( myParser.getName());
+				myParser.setInput(dataReader);
+				myParser.nextTag();
+				myParser.nextTag();
+				System.out.println( "nume " + myParser.getName());
 			
-			System.out.println( myParser.nextText());
-			myParser.nextTag();
-			System.out.println( myParser.getName());
-			type = myParser.nextText();
+				id = Integer.parseInt( myParser.nextText());
+				myParser.nextTag();
+				System.out.println( myParser.getName());
+				type = myParser.nextText();
 			
 			
-			// contextValue tag
-			myParser.nextTag();
-			System.out.println( myParser.getName());
+				// contextValue tag
+				myParser.nextTag();
+				System.out.println( myParser.getName());
 			
-			switch(type)
-			{
-				case "Time":
+				switch(type)
+				{
+					case "Time":
 					
-					int hour, minute;
+						int hour, minute;
 					
-
-					myParser.nextTag();
-					hour = Integer.parseInt( myParser.nextText());
-					myParser.nextTag();
-					minute = Integer.parseInt( myParser.nextText());
+						myParser.nextTag();
+						hour = Integer.parseInt( myParser.nextText());
+						myParser.nextTag();
+						minute = Integer.parseInt( myParser.nextText());
 					
-					System.out.println(minute + " " + hour);
-					contextElement = new TemporalContext(hour, minute);
+						System.out.println(minute + " " + hour);
+						contextElement = new TemporalContext(hour, minute);
 					
-					break;
+						break;
 				
-				case "Location":
+					case "Location":
 					
-					double lon, lat;
+						double lon, lat;
 					
-					myParser.nextTag();
-					lat = Double.parseDouble( myParser.nextText().replace("\"", ""));
-					myParser.nextTag();
-					lon = Double.parseDouble( myParser.nextText().replace("\"", ""));
+						myParser.nextTag();
+						lat = Double.parseDouble( myParser.nextText().replace("\"", ""));
+						myParser.nextTag();
+						lon = Double.parseDouble( myParser.nextText().replace("\"", ""));
 					
 					
-					System.out.println(lon + " " + lat);
-					contextElement = new LocationContext(lon, lat);
+						System.out.println(lon + " " + lat);
+						contextElement = new LocationContext(lon, lat);
 					
-					break;
+						break;
 					
-				case "Velocity":
+					case "Velocity":
 					
-					int speed;
+						int speed;
 					
-					myParser.nextTag();
-					speed = Integer.parseInt( myParser.nextText());
+						myParser.nextTag();
+						speed = Integer.parseInt( myParser.nextText());
 					
-					System.out.println(speed);
-					contextElement = new VelocityContext(speed);
+						System.out.println(speed);
+						contextElement = new VelocityContext(speed);
 					
-					break;
+						break;
+				}
+				
+				// </contextValue>
+				myParser.nextTag();
+				System.out.println(myParser.getName());
+			
+				contextElement.setM_data( parseMetadata(myParser));
+				contextElement.setId(id);
+			
+				//</contextElement>
+				myParser.nextTag();
+				System.out.println(myParser.getName());
+			
+			
+				contextElements.add(contextElement);
+			} 
+			catch (XmlPullParserException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			// </contextValue>
-			myParser.nextTag();
-			System.out.println(myParser.getName());
-			
-			 contextElement.setM_data( parseMetadata(myParser));
-			
-			//</contextElement>
-			myParser.nextTag();
-			System.out.println(myParser.getName());
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			
-			
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		contextElements.add(contextElement);
 		return contextElements;
 
 	}

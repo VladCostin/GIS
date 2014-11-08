@@ -1,4 +1,3 @@
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
 
 import common.Notifications;
-
 import AALComponent.AALComponent;
 import ContextModel.ContextElement;
 import GIS.GISComponent;
@@ -39,8 +37,13 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	 */
 	
 	JFrame m_frame;
+	 
 	
-	
+	/**
+	 *  the MEDIATOR saves the notifications received from the observer
+	 *  because the notifications are stored as a set of notifications interface, 
+	 *  I use as key to identify the type of them 
+	 */
 	HashMap<TypesNotification,ArrayList<Notifications>> m_notifications;
 	
 	/**
@@ -48,10 +51,6 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	 */
 	public CASMediator() {
 		
-		
-		
-		initFrame();
-		initComponents();
 		m_notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
 	}
 	
@@ -115,9 +114,15 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		
 	}
 
+	/**the main method of the project
+	 * @param arg : no arguments are added
+	 */
 	public static void main(String arg[])
 	{
-		CASMediator mediator = new CASMediator();
+
+		CASMediator mediator = new CASMediator();	
+		mediator.initFrame(); 
+		mediator.initComponents();
 
 	}
 
@@ -125,7 +130,6 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	public void actionPerformed(ActionEvent e) {
 		
 		JRadioButtonMenuItem menuItem = (JRadioButtonMenuItem) e.getSource();
-		String text = menuItem.getText();
 		if(menuItem.getText().equals("GIS"))
 		{
 			System.out.println("intra aici");

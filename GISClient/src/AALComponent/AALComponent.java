@@ -6,12 +6,16 @@ import java.awt.CheckboxGroup;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -20,6 +24,7 @@ import javax.swing.JPanel;
 
 import common.Notifications;
 import ContextModel.InterfaceContext;
+import ContextModel.MetadataContext;
 import Mediator.ComponentIf;
 import Mediator.TypesNotification;
 import Mediator.Subject;
@@ -29,7 +34,7 @@ import Mediator.Subject;
  * @author Vlad Herescu
  *
  */
-public class AALComponent implements ComponentIf, ItemListener{
+public class AALComponent implements ComponentIf, ItemListener, ActionListener{
 
 	/**
 	 * the panel where the data will be shown
@@ -65,6 +70,17 @@ public class AALComponent implements ComponentIf, ItemListener{
 	ArrayList<Notifications> m_contextElements;
 	
 	
+	/**
+	 * a set of labels where the values obtained from XML are shown
+	 */
+	LinkedHashMap<String, JLabel> m_labels;
+	
+	/**
+	 * the index of the current context element from the elements obtained from xml
+	 */
+	int m_indexContextsElement;
+	
+	
 	
 	/**
 	 * @param _subject : the instance of CASMediator, that receives all the data and then shares it
@@ -94,23 +110,34 @@ public class AALComponent implements ComponentIf, ItemListener{
 	public JPanel initCOntextElementsPanel() {
 		
 		JPanel panel = new JPanel(); 
+		int i = 0;
+		ArrayList<JLabel> label = new ArrayList<JLabel>();
 		panel.setLayout(new GridLayout(6, 2));
-		JButton buton = new JButton("Next Context element");
-		JLabel  type, id, value, description, unit;
-		JLabel  type_value, id_value, value_value, description_value, unit_value;
+		JButton buton = new JButton(AALConstants.buttonNextElement);
+		m_labels = new LinkedHashMap<String, JLabel>();
 		
-		id = new JLabel(" ID : "); 
-		type = new JLabel(" TYPE : ");
-		value = new JLabel(" VALUE : ");
-		description = new JLabel(" DESCRIPTION : ");
-		unit = new JLabel(" UNIT : ");
+		label.add(new JLabel(" ID : "));
+		label.add(new JLabel(" VALUE : "));
+		label.add(new JLabel(" DESCRIPTION : "));
+		label.add( new JLabel(" TYPE : "));
+		label.add(new JLabel(" UNIT : "));
 		
 		
-		panel.add(id);
-		panel.add(type);
-		panel.add(value);
-		panel.add(description);
-		panel.add(unit);
+		m_labels.put("ID", new JLabel());
+		m_labels.put("Value", new JLabel());
+		m_labels.put("Description", new JLabel());
+		m_labels.put("Type", new JLabel());
+		m_labels.put("Unit", new JLabel());
+		
+		
+		for(String key : m_labels.keySet())
+		{
+			JLabel lb = m_labels.get(key);
+			panel.add(label.get(i));
+			panel.add(lb);
+			i++;
+		}
+		buton.addActionListener(this);
 		panel.add(buton);
 
 		
@@ -169,14 +196,29 @@ public class AALComponent implements ComponentIf, ItemListener{
 		
 		System.out.println(e.getItem().toString());
 		m_contextElements = m_concrete_parsers.get(e.getItem().toString()).factoryMethod();
+		m_indexContextsElement = 0;
+		setValuesToLabels(m_indexContextsElement); 
 		
-		for(Notifications not : m_contextElements)
-		{
-			InterfaceContext context = (InterfaceContext) not;
-			context.checkValue();
-		}
+		m_subject.communicateContext(m_contextElements);
+
 		
-		//m_subject.communicateContext(new ContextElement[5]);
+	}
+	
+	/**
+	 * @param i
+	 */
+	public void setValuesToLabels(int i)
+	{
+		
+		InterfaceContext context = (InterfaceContext) m_contextElements.get(i);
+		MetadataContext metadata = context.getM_data();
+		
+				
+		m_labels.get("Type").setText(context.getType());
+		m_labels.get("ID").setText(context.getId());
+		m_labels.get("Value").setText(context.getValue());
+		m_labels.get("Unit").setText(metadata.getM_unit());
+		m_labels.get("Description").setText(metadata.getM_description());
 		
 	}
 
@@ -195,6 +237,21 @@ public class AALComponent implements ComponentIf, ItemListener{
 	@Override
 	public Set<TypesNotification> getNotificationsTypes() {
 		return m_notifications.keySet();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if(e.getActionCommand().equals(AALConstants.buttonNextElement))
+		{
+			m_indexContextsElement++;
+			m_indexContextsElement = m_indexContextsElement == m_contextElements.size() ? 0 : m_indexContextsElement;
+			System.out.println(m_indexContextsElement);
+			setValuesToLabels(m_indexContextsElement);
+		}
+		
+		
+		
 	}
 
 }

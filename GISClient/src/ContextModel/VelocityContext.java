@@ -26,9 +26,14 @@ public class VelocityContext extends ContextElement{
 	}
 	
 	@Override
-	public void checkValue() {
-		System.out.println("sunt velocity");
-		
+	public String getValue() {
+		// TODO Auto-generated method stub
+		return Integer.toString(m_speed);
+	}
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return "Velocity";
 	}
 	
 }
