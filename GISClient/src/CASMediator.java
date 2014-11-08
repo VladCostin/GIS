@@ -11,9 +11,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 import common.Notifications;
 import AALComponent.AALComponent;
-import ContextModel.ContextElement;
 import GIS.GISComponent;
-import GeoObject.GeoObject;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
 import Mediator.TypesNotification;
@@ -196,8 +194,8 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 
 	@Override
 	public ArrayList<Notifications> communicateNotifications(
-			TypesNotification _notification) {
-		// TODO Auto-generated method stub
+			TypesNotification _notification) 
+	{
 		return m_notifications.get(_notification);
 	}
 	

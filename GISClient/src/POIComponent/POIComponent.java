@@ -51,7 +51,8 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	/**
 	 * the user selects the types of the POI to be shown on the map
 	 */
-	public Panel m_panelSelect;
+	Panel m_panelSelect;
+	
 	
 	/**
 	 * the instance of the mediator/subject , to call the method to send 
@@ -186,9 +187,6 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 		buttonSelect.addActionListener(this); 
 		buttonSelect.setSize(200, 30);
 		select.add(buttonSelect);
-		  
-		  
-		
 		  
 		for (String type : m_POINames_ID.keySet())
 			  model.addElement(type);
