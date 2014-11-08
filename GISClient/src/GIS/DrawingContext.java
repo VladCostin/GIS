@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import GeoObject.GeoObject;
 import GeoObject.InterfaceDraw;
+import GeoObject.POIObject;
 
 
 

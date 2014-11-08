@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.awt.Polygon;
 
 import GeoObject.AreaObj;
+import GeoObject.GeoDoublePoint;
 import GeoObject.InterfaceDraw;
 import GeoObject.LineObj;
 import GeoObject.PointObj;
@@ -99,12 +100,8 @@ public class GeoTransformationMatrix {
 	 */
   public Point multiply(Point _pt) {
 	  
-	System.out.println(" inainte  : " +  _pt.x + "  " + _pt.y);
-	  
     double x = _pt.x * matrix11 + _pt.y * matrix12 + matrix13;
     double y = _pt.y * matrix21 + _pt.y * matrix22 + matrix23;
-    
-    System.out.println(" dupa  : " +  ((int)x) + "  " +  ((int)y));
     
     return new Point((int)x,(int)y);
   }

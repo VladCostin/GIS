@@ -12,8 +12,9 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import common.Notifications;
-
+import GeoObject.GeoDoublePoint;
 import GeoObject.GeoObject;
+import GeoObject.POIObject;
 import Mediator.TypesNotification;
 
 

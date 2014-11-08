@@ -42,29 +42,7 @@ public class LineObj extends ObjectTeil{
 	@Override
 	public void setColorObject(Graphics _g, Color fill, Color border) {
 		
-		int i;
-		int x1, y1,x2,y2;
-		
 		Graphics2D g2d = (Graphics2D) _g;
-		/*int x[] = new int[_points_multiply.size()];
-		int y[] = new int[_points_multiply.size()];
-		
-		for(i = 0; i <_points_multiply.size() ; i++)
-		{
-			/*x1 = _points_multiply.get(i).x;
-			y1 = _points_multiply.get(i).y;
-			
-			x2 = _points_multiply.get(i+1).x;
-			y2 = _points_multiply.get(i+1).y;
-			
-	    	g2d.setColor(fill);
-	    	 g2d.setStroke(new BasicStroke(2));
-	    	g2d.drawLine(x1, y1, x2, y2);
-			
-			x[i] = _points_multiply.get(i).x;
-			y[i] = _points_multiply.get(i).y;
-
-		}*/
 		
 		g2d.setColor(fill);
 		g2d.setStroke(new BasicStroke(2));
