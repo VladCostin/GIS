@@ -11,6 +11,9 @@ public class VelocityContext extends ContextElement{
 	 */
 	int m_speed;
 	
+	/**
+	 * specifying the default constructor in case it is needed
+	 */
 	public VelocityContext() {
 		
 	}

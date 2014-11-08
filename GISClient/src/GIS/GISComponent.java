@@ -49,7 +49,7 @@ import common.Notifications;
 
 import GeoObject.GeoObject;
 import Mediator.ComponentIf;
-import Mediator.Notification;
+import Mediator.TypesNotification;
 import Mediator.Subject;
 
 /** 
@@ -124,7 +124,7 @@ public class  GISComponent
 	/**
 	 * the notifications the gis component is interested in
 	 */
-	static HashMap<Notification, ArrayList<Notifications>> m_notifications;
+	static HashMap<TypesNotification, ArrayList<Notifications>> m_notifications;
 
 
 	/**
@@ -144,10 +144,10 @@ public class  GISComponent
 	}
   
 	
-	private HashMap<Notification, ArrayList<Notifications>> initNotifications() {
-		HashMap<Notification, ArrayList<Notifications>> notifications = new HashMap<Notification, ArrayList<Notifications>>();
+	private HashMap<TypesNotification, ArrayList<Notifications>> initNotifications() {
+		HashMap<TypesNotification, ArrayList<Notifications>> notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
 		
-		notifications.put(Notification.POI_OBJECT, new ArrayList<Notifications>());
+		notifications.put(TypesNotification.POI_OBJECT, new ArrayList<Notifications>());
 		return notifications;
 	}
 
@@ -566,12 +566,12 @@ public class  GISComponent
   }
 
    @Override
-   public Set<Notification> getNotificationsTypes() {
+   public Set<TypesNotification> getNotificationsTypes() {
 		return m_notifications.keySet();
   }
 
   @Override
-  public void update(Notification _notification) {
+  public void update(TypesNotification _notification) {
 	  
 	  System.out.println("intra si aici, in GISCompoent " + _notification);
 	  

@@ -14,5 +14,9 @@ public interface InterfaceContext {
 	 */
 	public boolean checkCompatibility(InterfaceContext _context);
 	
+	/**
+	 * sets the MetaData as a member to the context element
+	 * @param m_data : the metadata obtained from the xml file
+	 */
 	public void setM_data(MetadataContext m_data);
 }

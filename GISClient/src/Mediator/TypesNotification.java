@@ -1,10 +1,11 @@
 package Mediator;
 
 /**
+ * used to identify the notifications, because all of them are casted to the interface Notification
  * @author Vlad Herescu
  *
  */
-public enum Notification {
+public enum TypesNotification {
 	
 	/**
 	 * associated with the context_element notification from the subject
@@ -16,6 +17,9 @@ public enum Notification {
 	 */
 	GEO_OBJECT,
 	
+	/**
+	 * associated to the POI objects send to the subject
+	 */
 	POI_OBJECT;
 	
 	

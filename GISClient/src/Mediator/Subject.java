@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 import common.Notifications;
 
-import ContextModel.ContextElement;
-import GIS.POIObject;
-import GeoObject.GeoObject;
 
 /**
  * specifing the methods of the subject pattern. 
@@ -40,6 +37,6 @@ public interface Subject {
 	 * @param _notification : the type of notification the observer is requesting
 	 * @return : the set of notifications of the type _notification
 	 */
-	public ArrayList<Notifications> communicateNotifications(Notification _notification); 
+	public ArrayList<Notifications> communicateNotifications(TypesNotification _notification); 
 	
 }

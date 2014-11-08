@@ -14,7 +14,7 @@ import java.util.Vector;
 import common.Notifications;
 
 import GeoObject.GeoObject;
-import Mediator.Notification;
+import Mediator.TypesNotification;
 
 
 
@@ -319,7 +319,7 @@ public class DrawingPanel extends Panel {
   {
   	if (m_objects != null && m_matrix != null) 
   	{
-  		ArrayList<Notifications> objects = GISComponent.m_notifications.get(Notification.POI_OBJECT);
+  		ArrayList<Notifications> objects = GISComponent.m_notifications.get(TypesNotification.POI_OBJECT);
   		Image img;
   		_g.clearRect(0, 0, getWidth(), getHeight());
   		

@@ -27,9 +27,15 @@ import ContextModel.VelocityContext;
  */
 public class FileSystemParser extends Parser{
 	
-	 DocumentBuilder builder;
+	 /**
+	 * object that reads the XML file and parse it into a Document instance
+	 */
+	DocumentBuilder builder;
 	
 	
+	/**
+	 * instantiating the DocumentBuilder
+	 */
 	public FileSystemParser() {
 		DocumentBuilderFactory factory =DocumentBuilderFactory.newInstance();
 	
@@ -59,7 +65,7 @@ public class FileSystemParser extends Parser{
 
 			Element root = document.getDocumentElement();
 			nodeId = root.getElementsByTagName("contextId").item(0);
-			idValue = nodeId.getChildNodes().item(0).getNodeValue();
+			//idValue = nodeId.getChildNodes().item(0).getNodeValue();
 			
 			
 			nodeKey = root.getElementsByTagName("contextKey").item(0);
@@ -108,8 +114,6 @@ public class FileSystemParser extends Parser{
 			nodeMetadata  = root.getElementsByTagName("contextMetadata").item(0);
 			contextElement.setM_data(parseMetadata(nodeMetadata));
 			
-			
-			
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,9 +131,8 @@ public class FileSystemParser extends Parser{
 	 * @param _nodeMetadata : contains the father node where the metadata is extracted from
 	 * @return : the metadata of the current context element 
 	 */
-	public MetadataContext parseMetadata(Node _nodeMetadata) {
-		
-		
+	public MetadataContext parseMetadata(Node _nodeMetadata)
+	{	
 		MetadataContext metadata = new MetadataContext();
 		ArrayList<Double> location;
 		
@@ -148,25 +151,20 @@ public class FileSystemParser extends Parser{
 		System.out.println(metadata.getM_version());
 		System.out.println(metadata.getM_unit());
 		
-		
-		
 		return null;
 	}
 	
 	/**
 	 * @param _node : returns the attributes of a node
-	 * @return
+	 * @return : an Arraylist containing the coordinates of the context element
 	 */
 	public ArrayList<Double> getValuesAttributes(NodeList _node)
 	{
 		NamedNodeMap map = _node.item(0).getAttributes();
 		ArrayList<Double> attribtues = new ArrayList<Double>();
 		
-		
 		attribtues.add(Double.parseDouble(  map.getNamedItem("lat").getNodeValue()));
 		attribtues.add(Double.parseDouble(  map.getNamedItem("long").getNodeValue()));
-		
-		
 		
 		return attribtues;
 	}
@@ -179,7 +177,6 @@ public class FileSystemParser extends Parser{
 	 */
 	public String getValueFromNode(NodeList _node,int _position)
 	{
-		
 		return _node.item(_position).getChildNodes().item(0).getNodeValue();
 	}
 	

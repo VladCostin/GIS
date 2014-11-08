@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
-import GIS.GeoTransformationMatrix;
 import GIS.ObjectTeil;
 
 

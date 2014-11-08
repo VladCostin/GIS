@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 import GIS.POIObject;
 import Mediator.ComponentIf;
-import Mediator.Notification;
+import Mediator.TypesNotification;
 import Mediator.Subject;
 
 import java.awt.Point;
@@ -62,7 +62,7 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	 * each component receives from the subject a list of data that implement the interface notifications
 	 * I useNotification as a key to know the type of the values
 	 */
-	HashMap<Notification, ArrayList<Notifications>> m_notifications;
+	HashMap<TypesNotification, ArrayList<Notifications>> m_notifications;
 	
 	
 	/**
@@ -109,10 +109,10 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	/**
 	 * @return : the map containing the set of notifications the POI Component is interested in and the notifications received
 	 */
-	public HashMap<Notification, ArrayList<Notifications>> initNotifications()
+	public HashMap<TypesNotification, ArrayList<Notifications>> initNotifications()
 	{
 	
-		HashMap<Notification, ArrayList<Notifications>> notifications = new HashMap<Notification, ArrayList<Notifications>>();
+		HashMap<TypesNotification, ArrayList<Notifications>> notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
 		return notifications;
 	}
 
@@ -265,12 +265,12 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	}
 
 	@Override
-	public Set<Notification> getNotificationsTypes() {
+	public Set<TypesNotification> getNotificationsTypes() {
 		return m_notifications.keySet();
 	}
 
 	@Override
-	public void update(Notification _notification) {
+	public void update(TypesNotification _notification) {
 		// TODO Auto-generated method stub
 		
 	}

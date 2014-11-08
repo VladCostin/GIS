@@ -18,7 +18,7 @@ import GIS.GISComponent;
 import GeoObject.GeoObject;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
-import Mediator.Notification;
+import Mediator.TypesNotification;
 import Mediator.Subject;
 import POIComponent.POIComponent;
 
@@ -41,7 +41,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	JFrame m_frame;
 	
 	
-	HashMap<Notification,ArrayList<Notifications>> m_notifications;
+	HashMap<TypesNotification,ArrayList<Notifications>> m_notifications;
 	
 	/**
 	 * initializing the window and the components of the mediator 
@@ -52,7 +52,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		
 		initFrame();
 		initComponents();
-		m_notifications = new HashMap<Notification, ArrayList<Notifications>>();
+		m_notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
 	}
 	
 	/**
@@ -153,11 +153,11 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	@Override
 	public void communicateGeoObject(ArrayList<Notifications> _geoObjects)
 	{
-		 m_notifications.put(Notification.GEO_OBJECT, _geoObjects);
+		 m_notifications.put(TypesNotification.GEO_OBJECT, _geoObjects);
 		
 		for(ComponentIf component : m_components)
 		{
-			component.update(Notification.GEO_OBJECT);
+			component.update(TypesNotification.GEO_OBJECT);
 		}
 		
 		
@@ -168,10 +168,10 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	public void communicateContext(ArrayList<Notifications> _contextElements) 
 	{
 
-		m_notifications.put(Notification.CONTEXT_ELEMENT, _contextElements);
+		m_notifications.put(TypesNotification.CONTEXT_ELEMENT, _contextElements);
 		for(ComponentIf component : m_components)
 		{
-			component.update(Notification.CONTEXT_ELEMENT);
+			component.update(TypesNotification.CONTEXT_ELEMENT);
 		}
 		
 	}
@@ -182,17 +182,17 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		
 		System.out.println("intra aici");
 		
-		m_notifications.put(Notification.POI_OBJECT, _POIObjects);
+		m_notifications.put(TypesNotification.POI_OBJECT, _POIObjects);
 		for(ComponentIf component : m_components)
 		{
-			component.update(Notification.POI_OBJECT);
+			component.update(TypesNotification.POI_OBJECT);
 		}
 		
 	}
 
 	@Override
 	public ArrayList<Notifications> communicateNotifications(
-			Notification _notification) {
+			TypesNotification _notification) {
 		// TODO Auto-generated method stub
 		return m_notifications.get(_notification);
 	}
