@@ -3,6 +3,7 @@ package GIS;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import GISCalculation.GeoTransformationMatrix;
 import GeoObject.GeoObject;
 import GeoObject.InterfaceDraw;
 import GeoObject.POIObject;

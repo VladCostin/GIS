@@ -4,8 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 
-import GIS.GeoTransformationMatrix;
-import GIS.ObjectTeil;
+import GISCalculation.GeoTransformationMatrix;
 
 
 /**

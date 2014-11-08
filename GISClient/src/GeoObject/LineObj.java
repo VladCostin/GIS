@@ -7,8 +7,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import GIS.GeoTransformationMatrix;
-import GIS.ObjectTeil;
+import GISCalculation.GeoTransformationMatrix;
 
 
 

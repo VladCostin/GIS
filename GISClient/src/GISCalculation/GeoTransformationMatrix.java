@@ -1,10 +1,9 @@
-package GIS;
+package GISCalculation;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Polygon;
 
 import GeoObject.AreaObj;
-import GeoObject.GeoDoublePoint;
 import GeoObject.InterfaceDraw;
 import GeoObject.LineObj;
 import GeoObject.PointObj;

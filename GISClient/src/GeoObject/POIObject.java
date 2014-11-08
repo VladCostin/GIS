@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.Image;
 import java.awt.Panel;
 
-import GIS.GeoTransformationMatrix;
+import GISCalculation.GeoTransformationMatrix;
 
 /**
  * a rudimentary class to represent point of interst objects

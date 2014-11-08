@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import common.Notifications;
-import GeoObject.GeoDoublePoint;
+import GISCalculation.GeoDoublePoint;
+import GISCalculation.GeoTransformationMatrix;
 import GeoObject.GeoObject;
 import GeoObject.POIObject;
 import Mediator.TypesNotification;

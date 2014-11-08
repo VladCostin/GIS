@@ -1,4 +1,4 @@
-package GeoObject;
+package GISCalculation;
 /*
  * $Log: GeoDoublePoint.java,v $
  */

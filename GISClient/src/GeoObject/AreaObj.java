@@ -4,8 +4,6 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
-import GIS.ObjectTeil;
-
 
 /**
  * represents a polygon on the map
