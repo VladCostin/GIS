@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import ContextModel.InterfaceContext;
 import ContextModel.LocationContext;
 import ContextModel.MetadataContext;
+import ContextModel.TemperatureContext;
 import ContextModel.TemporalContext;
 import ContextModel.VelocityContext;
 
@@ -32,6 +33,7 @@ public class ServerParser extends Parser{
 		 m_fileNames.add("xml/time_context_element.xml");
 		 m_fileNames.add("xml/location_context_element.xml");
 	     m_fileNames.add("xml/velocity_context_element.xml");
+	     m_fileNames.add("xml/temperature_context_element.xml");
 	}
 	
 
@@ -107,6 +109,18 @@ public class ServerParser extends Parser{
 					
 						System.out.println(speed);
 						contextElement = new VelocityContext(speed);
+					
+						break;
+						
+					case "Temperature":
+						
+						String temperature;
+						
+						myParser.nextTag();
+						temperature =  myParser.nextText();
+					
+						System.out.println(temperature);
+						contextElement = new TemperatureContext(temperature);
 					
 						break;
 				}

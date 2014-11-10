@@ -15,10 +15,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import common.Notifications;
-
 import ContextModel.InterfaceContext;
 import ContextModel.LocationContext;
 import ContextModel.MetadataContext;
+import ContextModel.TemperatureContext;
 import ContextModel.TemporalContext;
 import ContextModel.VelocityContext;
 
@@ -54,6 +54,7 @@ public class FileSystemParser extends Parser{
 		m_fileNames.add("xml/time_context_element.xml");
 		m_fileNames.add("xml/location_context_element.xml");
 		m_fileNames.add("xml/velocity_context_element.xml");
+		m_fileNames.add("xml/temperature_context_element.xml");
 		
 
 	}
@@ -114,6 +115,16 @@ public class FileSystemParser extends Parser{
 						NodeList velocity = ((Element) nodeValue).getElementsByTagName("value");
 						speed = Integer.parseInt(getValueFromNode(velocity, 0).replace("\"", "")); 
 						contextElement = new VelocityContext(speed);
+					
+					break;
+					
+					case "Temperature" :
+						
+						String temperature;
+					
+						NodeList temp = ((Element) nodeValue).getElementsByTagName("value");
+						temperature = getValueFromNode(temp, 0).replace("\"", ""); 
+						contextElement = new TemperatureContext(temperature);
 					
 					break;
 					
