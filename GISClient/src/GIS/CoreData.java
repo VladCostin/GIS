@@ -1,11 +1,7 @@
 package GIS;
 import java.awt.Color;
-import java.awt.Point;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-
-import org.postgis.Polygon;
-
 import common.ConstantsId;
 
 
@@ -66,11 +62,11 @@ public class CoreData {
 	 */
 	public void init_POIMarkers() {
 		
-		m_hashMapTypePOI_NameMarker.put(ConstantsId.bank, "bank.png");
-		m_hashMapTypePOI_NameMarker.put(ConstantsId.school, "school.png");
-		m_hashMapTypePOI_NameMarker.put(ConstantsId.pharmacy, "hospital.png");
-		m_hashMapTypePOI_NameMarker.put(ConstantsId.post_office, "post.png");
-		m_hashMapTypePOI_NameMarker.put(ConstantsId.police, "police.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.bank, "img/bank.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.school, "img/school.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.pharmacy, "img/hospital.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.post_office, "img/post.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.police, "img/police.png");
 		
 	}
 

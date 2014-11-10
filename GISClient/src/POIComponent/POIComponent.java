@@ -24,7 +24,9 @@ import Mediator.Subject;
 import java.awt.Point;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import common.ConstantsId;
@@ -46,12 +48,23 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	/**
 	 * the list of Point of objects hardcoded/ later in the database
 	 */
-	ArrayList<Notifications> m_poi;
+	static ArrayList<Notifications> m_poi;
 	
 	/**
 	 * the user selects the types of the POI to be shown on the map
 	 */
-	Panel m_panelSelect;
+	JPanel m_panelSelect;
+	
+	
+	/**
+	 * the user can add new POI
+	 */
+	AddPanel m_panelAdd;
+	
+	/**
+	 * the user can delete POIs
+	 */
+	DeletePanel m_panelDelete;
 	
 	
 	/**
@@ -77,6 +90,7 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	 * the list contained in the panel where the user can select his types of POI to be shown
 	 */
 	JList<String> m_list;
+
 	
 	
 	/**
@@ -88,11 +102,14 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 		m_panel = initGUI();
 		m_poi = initPOI();
 		m_panelSelect = initPanelSelect();
+		m_panelAdd = new AddPanel(m_POINames_ID);
+		m_panelDelete = new DeletePanel(m_poi);
 		m_notifications = initNotifications();
 		m_subject = _subject;
 		
 	}
 	
+
 	/**
 	 * @return : the map typeName-idType that identify the POI
 	 */
@@ -144,6 +161,7 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 		
 		Panel gui = new Panel(new BorderLayout());
 	    gui.add(initOptionsParser(),      BorderLayout.NORTH);
+
 	    return gui;
 	}
 	
@@ -176,9 +194,9 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	/**
 	 * @return : the panel where the user can select the types of POI and sent them to the GIS Component
 	 */
-	public Panel initPanelSelect()
+	public JPanel initPanelSelect()
 	{
-		Panel select = new Panel(new FlowLayout());
+		JPanel select = new JPanel(new FlowLayout());
 		Button buttonSelect = new Button(InterfaceOptionsManagePOI.buttonLoad);
 		DefaultListModel<String> model = new DefaultListModel<String>(); 
 		m_list = new JList<String>(model);
@@ -189,7 +207,7 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 		select.add(buttonSelect);
 		  
 		for (String type : m_POINames_ID.keySet())
-			  model.addElement(type);
+				model.addElement(type);
 		
 		select.add(pane);
 		
@@ -198,6 +216,8 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 		
 		
 	}
+	
+
 	
 
 	@Override
@@ -215,20 +235,67 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
+		ArrayList<String> poisDeleted = m_panelDelete.m_POIsDeleted;
+		System.out.println("intra aici " + e.getItem().toString());
 		
-		System.out.println("intra aici");
+		
+		m_panel.removeAll();
+		m_panel.add( initOptionsParser(),      BorderLayout.NORTH);
+
+		m_poi.addAll(m_panelAdd.getM_newPOI());
+		m_panelAdd.getM_newPOI().clear();
+		
+		
+	/*	for(Notifications notification : m_poi)
+		{
+			POIObject object = (POIObject) notification;
+			if(object.getId().equals(poisDeleted))
+			{
+				
+			}
+		}
+	*/
+		for(String delete : poisDeleted)
+		{
+			for(Notifications notification : m_poi)
+			{
+				POIObject object = (POIObject) notification;
+				if(object.getId().equals(delete))
+				{
+					m_poi.remove(notification);
+					break;
+				}
+			}
+		}
+		
+		
+		
 		switch(e.getItem().toString())
 		{
-			case InterfaceOptionsManagePOI.optionSelect :
+			case InterfaceOptionsManagePOI.optionSelect :		
 				
+
 				m_panel.add(m_panelSelect,      BorderLayout.CENTER);
 
 				break;
+			case InterfaceOptionsManagePOI.optionAdd :
+
+				
+				m_panel.add(m_panelAdd,      BorderLayout.CENTER);
+
+				break;
+			case InterfaceOptionsManagePOI.optionDelete :
+				
+				m_panelDelete.addNewPois(m_poi);
+				
+				m_panel.add(m_panelDelete, BorderLayout.CENTER);
+				break;
 		}
+		
+
 		
 		m_panel.validate();
 		m_panel.repaint();
-		
 		
 	}
 
@@ -272,6 +339,16 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 	public void update(TypesNotification _notification) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	public JPanel getM_panelAdd() {
+		return m_panelAdd;
+	}
+
+
+	public void setM_panelAdd(AddPanel m_panelAdd) {
+		this.m_panelAdd = m_panelAdd;
 	}
 
 

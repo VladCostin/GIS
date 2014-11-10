@@ -3,7 +3,6 @@ package AALComponent;
 import java.awt.BorderLayout;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
@@ -13,7 +12,6 @@ import java.awt.event.ItemListener;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -152,7 +150,8 @@ public class AALComponent implements ComponentIf, ItemListener, ActionListener{
 	 * @return the map of expected notifications initialized
 	 */
 	public HashMap<TypesNotification, ArrayList<Notifications>> initNotifications() {
-		HashMap<TypesNotification, ArrayList<Notifications>> notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
+		HashMap<TypesNotification, ArrayList<Notifications>> notifications =
+				new HashMap<TypesNotification, ArrayList<Notifications>>();
 		return notifications;
 	}
 	
