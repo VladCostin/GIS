@@ -11,6 +11,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 import common.Notifications;
 import AALComponent.AALComponent;
+import ContextManagementComponent.ContextManagement;
 import GIS.GISComponent;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
@@ -60,6 +61,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		m_components.add(new GISComponent(this));
 		m_components.add(new AALComponent(this));
 		m_components.add(new POIComponent(this));
+		m_components.add(new ContextManagement(this));
 		
 	}
 
@@ -82,7 +84,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	public void setTheMenu() {
 		JMenuBar menuBar;
 		JMenu menu;
-		JRadioButtonMenuItem menuItemGIS, menuItemAAL, menuItemPOI;
+		JRadioButtonMenuItem menuItemGIS, menuItemAAL, menuItemPOI, menuItemManage;
 		ButtonGroup group;
 		
 		menuBar = new JMenuBar();
@@ -91,19 +93,23 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		menuItemGIS = new JRadioButtonMenuItem("GIS");
 		menuItemAAL = new JRadioButtonMenuItem("AAL");
 		menuItemPOI = new JRadioButtonMenuItem("POI");
+		menuItemManage = new JRadioButtonMenuItem("Manager");
 		
 		
 		menuItemGIS.addActionListener(this);
 		menuItemAAL.addActionListener(this);
 		menuItemPOI.addActionListener(this);
+		menuItemManage.addActionListener(this); 
 		
 		menu.add(menuItemGIS);
 		menu.add(menuItemAAL);
 		menu.add(menuItemPOI);
+		menu.add(menuItemManage);
 		
 		group.add(menuItemAAL);
 		group.add(menuItemGIS);
 		group.add(menuItemPOI);
+		group.add(menuItemManage);
 		
 		menuBar.add(menu);
 		
@@ -129,27 +135,24 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		
 		JRadioButtonMenuItem menuItem = (JRadioButtonMenuItem) e.getSource();
 		if(menuItem.getText().equals("GIS"))
-		{
-			System.out.println("intra aici");
-			m_frame.setContentPane(m_components.get(0).getPanel());
-			m_frame.validate();
-			m_frame.repaint();
-			
-		}
+			loadPanel(0);
 		if(menuItem.getText().equals("AAL"))
-		{
-			m_frame.setContentPane(m_components.get(1).getPanel());
-			m_frame.validate();
-			m_frame.repaint();
-		}
+			loadPanel(1);
 		if(menuItem.getText().equals("POI"))
-		{
-			m_frame.setContentPane(m_components.get(2).getPanel());
-			m_frame.validate();
-			m_frame.repaint();
-		}
+			loadPanel(2);
+		if(menuItem.getText().equals("Manager"))
+			loadPanel(3);
 
-		
+	}
+	
+	/**
+	 * @param _nrPanel : the id of the component whose panel will be loaded 
+	 */
+	public void loadPanel(int _nrPanel)
+	{
+		m_frame.setContentPane(m_components.get(_nrPanel).getPanel());
+		m_frame.validate();
+		m_frame.repaint();
 	}
 
 	@Override
