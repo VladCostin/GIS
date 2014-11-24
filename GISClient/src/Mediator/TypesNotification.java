@@ -20,7 +20,12 @@ public enum TypesNotification {
 	/**
 	 * associated to the POI objects send to the subject
 	 */
-	POI_OBJECT;
+	POI_OBJECT,
+	
+	/**
+	 * associated to the context created by the context management
+	 */
+	CONTEXT_SITUATION;
 	
 	
 	

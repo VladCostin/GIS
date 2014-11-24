@@ -2,6 +2,7 @@ package ContextManagementComponent;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
@@ -24,8 +25,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.LabelView;
 
 import common.Notifications;
 import Mediator.ComponentIf;
@@ -56,11 +59,44 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 	Panel m_panel;
 	
 	
+	/**
+	 * label where the current time is shown
+	 */
 	static JLabel labelTimeCurrent;
 	
+	/**
+	 * label where the frequency to update the map is shown
+	 */
 	JLabel labelFrequency;
 	
-	JSlider slider;
+	/**
+	 * label where the velocity of the user is shown
+	 */
+	JLabel labelVelocity;
+	
+	
+	/**
+	 * text field where the latitude is shown;
+	 */
+	JTextField textFieldLatitude;
+	
+	
+	/**
+	 * text field where the longitude is shown;
+	 */
+	JTextField textFieldLongitude;
+	
+	
+	
+	/**
+	 * slider where the user can select the frequency to update the map
+	 */
+	JSlider sliderFrequency;
+	
+	/**
+	 *  slider where the user can select the velocity of the map
+	 */
+	JSlider sliderVelocity;
 	
 	
 	/**
@@ -81,10 +117,42 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 		Panel gui = new Panel(new GridLayout(5,1));
 		gui.add(initPanelNightDay());
 		gui.add(initPanelFrequency());
+		gui.add(initPanelVelocity());
+		gui.add(initPosition());
 		return gui;
 	}
 	
-	
+
+	/**
+	 * @return : the panel where 
+	 */
+	public JPanel initPosition() {
+		
+		JPanel panel = new JPanel(new GridLayout(2,2));
+		textFieldLatitude = new JTextField();
+		textFieldLongitude = new JTextField();
+		
+		textFieldLatitude.setEditable(false);
+		textFieldLongitude.setEditable(false);
+		
+		textFieldLatitude.setBackground(Color.white);
+		textFieldLongitude.setBackground(Color.white);
+		
+		panel.add(new JLabel("Latitude"));
+		panel.add(textFieldLatitude);
+		panel.add(new JLabel("Longitude"));
+		panel.add(textFieldLongitude);
+		
+		return panel;
+		
+		
+		
+	}
+
+	/**
+	 * @return : the panel where the user can select the moment of the day : if 
+	 * it is night or day
+	 */
 	public JPanel initPanelNightDay()
 	{
 		JPanel panel = new JPanel();
@@ -104,6 +172,9 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 		return panel;
 	}
 	
+	/**
+	 * @return : the panel where the user can select the frequency to send data to the user
+	 */
 	public JPanel initPanelFrequency()
 	{
 
@@ -113,23 +184,50 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 		JLabel labelCurrentTime =  new JLabel("              Current frequency : ");
 		labelFrequency = new JLabel("25 ms");
 		
-		slider = new JSlider(JSlider.HORIZONTAL, 0, 50, 25);
-	    slider.setMinorTickSpacing(2);
-	    slider.setMajorTickSpacing(10);
-	    slider.setPaintTicks(true);
-	    slider.setPaintLabels(true);
+		sliderFrequency = new JSlider(JSlider.HORIZONTAL, 0, 50, 25);
+	    sliderFrequency.setMinorTickSpacing(2);
+	    sliderFrequency.setMajorTickSpacing(10);
+	    sliderFrequency.setPaintTicks(true);
+	    sliderFrequency.setPaintLabels(true);
 
 		    // We'll just use the standard numeric labels for now...
-		slider.setLabelTable(slider.createStandardLabels(10));
-		slider.addChangeListener(this);
+		sliderFrequency.setLabelTable(sliderFrequency.createStandardLabels(10));
+		sliderFrequency.addChangeListener(this);
 		
 		panel.add(labelTimeSelect);
-		panel.add( slider );
+		panel.add( sliderFrequency );
 		panel.add(labelCurrentTime);
 		panel.add(labelFrequency);
 
 		return panel;
 	}
+	
+	public JPanel initPanelVelocity()
+	{
+		JPanel panel = new JPanel();
+
+		JLabel labelTimeSelect =  new JLabel("Select velocity :  ");
+		JLabel labelCurrentTime =  new JLabel("              Current velocity : ");
+		labelVelocity = new JLabel("25 ms");
+		
+		sliderVelocity = new JSlider(JSlider.HORIZONTAL, 0, 80, 10);
+	    sliderVelocity.setMinorTickSpacing(2);
+	    sliderVelocity.setMajorTickSpacing(10);
+	    sliderVelocity.setPaintTicks(true);
+	    sliderVelocity.setPaintLabels(true);
+
+		    // We'll just use the standard numeric labels for now...
+		sliderVelocity.setLabelTable(sliderVelocity.createStandardLabels(45));
+		sliderVelocity.addChangeListener(this);
+		
+		panel.add(labelTimeSelect);
+		panel.add( sliderVelocity );
+		panel.add(labelCurrentTime);
+		panel.add(labelVelocity);
+
+		return panel;
+	}
+
 	
 	
 	@Override
@@ -159,7 +257,11 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		
-		labelFrequency.setText(slider.getValue() + " ms");
+		JSlider slider = (JSlider) e.getSource();
+		if(slider == sliderFrequency)
+			labelFrequency.setText(sliderFrequency.getValue() + " ms");
+		if(slider == sliderVelocity)
+			labelVelocity.setText(sliderVelocity.getValue() + " ms");
 	}
 
 }

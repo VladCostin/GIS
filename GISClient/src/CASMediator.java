@@ -13,6 +13,7 @@ import common.Notifications;
 import AALComponent.AALComponent;
 import ContextManagementComponent.ContextManagement;
 import GIS.GISComponent;
+import GPSComponent.GPS;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
 import Mediator.TypesNotification;
@@ -62,6 +63,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		m_components.add(new AALComponent(this));
 		m_components.add(new POIComponent(this));
 		m_components.add(new ContextManagement(this));
+		m_components.add(new GPS(this));
 		
 	}
 
@@ -94,6 +96,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		menuItemAAL = new JRadioButtonMenuItem("AAL");
 		menuItemPOI = new JRadioButtonMenuItem("POI");
 		menuItemManage = new JRadioButtonMenuItem("Manager");
+		menuItemManage = new JRadioButtonMenuItem("GPS");
 		
 		
 		menuItemGIS.addActionListener(this);
@@ -194,6 +197,16 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		}
 		
 	}
+	
+	public void communicateContextSituation(ArrayList<Notifications> _contextSituations)
+	{
+		m_notifications.put(TypesNotification.CONTEXT_SITUATION, _contextSituations);
+		for(ComponentIf component : m_components)
+		{
+			component.update(TypesNotification.CONTEXT_SITUATION);
+		}
+	}
+	
 
 	@Override
 	public ArrayList<Notifications> communicateNotifications(
