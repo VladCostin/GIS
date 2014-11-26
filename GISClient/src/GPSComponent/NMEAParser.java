@@ -92,6 +92,7 @@ public class NMEAParser extends Observable implements Runnable {
 	 */
 	public void run() {
 		try {
+			
 			String str = "";
 			String[] fields;
 			SatelliteInfo satInfo;

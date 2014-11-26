@@ -86,7 +86,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	public void setTheMenu() {
 		JMenuBar menuBar;
 		JMenu menu;
-		JRadioButtonMenuItem menuItemGIS, menuItemAAL, menuItemPOI, menuItemManage;
+		JRadioButtonMenuItem menuItemGIS, menuItemAAL, menuItemPOI, menuItemManage,  menuItemGPS;
 		ButtonGroup group;
 		
 		menuBar = new JMenuBar();
@@ -96,23 +96,26 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		menuItemAAL = new JRadioButtonMenuItem("AAL");
 		menuItemPOI = new JRadioButtonMenuItem("POI");
 		menuItemManage = new JRadioButtonMenuItem("Manager");
-		menuItemManage = new JRadioButtonMenuItem("GPS");
+		menuItemGPS = new JRadioButtonMenuItem("GPS");
 		
 		
 		menuItemGIS.addActionListener(this);
 		menuItemAAL.addActionListener(this);
 		menuItemPOI.addActionListener(this);
 		menuItemManage.addActionListener(this); 
+		menuItemGPS.addActionListener(this); 
 		
 		menu.add(menuItemGIS);
 		menu.add(menuItemAAL);
 		menu.add(menuItemPOI);
 		menu.add(menuItemManage);
+		menu.add(menuItemGPS);
 		
 		group.add(menuItemAAL);
 		group.add(menuItemGIS);
 		group.add(menuItemPOI);
 		group.add(menuItemManage);
+		group.add(menuItemGPS);
 		
 		menuBar.add(menu);
 		
@@ -145,6 +148,8 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 			loadPanel(2);
 		if(menuItem.getText().equals("Manager"))
 			loadPanel(3);
+		if(menuItem.getText().equals("GPS"))
+			loadPanel(4);
 
 	}
 	
@@ -175,6 +180,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	@Override
 	public void communicateContext(ArrayList<Notifications> _contextElements) 
 	{
+		System.out.println("intra aici si aici si aici");
 
 		m_notifications.put(TypesNotification.CONTEXT_ELEMENT, _contextElements);
 		for(ComponentIf component : m_components)

@@ -19,8 +19,6 @@ import GeoObject.POIObject;
 import Mediator.TypesNotification;
 
 
-
-
 public class DrawingPanel extends Panel {
 	
 	/// the objects to paint
@@ -34,12 +32,19 @@ public class DrawingPanel extends Panel {
 	/// the dpi amount of the screen
 	private double m_dotPerInch = 72.0;
 	
+	
+	/**
+	 * instance which will paint the map
+	 */
+	DrawingContext drawing;
+	
 	/**
 	 * The default constructor
 	 */
 	public DrawingPanel() {
 		super();
 		setBackground(Color.lightGray);
+		drawing = new DrawingContext(this);
 		
 		
 	}
@@ -326,21 +331,33 @@ public class DrawingPanel extends Panel {
   		_g.clearRect(0, 0, getWidth(), getHeight());
   		
 
-  		for (int i = 0 ; i < m_objects.size() ; i++) 
+  		if(DrawingContext.m_imageCreated == false)
   		{
-  			GeoObject obj = (GeoObject)m_objects.elementAt(i);
-  			DrawingContext.drawObject(obj, _g, m_matrix);
-  		} 
+  			for (int i = 0 ; i < m_objects.size() ; i++) 
+  			{
+  				GeoObject obj = (GeoObject)m_objects.elementAt(i);
+  				DrawingContext.drawObject(obj, _g, m_matrix);
+  			}
   		
   		
-  		for(Notifications object :  objects)
-  		{
-  			POIObject poiObject = (POIObject) object;
-  			img = getImage(poiObject);
+  		
+  		
+  			for(Notifications object :  objects)
+  			{
+  				POIObject poiObject = (POIObject) object;
+  				img = getImage(poiObject);
   	
-  			poiObject.setM_image(img); 
-  			DrawingContext.drawObject(poiObject,_g,m_matrix);
+  				poiObject.setM_image(img); 
+  				DrawingContext.drawObject(poiObject,_g,m_matrix);
+  			}
   		}
+  	/*	else
+  		{
+  			_g.drawImage(DrawingContext.bufferedImage, 0, 0, this);
+  		}*/
+  		
+  		_g.drawImage(DrawingContext.bufferedImage, 0, 0, this);
+  		
   		
   		
   	/*	if (m_pois != null) {

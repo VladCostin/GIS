@@ -49,6 +49,11 @@ public class GeoObject implements Notifications{
 	  m_type = _type;
   }
   
+  public GeoObject()
+  {
+	  
+  }
+  
   /**
    * Returns the ID of the Object
    *

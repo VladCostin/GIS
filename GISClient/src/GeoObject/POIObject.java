@@ -52,6 +52,11 @@ public class POIObject extends GeoObject {
 	  
   }
   
+  public POIObject()
+  {
+	 
+  }
+  
   
   /**
   * another constructor, don't know its purpose

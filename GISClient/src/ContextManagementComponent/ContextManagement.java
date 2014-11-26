@@ -17,6 +17,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.AbstractButton;
@@ -31,6 +32,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.text.LabelView;
 
 import common.Notifications;
+import ContextModel.LocationContext;
 import Mediator.ComponentIf;
 import Mediator.Subject;
 import Mediator.TypesNotification;
@@ -57,6 +59,11 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 	 * the panel where the data will be shown
 	 */
 	Panel m_panel;
+	
+	/**
+	 * the notifications the gis component is interested in
+	 */
+	static HashMap<TypesNotification, ArrayList<Notifications>> m_notifications;
 	
 	
 	/**
@@ -86,8 +93,6 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 	 */
 	JTextField textFieldLongitude;
 	
-	
-	
 	/**
 	 * slider where the user can select the frequency to update the map
 	 */
@@ -106,6 +111,14 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 		m_subject = _subject;
 		m_contextElements = new ArrayList<>();
 		m_panel = initGUI();
+		m_notifications = initNotificationsInterested();
+	}
+	
+	private HashMap<TypesNotification, ArrayList<Notifications>> initNotificationsInterested() {
+		HashMap<TypesNotification, ArrayList<Notifications>> notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
+		
+		notifications.put(TypesNotification.CONTEXT_ELEMENT, new ArrayList<Notifications>());
+		return notifications;
 	}
 	
 	/**
@@ -144,8 +157,6 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 		panel.add(textFieldLongitude);
 		
 		return panel;
-		
-		
 		
 	}
 
@@ -190,7 +201,7 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 	    sliderFrequency.setPaintTicks(true);
 	    sliderFrequency.setPaintLabels(true);
 
-		    // We'll just use the standard numeric labels for now...
+		
 		sliderFrequency.setLabelTable(sliderFrequency.createStandardLabels(10));
 		sliderFrequency.addChangeListener(this);
 		
@@ -244,9 +255,25 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 
 	@Override
 	public void update(TypesNotification _notification) {
-		// TODO Auto-generated method stub
-		
-	}
+		  
+		  System.out.println("intra si aici, in Contextmanagement " + _notification);
+		  
+		 if(m_notifications.keySet().contains(_notification))
+		 {
+			 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
+			 
+			 
+			ArrayList<Notifications> notifications =  m_subject.communicateNotifications(_notification);
+			LocationContext location = (LocationContext) notifications.get(0);
+			System.out.println( location.m_latitudeGrad + "  " + location.m_longitudeGrad);
+			textFieldLatitude.setText(location.m_latitudeGrad + "" + location.m_latitudeMinuten);
+			textFieldLongitude.setText(location.m_longitudeGrad + "" + location.m_longitudeMinuten);
+			
+			 
+		 }
+		 
+		 System.out.println(m_notifications.get(_notification));
+	  }
 
 	@Override
 	public Set<TypesNotification> getNotificationsTypes() {
