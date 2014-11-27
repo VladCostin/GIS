@@ -21,7 +21,7 @@ public class POIObject extends GeoObject {
   /**
    * the location of the image on the map 
    */
-	Point m_point = null;
+	public Point m_point = null;
   
   /**
    * Constructor
@@ -49,6 +49,13 @@ public class POIObject extends GeoObject {
   {
 	  super(_id, _type, null);
 	  m_point = _pt;
+	  
+  }
+  
+  public POIObject(String _id, int _type, double latitude, double longitude)
+  {
+	  super(_id, _type, null);
+	  m_point = new Point((int)  latitude, (int) longitude);
 	  
   }
   

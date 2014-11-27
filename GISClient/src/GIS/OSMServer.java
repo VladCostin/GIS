@@ -115,7 +115,7 @@ public class OSMServer implements GeoServerInterface{
 			{
 				
 				
-				s.execute(" SELECT UpdateGeometrySRID('"+table.toString() + "','geom',4326)");
+				//s.execute(" SELECT UpdateGeometrySRID('"+table.toString() + "','geom',4326)");
 				whereClause = createWhereClause(_types, _area, table.toString());
 
 				
@@ -156,8 +156,9 @@ public class OSMServer implements GeoServerInterface{
 							org.postgis.Point point = (org.postgis.Point) g;
 							
 							System.out.println(point.x + " " + point.y);
+						//	object._components.add(new PointObj((int)  point.x,(int) point.y));
+							object._components.add(new PointObj((int) (1000000 * point.x),(int) (1000000 * point.y)));
 							
-							object._components.add(new PointObj((int)  point.x,(int) point.y));
 							
 							
 							break;
@@ -219,8 +220,12 @@ public class OSMServer implements GeoServerInterface{
 					//										+ _area.y + ")";
 		boolean identify = false;
 		//String whereClause = " where geom && ST_MakeEnvelope(13, 48, 15, 49) AND "+ 
-		String whereClause = " where geom && ST_MakeEnvelope(14.3226, 48.3260, 14.2503, 48.2778) AND "+
-		CoreData._hashMapTypeColumn.get(Tables_Austria_OSM.valueOf(_tableName)) + " in (";
+		String whereClause = " where geom && ST_MakeEnvelope(14.283194, 48.283194, 14.299116, 48.304786)";
+	//	String whereClause = " where geom && ST_MakeEnvelope(14.280192, 48.309576, 14.296318, 48.304681)";
+	//	String whereClause = " where geom && ST_MakeEnvelope(14.32265282, 48.32601192, 14.25038338, 48.27782371)";
+		
+	//	String whereClause = " where geom && ST_MakeEnvelope(14.352862, 48.299005, 14.323336, 48.303344)";
+	/*	CoreData._hashMapTypeColumn.get(Tables_Austria_OSM.valueOf(_tableName)) + " in (";
 
 		for(String _type :_types)
 		{
@@ -233,17 +238,17 @@ public class OSMServer implements GeoServerInterface{
 				identify = true;
 			}
 
-		}
+		}*/
 		
-		if(identify == false)
-			return "";
+		//if(identify == false)
+		//	return "";
 			//return  " where geom && ST_MakeEnvelope(13, 48, 15, 49)";
 		
 		
-		whereClause = whereClause.substring(0, whereClause.length() -1);
-		whereClause += ")";
+	//	whereClause = whereClause.substring(0, whereClause.length() -1);
+	//	whereClause += ")";
 
-		
+	//	return "";
 		return whereClause;
 
 	}
@@ -256,7 +261,8 @@ public class OSMServer implements GeoServerInterface{
 	 */
 	public String createSelectStatement(Tables_Austria_OSM _table) {
 		
-		String clause =  "Select ST_Transform(geom,31467) geom, id,name," +
+	//	String clause =  "Select ST_Transform(geom,31467) geom, id,name," +
+		String clause =  "Select geom, id,name," +
 		CoreData._hashMapTypeColumn.get(_table);
 		
 		
@@ -292,7 +298,8 @@ public class OSMServer implements GeoServerInterface{
 			{
 				 x = _multi.getPolygon(j).getPoint(i).x;
 				 y = _multi.getPolygon(j).getPoint(i).y;
-				_poligon.addPoint((int) x,(int) y);
+			//	 _poligon.addPoint(   (int)  x,(int)  y);
+				_poligon.addPoint(   (int) (1000000 * x),(int) (1000000 * y));
 			}
 			area.set_polygon(_poligon);
 			areas.add(area);
@@ -317,7 +324,9 @@ public class OSMServer implements GeoServerInterface{
 			ArrayList<Point> _line = new ArrayList<Point>();
 			int j;
 			for(j = 0; j < line.numPoints(); j++)
-				_line.add( new Point( (int) line.getPoint(j).x,(int) line.getPoint(j).y));
+			//	_line.add( new Point( (int)  line.getPoint(j).x,(int) line.getPoint(j).y));
+				_line.add( new Point( (int) (1000000 * line.getPoint(j).x),(int) (1000000 *line.getPoint(j).y)));
+				//1_line.add( new Point( (int) (1000000 * line.getPoint(j).x),(int) (1000000 *line.getPoint(j).y)));
 			lineObj.set_points(_line);
 			lines.add(lineObj);
 		}

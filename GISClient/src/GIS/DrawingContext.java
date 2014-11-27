@@ -47,20 +47,23 @@ public class DrawingContext {
   								Graphics  _g, 
   								GeoTransformationMatrix _matrix) {
 	int type; 
-	
-	if(_obj instanceof POIObject)
-	{
-		System.out.println("obiect");
-		((POIObject) _obj).paint(_g, _matrix);
-		return;
-	}
-	
 	if(m_imageCreated == false)
 	{
 	  
 		bufferedImage = new  BufferedImage(m_panel.getWidth(),m_panel.getHeight(),BufferedImage.TYPE_INT_RGB);
 		m_imageCreated = true;
 	}
+	
+	if(_obj instanceof POIObject)
+	{
+		System.out.println("obiect");
+		Graphics g = bufferedImage.getGraphics();
+		((POIObject) _obj).paint(g, _matrix);
+		System.out.println("deseneaza un obiect" + ((POIObject) _obj).m_point.x + " " + ((POIObject) _obj).m_point.y);
+		return;
+	}
+	
+
 	
 		
 	if (_obj != null && _g != null && _matrix != null) 

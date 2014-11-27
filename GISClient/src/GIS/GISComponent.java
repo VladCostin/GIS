@@ -577,9 +577,10 @@ public class  GISComponent
 	  
 	 if(m_notifications.keySet().contains(_notification))
 	 {
-	//	 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
+		 
+		 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
 		 System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAaaa");
-		// m_drawingPanel.repaint();
+		 m_drawingPanel.repaint();
 		 
 	 }
 	 

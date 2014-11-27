@@ -4,6 +4,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Panel;
 import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -20,8 +25,18 @@ import java.util.Set;
 
 
 
+
+
+
+
+
+
+import org.postgresql.PGConnection;
+
+import common.ConstantsId;
 import common.Notifications;
 import ContextModel.LocationContext;
+import GIS.Tables_Austria_OSM;
 import GeoObject.POIObject;
 import Mediator.ComponentIf;
 import Mediator.Subject;
@@ -135,9 +150,9 @@ public class GPS implements ComponentIf, Observer{
 		parser = null;
 		try {
 			if(m_useErrorFile)
-				parser = new NMEAParser("GPS-Log-II.log");
+				parser = new NMEAParser("GPS-Log-3.log");
 			else
-				parser = new NMEAParser("GPS-Log-I.log");
+				parser = new NMEAParser("GPS-Log-3.log");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -191,8 +206,19 @@ public class GPS implements ComponentIf, Observer{
 		
 		ArrayList<Notifications> contextElements = m_notifications.get(TypesNotification.POI_OBJECT);
 		
+		double latitude = m_info.getLatitudeGrad() * 1000000 + m_info.getLatitudeMinuten() * 10000;
+		double longitude = m_info.getLongitudeGrad() * 1000000 + m_info.getLongitudeMinuten() * 10000;
+		
+		//System.out.println(m_info.getLatitudeGrad() + " " + m_info.getLatitudeMinuten());
+		//System.out.println(m_info.getLongitudeGrad() + " " + m_info.getLongitudeMinuten());
+		
+		System.out.println("coordonate :" + latitude + " " + longitude);
+		
 		contextElements.clear();	
-		contextElements.add(new  POIObject());
+		
+		contextElements.add(new  POIObject("999",ConstantsId.police, longitude,latitude ));
+		
+		System.out.println( ((POIObject) contextElements.get(0)).m_point.x + " " + ((POIObject) contextElements.get(0)).m_point.y);
 		m_subject.communicatePOI(m_notifications.get(TypesNotification.POI_OBJECT));
 	}
 
@@ -203,11 +229,57 @@ public class GPS implements ComponentIf, Observer{
 		
 		ArrayList<Notifications> contextElements = m_notifications.get(TypesNotification.CONTEXT_ELEMENT);
 		
+	//	SELECT ST_AsText(ST_Transform(ST_GeomFromText('POLYGON((743238 2967416,743238 2967450,
+	//			743265 2967450,743265.625 2967416,743238 2967416))',2249),4326)) As wgs_geom;
+	//	generateValues();
+		
 		contextElements.clear();	
 		contextElements.add(
 		new LocationContext( m_info.getLatitudeGrad(),m_info.getLatitudeMinuten(), m_info.getLongitudeGrad(), m_info.getLongitudeMinuten() ));
 		m_subject.communicateContext(m_notifications.get(TypesNotification.CONTEXT_ELEMENT));
 		
+	}
+	
+	public void generateValues()
+	{
+		try {
+			Class.forName("org.postgresql.Driver");
+			String url = "jdbc:postgresql://localhost:5432/osm"; 
+			Connection conn = DriverManager.getConnection(url, "gisuser", "gisuser");
+		
+			PGConnection c = (PGConnection) conn;
+			c.addDataType("geometry", Class.forName("org.postgis.PGgeometry"));
+			c.addDataType("box3d", Class.forName("org.postgis.PGbox3d"));
+			Statement s = conn.createStatement();
+			
+			
+			String queryForm = "Select ST_GeomFromText('POINT(-71.064544 42.28787)')";
+			
+			ResultSet r = s.executeQuery(queryForm);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		// searching for data for each table in the database
+		/*for(Tables_Austria_OSM table : _tables)
+		{
+			
+			
+			//s.execute(" SELECT UpdateGeometrySRID('"+table.toString() + "','geom',4326)");
+			whereClause = createWhereClause(_types, _area, table.toString());
+
+			
+			
+			queryForm = createSelectStatement(table) + createFromStatement(table) +  whereClause;
+			System.out.println(queryForm);
+
+			ResultSet r = s.executeQuery(queryForm);
+		*/
 	}
 
 

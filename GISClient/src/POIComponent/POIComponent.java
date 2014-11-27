@@ -144,11 +144,16 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 
 		ArrayList<Notifications> points = new ArrayList<Notifications>();
 		
-		points.add(new POIObject("Linz Universitat", ConstantsId.school, new Point(3891659,5366608 ) ));
+		points.add(new POIObject("Linz Universitat", ConstantsId.school, new Point(14298523,48310725) ));
+		points.add(new POIObject("Reiffeisen bank", ConstantsId.bank, new Point(14290766,48300859 ) ));
+		points.add(new POIObject("Polizei", ConstantsId.police, new Point(14295455,48300303) ));
+		points.add(new POIObject("Die Post Linz", ConstantsId.post_office, new Point(14282353,48314336 ) ));
+		
+	/*	points.add(new POIObject("Linz Universitat", ConstantsId.school, new Point(3891659,5366608 ) ));
 		points.add(new POIObject("Reiffeisen bank", ConstantsId.bank, new Point(3891720,5366012 ) ));
 		points.add(new POIObject("Polizei", ConstantsId.police, new Point(3891600,5366400 ) ));
 		points.add(new POIObject("Die Post Linz", ConstantsId.post_office, new Point(3892400,5367400 ) ));
-		
+	*/	
 		return points;
 		
 	}
