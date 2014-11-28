@@ -97,6 +97,8 @@ public class GPS implements ComponentIf, Observer{
 		m_notifications.put(TypesNotification.CONTEXT_ELEMENT, new ArrayList<Notifications>());
 		m_notifications.put(TypesNotification.POI_OBJECT, new ArrayList<Notifications>());
 		m_info = new NMEAInfo();
+		
+		System.out.println("a instantiat gps-ul");
 
 	}
 

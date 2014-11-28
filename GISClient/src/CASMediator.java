@@ -8,17 +8,25 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import common.Notifications;
-import AALComponent.AALComponent;
-import ContextManagementComponent.ContextManagement;
-import GIS.GISComponent;
-import GPSComponent.GPS;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
 import Mediator.TypesNotification;
 import Mediator.Subject;
-import POIComponent.POIComponent;
+
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author Vlad Herescu
@@ -29,13 +37,13 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	/**
 	 * the list of components that collaborate using the MediatorIf
 	 */
-	ArrayList<ComponentIf> m_components; 
+	HashMap<String, ComponentIf> m_mapComponents;
+	
 	
 	
 	/**
 	 * specifying the components and adding them into the list
 	 */
-	
 	JFrame m_frame;
 	 
 	
@@ -46,11 +54,22 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	 */
 	HashMap<TypesNotification,ArrayList<Notifications>> m_notifications;
 	
+	
+	/**
+	 * it specifies the name of the modules and their structures
+	 */
+	String m_fileModuleNameStructure;
+	
 	/**
 	 * initializing the window and the components of the mediator 
+	 * @param fileName : the name of the xml file where the structure is specified
 	 */
-	public CASMediator() {
+	public CASMediator(String fileName) 
+	{
+		m_fileModuleNameStructure = fileName;
 		
+
+		m_mapComponents = new HashMap<String, ComponentIf>();
 		m_notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
 	}
 	
@@ -58,14 +77,113 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	 * specifying the components of the 
 	 */
 	public void initComponents() {
-		m_components = new ArrayList<ComponentIf>();
-		m_components.add(new GISComponent(this));
-		m_components.add(new AALComponent(this));
-		m_components.add(new POIComponent(this));
-		m_components.add(new ContextManagement(this));
-		m_components.add(new GPS(this));
+		
+		DocumentBuilder builder;
+		DocumentBuilderFactory factory =DocumentBuilderFactory.newInstance();
+		Element root;
+		NodeList modules;
+		int indexNodes;
+		
+		try {
+				builder =  factory.newDocumentBuilder();
+				Document document =builder.parse(
+				ClassLoader.getSystemResourceAsStream(m_fileModuleNameStructure));
+				
+				root = document.getDocumentElement();
+				modules = root.getElementsByTagName("module");
+				
+				for(indexNodes = 0; indexNodes < modules.getLength(); indexNodes++)
+					parseDataOneModule(modules.item(indexNodes));
+				
+				
+		} 
+		catch (ParserConfigurationException e) 
+		{
+				
+				e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
+	
+	/**
+	 * parses the data from one module
+	 * @param _node : the current node (Module) from the XML file to be parsed
+	 */
+	public void parseDataOneModule(Node _node)
+	{
+		Element element = (Element) _node;
+		
+		String packageName =  getValueFromNode( element.getElementsByTagName("name"));
+		String className = getValueFromNode( element.getElementsByTagName("class"));
+		String aliasName = getValueFromNode( element.getElementsByTagName("alias"));
+		ComponentIf component = createComponentIf(packageName, className);
+		m_mapComponents.put(aliasName, component);
+		
+		
+	}
+	/**
+	 * @param _node : a node from the xml file
+	 * @param _position : in case it is an array, extract element from this position
+	 * @return : the value between tags : <>value</>
+	 */
+	public String getValueFromNode(NodeList _node)
+	{
+		return _node.item(0).getChildNodes().item(0).getNodeValue();
+	}
+	
+	/**
+	 * @param packageName : the name of the package the class belongs to
+	 * @param className : the name of the class to be instantiated
+	 * @return : the clas created
+	 */
+	public ComponentIf createComponentIf(String packageName, String className)
+	{
+
+		Class cl;
+		try {
+			cl = Class.forName(packageName+"."+ className);
+			Constructor con = cl.getConstructor(Subject.class);
+			Object classCreated = con.newInstance(this);
+			return (ComponentIf) classCreated;
+		} 
+		catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+
 
 	private void initFrame() {
 		m_frame = new JFrame();
@@ -130,7 +248,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	public static void main(String arg[])
 	{
 
-		CASMediator mediator = new CASMediator();	
+		CASMediator mediator = new CASMediator(arg[0]);	
 		mediator.initFrame(); 
 		mediator.initComponents();
 
@@ -140,25 +258,17 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	public void actionPerformed(ActionEvent e) {
 		
 		JRadioButtonMenuItem menuItem = (JRadioButtonMenuItem) e.getSource();
-		if(menuItem.getText().equals("GIS"))
-			loadPanel(0);
-		if(menuItem.getText().equals("AAL"))
-			loadPanel(1);
-		if(menuItem.getText().equals("POI"))
-			loadPanel(2);
-		if(menuItem.getText().equals("Manager"))
-			loadPanel(3);
-		if(menuItem.getText().equals("GPS"))
-			loadPanel(4);
-
+		loadPanel(menuItem.getText());
 	}
 	
 	/**
+	 * it loads a panel of a component chosen by the user
+	 * @param _aliasComponent : the alias of the class that will be loaded
 	 * @param _nrPanel : the id of the component whose panel will be loaded 
 	 */
-	public void loadPanel(int _nrPanel)
+	public void loadPanel(String _aliasComponent)
 	{
-		m_frame.setContentPane(m_components.get(_nrPanel).getPanel());
+		m_frame.setContentPane(m_mapComponents.get(_aliasComponent).getPanel());
 		m_frame.validate();
 		m_frame.repaint();
 	}
@@ -168,12 +278,10 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	{
 		 m_notifications.put(TypesNotification.GEO_OBJECT, _geoObjects);
 		
-		for(ComponentIf component : m_components)
+		for(ComponentIf component : m_mapComponents.values())
 		{
 			component.update(TypesNotification.GEO_OBJECT);
 		}
-		
-		
 		
 	}
 
@@ -183,7 +291,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		System.out.println("intra aici si aici si aici");
 
 		m_notifications.put(TypesNotification.CONTEXT_ELEMENT, _contextElements);
-		for(ComponentIf component : m_components)
+		for(ComponentIf component : m_mapComponents.values())
 		{
 			component.update(TypesNotification.CONTEXT_ELEMENT);
 		}
@@ -197,7 +305,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		System.out.println("intra aici");
 		
 		m_notifications.put(TypesNotification.POI_OBJECT, _POIObjects);
-		for(ComponentIf component : m_components)
+		for(ComponentIf component : m_mapComponents.values())
 		{
 			component.update(TypesNotification.POI_OBJECT);
 		}
@@ -207,7 +315,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	public void communicateContextSituation(ArrayList<Notifications> _contextSituations)
 	{
 		m_notifications.put(TypesNotification.CONTEXT_SITUATION, _contextSituations);
-		for(ComponentIf component : m_components)
+		for(ComponentIf component : m_mapComponents.values())
 		{
 			component.update(TypesNotification.CONTEXT_SITUATION);
 		}

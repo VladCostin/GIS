@@ -47,7 +47,7 @@ public class FileSystemParser extends Parser{
 		} 
 		catch (ParserConfigurationException e) 
 		{
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 		}
 		m_fileNames = new ArrayList<String>();
