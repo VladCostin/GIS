@@ -1,13 +1,17 @@
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,6 +23,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import common.Notifications;
+import GIS.GeoServerInterface;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
 import Mediator.TypesNotification;
@@ -32,7 +37,7 @@ import java.lang.reflect.InvocationTargetException;
  * @author Vlad Herescu
  *
  */
-public class CASMediator implements MediatorIF, ActionListener, Subject{
+public class CASMediator implements MediatorIF, ActionListener, Subject, MenuListener{
 
 	/**
 	 * the list of components that collaborate using the MediatorIf
@@ -117,12 +122,60 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	 */
 	public void parseDataOneModule(Node _node)
 	{
-		Element element = (Element) _node;
+		Element root = (Element) _node;
+		int indexElement;
+		ArrayList<String> server = new ArrayList<String>();
+		ArrayList<String> gui = new ArrayList<String>();
+		ArrayList<String> parsers = new ArrayList<String>();
 		
-		String packageName =  getValueFromNode( element.getElementsByTagName("name"));
-		String className = getValueFromNode( element.getElementsByTagName("class"));
-		String aliasName = getValueFromNode( element.getElementsByTagName("alias"));
-		ComponentIf component = createComponentIf(packageName, className);
+		String packageName =  getValueFromNode( root.getElementsByTagName("name"));
+		String className = getValueFromNode( root.getElementsByTagName("class"));
+		String aliasName = getValueFromNode( root.getElementsByTagName("alias"));
+		
+		NodeList nodeList = root.getElementsByTagName("elements");
+		
+		Node node = root.getElementsByTagName("elements").item(0);
+		NodeList elements = ((Element) node).getElementsByTagName("element");
+		
+		System.out.println("Lungimea este : " + elements.getLength());
+		
+
+		for(indexElement=0; indexElement<elements.getLength(); indexElement++) {
+        	
+			
+			Node element = elements.item(indexElement);
+			
+			System.out.println(element.getNodeName());
+			String typeElement = elements.item(indexElement).getAttributes().getNamedItem("type").getNodeValue();
+			
+			if(typeElement.equals("server"))
+				server.add(element.getChildNodes().item(0).getNodeValue());
+			if(typeElement.equals("parser"))
+				parsers.add(element.getChildNodes().item(0).getNodeValue());
+			if(typeElement.equals("gui"))
+				gui.add(element.getChildNodes().item(0).getNodeValue());
+			
+		/*	if( elements.item(indexElement).getAttributes().getNamedItem("type").getNodeValue().equals("server"));
+			{
+				//System.out.println(element.getChildNodes().item(0).getNodeValue());
+				//server.add(element.)
+				System.out.println("aaaaa");
+			}*/
+	/*		if( elements.item(indexElement).getAttributes().getNamedItem("type").getNodeValue().equals("parser"));
+			{
+				System.out.println("buuu");
+			}
+			if( elements.item(indexElement).getAttributes().getNamedItem("type").getNodeValue().equals("gui"));
+			{
+				System.out.println("iiii");
+			}*/
+
+		}
+		
+		
+		System.out.println("sa mai termiant un nod");
+       
+		ComponentIf component = createComponentIf(packageName, className, server, parsers, gui);
 		m_mapComponents.put(aliasName, component);
 		
 		
@@ -140,16 +193,33 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	/**
 	 * @param packageName : the name of the package the class belongs to
 	 * @param className : the name of the class to be instantiated
+	 * @param gui : the gui elements of the module
+	 * @param parsers : the parser elements used to parse the xml file
+	 * @param server : the server elements used by the GIS Component
 	 * @return : the clas created
 	 */
-	public ComponentIf createComponentIf(String packageName, String className)
+	public ComponentIf createComponentIf(String packageName, String className,
+	ArrayList<String> server, ArrayList<String> parsers, ArrayList<String> gui)
 	{
-
+		HashMap<String,GeoServerInterface>  servers= getServers(packageName, server);
+		
+		@SuppressWarnings("rawtypes")
 		Class cl;
+		Constructor con;
+		Object classCreated;
 		try {
 			cl = Class.forName(packageName+"."+ className);
-			Constructor con = cl.getConstructor(Subject.class);
-			Object classCreated = con.newInstance(this);
+			if(servers.size() != 0)
+			{
+				con = cl.getConstructor(Subject.class, HashMap.class);
+				classCreated = con.newInstance(this, servers);
+			}
+			else
+			{
+				con = cl.getConstructor(Subject.class);
+				classCreated = con.newInstance(this);
+			}
+			
 			return (ComponentIf) classCreated;
 		} 
 		catch (ClassNotFoundException e) {
@@ -185,6 +255,28 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	
 
 
+	/**
+	 * creates the server 
+	 * @param packageName
+	 * @param _server
+	 * @return
+	 */
+	public HashMap<String,GeoServerInterface> getServers(String packageName, ArrayList<String> _server) {
+		HashMap<String,GeoServerInterface> serverObjects = new HashMap<String,GeoServerInterface>();
+		for(String server : _server)
+		{
+			try {
+				Object cl = Class.forName(packageName+"."+ server).newInstance();
+				serverObjects.put(server, (GeoServerInterface) cl  );
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return serverObjects;
+	}
+
 	private void initFrame() {
 		m_frame = new JFrame();
 		m_frame = new JFrame("a test frame");
@@ -202,8 +294,19 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	 * setting the menu
 	 */
 	public void setTheMenu() {
-		JMenuBar menuBar;
-		JMenu menu;
+		JMenuBar menuBar = new JMenuBar();
+		
+		for(String component : m_mapComponents.keySet())
+		{
+			JMenu menu = new JMenu(component);
+			menu.addMenuListener(this);
+			menuBar.add(menu);
+			
+		}
+		
+		
+		/*
+		
 		JRadioButtonMenuItem menuItemGIS, menuItemAAL, menuItemPOI, menuItemManage,  menuItemGPS;
 		ButtonGroup group;
 		
@@ -237,7 +340,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		
 		menuBar.add(menu);
 		
-		
+		*/
 		m_frame.setJMenuBar(menuBar);
 		
 	}
@@ -249,16 +352,18 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 	{
 
 		CASMediator mediator = new CASMediator(arg[0]);	
-		mediator.initFrame(); 
 		mediator.initComponents();
+		mediator.initFrame(); 
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		JRadioButtonMenuItem menuItem = (JRadioButtonMenuItem) e.getSource();
-		loadPanel(menuItem.getText());
+	//	JRadioButtonMenuItem menuItem = (JRadioButtonMenuItem) e.getSource();
+		JMenu menu = (JMenu) e.getSource();	
+		System.out.println("intra aici" + menu.getText());
+		loadPanel(menu.getText());
 	}
 	
 	/**
@@ -312,6 +417,10 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 		
 	}
 	
+	/**
+	 * METHOD CALLED BY THE MANAGER COMPONENT, WHEN A NEW  CONTEXT SITUATION IS READY
+	 * @param _contextSituations
+	 */
 	public void communicateContextSituation(ArrayList<Notifications> _contextSituations)
 	{
 		m_notifications.put(TypesNotification.CONTEXT_SITUATION, _contextSituations);
@@ -327,6 +436,27 @@ public class CASMediator implements MediatorIF, ActionListener, Subject{
 			TypesNotification _notification) 
 	{
 		return m_notifications.get(_notification);
+	}
+
+	@Override
+	public void menuSelected(MenuEvent e) {
+		
+		JMenu menu = (JMenu) e.getSource();	
+		System.out.println("intra aici" + menu.getText());
+		loadPanel(menu.getText());
+		
+	}
+
+	@Override
+	public void menuDeselected(MenuEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void menuCanceled(MenuEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

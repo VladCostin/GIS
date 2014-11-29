@@ -12,12 +12,6 @@ import java.util.List;
 import java.util.Vector;
 
 
-
-
-
-
-
-
 import org.postgis.Geometry;
 import org.postgis.LineString;
 import org.postgis.MultiLineString;

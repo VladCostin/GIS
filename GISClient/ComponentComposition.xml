@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+	<module>
+		<name>GIS</name>
+		<class>GISComponent</class>
+		<alias>GIS</alias>
+		<elements>
+			<element type="server">OSMServer</element>
+			<element type="server">SDEServer</element>
+			<element type="server">DummyServer</element>
+			<element type="gui">GUI</element>
+			<element type="parser">Parser</element>
+		</elements>
+	</module>
+	<module>
+		<name>AALComponent</name>
+		<class>AALComponent</class>
+		<alias>AAL</alias>
+		<elements>
+		</elements>
+	</module>
+	<module>
+		<name>GPSComponent</name>
+		<class>GPS</class>
+		<alias>GPS</alias>
+		<elements>
+		</elements>
+	</module>
+	<module>
+		<name>POIComponent</name>
+		<class>POIComponent</class>
+		<alias>POI</alias>
+		<elements>
+		</elements>
+	</module>
+	<module>
+		<name>ContextManagementComponent</name>
+		<class>ContextManagement</class>
+		<alias>Manager</alias>
+		<elements>
+		</elements>
+	</module>
+	
+</modules>

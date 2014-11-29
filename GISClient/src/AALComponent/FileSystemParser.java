@@ -102,6 +102,7 @@ public class FileSystemParser extends Parser{
 						int hour, minute;
 					
 						NodeList time = ((Element) nodeValue).getElementsByTagName("value");
+						
 						hour = Integer.parseInt(getValueFromNode(time, 0).replace("\"", ""));   
 						minute = Integer.parseInt(getValueFromNode(time, 1).replace("\"", "")); 
 						contextElement = new TemporalContext(hour, minute);
@@ -203,7 +204,6 @@ public class FileSystemParser extends Parser{
 	 */
 	public String getValueFromNode(NodeList _node,int _position)
 	{
-		
 		
 		return _node.item(_position).getChildNodes().item(0).getNodeValue();
 	}

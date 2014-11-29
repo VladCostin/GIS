@@ -130,9 +130,9 @@ public class  GISComponent
 	/**
 	 * @param _subject
 	 */
-	public GISComponent(Subject _subject) {
+	public GISComponent(Subject _subject, HashMap<String,GeoServerInterface> _servers) {
 	  
-		_mapOptionsServer = new HashMap<String,GeoServerInterface>();  
+		_mapOptionsServer = _servers;
 		_panel = initGUI();
 		m_notifications = initNotifications();
 	
@@ -167,26 +167,25 @@ public class  GISComponent
   }
 
   
+  /**
+   * creates the options for the server added from the xml file
+   * @return : the panel with the options for the panels avaiblable
+   */
   public Panel initOptionsServer() {
 	
 	  Panel options = new Panel(new FlowLayout());
-	  CheckboxGroup cg1 = new CheckboxGroup ();       //create group
-	  Checkbox c1 = new Checkbox(InterfaceConstants.MenuItemOptionDummy,cg1,true);  //circle button
-	  Checkbox c2 = new Checkbox(InterfaceConstants.MenuItemOptionOSM,cg1,true);  //square button
-	  Checkbox c3 = new Checkbox(InterfaceConstants.MenuItemOptionSDE,cg1,true);
-	  options.add(c1);
-	  options.add(c2);
-	  options.add(c3);
-	  _mapOptionsServer.put(InterfaceConstants.MenuItemOptionDummy, new DummyServer());
-	  _mapOptionsServer.put(InterfaceConstants.MenuItemOptionOSM, new OSMServer());
-	  _mapOptionsServer.put(InterfaceConstants.MenuItemOptionSDE, new SDEServer());
+	  CheckboxGroup cg1 = new CheckboxGroup ();     
 	  
-	  c1.addItemListener(this);
-	  c2.addItemListener(this);
-	  c3.addItemListener(this);
+	  for(String server : _mapOptionsServer.keySet())
+	  {
+		  Checkbox checkBox = new Checkbox(server,cg1, true);
+		  options.add(checkBox);
+		  checkBox.addItemListener(this);
+	  }
+
 	  
 	  return options;
-}
+  }
 
 /**
    * Initialize button bar part of the UI
