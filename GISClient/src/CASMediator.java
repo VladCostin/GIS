@@ -1,4 +1,5 @@
 import java.awt.Dimension;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -64,6 +65,8 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	 * it specifies the name of the modules and their structures
 	 */
 	String m_fileModuleNameStructure;
+	
+	Panel m_currentPanel;
 	
 	/**
 	 * initializing the window and the components of the mediator 
@@ -137,15 +140,12 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 		Node node = root.getElementsByTagName("elements").item(0);
 		NodeList elements = ((Element) node).getElementsByTagName("element");
 		
-		System.out.println("Lungimea este : " + elements.getLength());
-		
 
 		for(indexElement=0; indexElement<elements.getLength(); indexElement++) {
         	
 			
 			Node element = elements.item(indexElement);
-			
-			System.out.println(element.getNodeName());
+
 			String typeElement = elements.item(indexElement).getAttributes().getNamedItem("type").getNodeValue();
 			
 			if(typeElement.equals("server"))
@@ -155,25 +155,10 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 			if(typeElement.equals("gui"))
 				gui.add(element.getChildNodes().item(0).getNodeValue());
 			
-		/*	if( elements.item(indexElement).getAttributes().getNamedItem("type").getNodeValue().equals("server"));
-			{
-				//System.out.println(element.getChildNodes().item(0).getNodeValue());
-				//server.add(element.)
-				System.out.println("aaaaa");
-			}*/
-	/*		if( elements.item(indexElement).getAttributes().getNamedItem("type").getNodeValue().equals("parser"));
-			{
-				System.out.println("buuu");
-			}
-			if( elements.item(indexElement).getAttributes().getNamedItem("type").getNodeValue().equals("gui"));
-			{
-				System.out.println("iiii");
-			}*/
 
 		}
 		
-		
-		System.out.println("sa mai termiant un nod");
+
        
 		ComponentIf component = createComponentIf(packageName, className, server, parsers, gui);
 		m_mapComponents.put(aliasName, component);
@@ -374,6 +359,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	public void loadPanel(String _aliasComponent)
 	{
 		m_frame.setContentPane(m_mapComponents.get(_aliasComponent).getPanel());
+		m_currentPanel = m_mapComponents.get(_aliasComponent).getPanel();
 		m_frame.validate();
 		m_frame.repaint();
 	}
@@ -457,6 +443,12 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	public void menuCanceled(MenuEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Panel getPanel() {
+		// TODO Auto-generated method stub
+		return m_currentPanel;
 	}
 	
 }

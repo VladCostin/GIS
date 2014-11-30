@@ -38,15 +38,25 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import common.Notifications;
-
 import GeoObject.GeoObject;
 import Mediator.ComponentIf;
 import Mediator.TypesNotification;
@@ -103,21 +113,28 @@ public class  GISComponent
 	private Button m_leftButton   = new Button("W");
 	private Button m_rightButton  = new Button("E");
 	private Button m_poiButton    = new Button("POI");
-	private Button m_storeButton  = new Button("Store"); // not realy needed 
-	private Button m_stickyButton = new Button("Sticky"); // not realy needed 
 	
 	private TextField m_scale = new TextField("1:unknown");
 	
-	HashMap<String,GeoServerInterface> _mapOptionsServer;
+	/**
+	 * associate for every server a Check-box with the name being the key of the server name
+	 */
+	HashMap<String,GeoServerInterface> m_mapOptionsServer;
 	
 	/**
 	 * loads the methods of the current interface to which the use has check his credentials
 	 */
 	GeoServerInterface _currentInterface;
 	
-	public Panel _panel;
+	/**
+	 * the panel where the map is drawn
+	 */
+	public Panel m_panel;
 	
 	
+	/**
+	 * instance of the Mediator, used to communicate with the other components
+	 */
 	Subject m_subject; 
 	
 	
@@ -125,6 +142,12 @@ public class  GISComponent
 	 * the notifications the gis component is interested in
 	 */
 	static HashMap<TypesNotification, ArrayList<Notifications>> m_notifications;
+	
+	/**
+	 *  associate for each condition an action
+	 */
+	HashMap<String, Method> m_mapConditionAction;
+
 
 
 	/**
@@ -132,26 +155,86 @@ public class  GISComponent
 	 */
 	public GISComponent(Subject _subject, HashMap<String,GeoServerInterface> _servers) {
 	  
-		_mapOptionsServer = _servers;
-		_panel = initGUI();
+		m_mapOptionsServer = _servers;
+		m_panel = initGUI();
 		m_notifications = initNotifications();
-	
 		m_subject = _subject;
-	
-	  
-    
+		m_mapConditionAction = initConditionsActions();
+
 		new CoreData();
 	}
   
 	
+	/** reads the GISRules file to parse the rules and the actions
+	 * @return : the map which associates each action to a condition
+	 */
+	public HashMap<String, Method> initConditionsActions() {
+		
+		DocumentBuilderFactory factory =DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+		Document document;
+		int indexStatement;
+		HashMap<String, Method> methods = new HashMap<String,Method>(); 
+		
+		try {
+				builder =  factory.newDocumentBuilder();
+				document =builder.parse(
+						ClassLoader.getSystemResourceAsStream("rules/GISRules.xml"));
+				
+				Element root = document.getDocumentElement();
+				NodeList statements = root.getElementsByTagName("statement");
+				System.out.println(statements.getLength());
+				
+				for(indexStatement = 0; indexStatement < statements.getLength(); indexStatement++)
+				{
+					Node node = statements.item(indexStatement);
+					Node condition = ((Element) node).getElementsByTagName("condition").item(0);
+					Node action = ((Element) node).getElementsByTagName("action").item(0);
+					
+					String conditionString = condition.getFirstChild().getNodeValue();
+					String actionString = action.getFirstChild().getNodeValue();
+					
+					Method method = this.getClass().getMethod(actionString, null);
+					methods.put(conditionString, method);
+
+					
+				}
+				
+				
+		} 
+		catch (ParserConfigurationException e) 
+		{	
+				e.printStackTrace();
+		}
+		catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		return methods;
+	}
+
+
 	private HashMap<TypesNotification, ArrayList<Notifications>> initNotifications() {
 		HashMap<TypesNotification, ArrayList<Notifications>> notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
 		
 		notifications.put(TypesNotification.POI_OBJECT, new ArrayList<Notifications>());
 		return notifications;
 	}
+	
 
-/**
+	/**
    * Initialize UI in one Panel
    */
   public Panel initGUI() {
@@ -176,7 +259,7 @@ public class  GISComponent
 	  Panel options = new Panel(new FlowLayout());
 	  CheckboxGroup cg1 = new CheckboxGroup ();     
 	  
-	  for(String server : _mapOptionsServer.keySet())
+	  for(String server : m_mapOptionsServer.keySet())
 	  {
 		  Checkbox checkBox = new Checkbox(server,cg1, true);
 		  options.add(checkBox);
@@ -187,7 +270,7 @@ public class  GISComponent
 	  return options;
   }
 
-/**
+  /**
    * Initialize button bar part of the UI
    */
   public Panel initButtonBar() {
@@ -208,8 +291,6 @@ public class  GISComponent
   	bar.add(m_scale);
   	bar.add(m_poiButton);
 	Panel sdePanel = new Panel(new GridLayout(2,1));
-  	sdePanel.add(m_storeButton);
-  	sdePanel.add(m_stickyButton);
   	bar.add(sdePanel);
   	
 	m_ldButton.addActionListener(this);
@@ -221,8 +302,7 @@ public class  GISComponent
 	m_leftButton.addActionListener(this);
 	m_rightButton.addActionListener(this);
 	m_poiButton.addActionListener(this);
-	m_storeButton.addActionListener(this);
-	m_stickyButton.addActionListener(this);
+
 	
 	m_scale.addKeyListener(this);
   	
@@ -378,22 +458,7 @@ public class  GISComponent
       m_drawingPanel.scrollHorizontal(20);
 		} else if (source.equals(m_poiButton)) {
 			m_drawingPanel.initPOI();
-	  } else if (source.equals(m_storeButton)) {
-			storeImage();
-	  } else if (source.equals(m_stickyButton)) {
-	  	if (m_stickyRectangle == null) {
-		  	Rectangle rect = new Rectangle(0, 
-		  	                               0, 
-		  	                               m_drawingPanel.getWidth(), 
-		  	                               m_drawingPanel.getHeight());  	            
-				m_stickyRectangle = m_drawingPanel.getMapRectangle(rect);
-			} else {
-				m_stickyRectangle = null;
-			}
-			m_drawingPanel.setGeoObjects(null);
-			System.gc();
-			loadData();
-	  } else {
+	  }  else {
 			System.out.println("Event-Producer UNKNOWN!!!");
 		}
 		m_drawingPanel.repaint();
@@ -542,13 +607,13 @@ public class  GISComponent
 
   	
   	
-     if(_mapOptionsServer.get(e.getItem()).getPassword() == null || _mapOptionsServer.get(e.getItem()).getUsername() == null) 
+     if(m_mapOptionsServer.get(e.getItem()).getPassword() == null || m_mapOptionsServer.get(e.getItem()).getUsername() == null) 
      {
-    	 CheckCredentialsDialog dialog = new CheckCredentialsDialog(m_frame, _mapOptionsServer.get(e.getItem()));
+    	 CheckCredentialsDialog dialog = new CheckCredentialsDialog(m_frame, m_mapOptionsServer.get(e.getItem()));
     	 dialog.setVisible(true);
     	 
      }
-     _currentInterface = _mapOptionsServer.get(e.getItem());
+     _currentInterface = m_mapOptionsServer.get(e.getItem());
 
 	  
   }
@@ -556,7 +621,7 @@ public class  GISComponent
   @Override
   public Panel getPanel() {
 	  // TODO Auto-generated method stub
-	  return _panel;
+	  return m_panel;
   }
 
   @Override
@@ -579,12 +644,35 @@ public class  GISComponent
 		 
 		 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
 		 System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAaaa");
-		 m_drawingPanel.repaint();
+		 for(Method method : m_mapConditionAction.values())
+		 {
+			System.out.println(method.getName());
+			try {
+				method.invoke(this);
+			} catch (IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 }
+		 if(m_subject.getPanel() == this.m_panel)
+			 m_drawingPanel.repaint();
 		 
 	 }
 	 
 	 System.out.println(m_notifications.get(_notification));
   }
+  
+  /**
+   * action called when updating, if the condition is fulfilled
+   */
+  public void changeBackground()
+  {
+	  System.out.println("schimba backgroundul HA HA HA");
+	  this.m_drawingPanel.drawing.color = new Color(255,240,240);
+	  this.m_drawingPanel.drawing.m_imageCreated = false;
+  }
+  
 }
 
 /**

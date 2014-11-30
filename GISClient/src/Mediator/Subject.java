@@ -1,5 +1,6 @@
 package Mediator;
 
+import java.awt.Panel;
 import java.util.ArrayList;
 
 import common.Notifications;
@@ -38,5 +39,7 @@ public interface Subject {
 	 * @return : the set of notifications of the type _notification
 	 */
 	public ArrayList<Notifications> communicateNotifications(TypesNotification _notification); 
+	
+	public Panel getPanel();
 	
 }

@@ -27,6 +27,8 @@ public class DrawingContext {
 	
 	static boolean m_imageCreated;
 	
+	static Color color;
+	
 	
 	/**
 	 * initiating the image to be drawn
@@ -35,6 +37,7 @@ public class DrawingContext {
 		//bufferedImage = new  BufferedImage(500,500,BufferedImage.TYPE_INT_RGB);
 		m_panel = _panel;
 		m_imageCreated = false;
+		color = new Color(0,0,0);
 	}
 
   /**
@@ -47,69 +50,58 @@ public class DrawingContext {
   								Graphics  _g, 
   								GeoTransformationMatrix _matrix) {
 	int type; 
+	
 	if(m_imageCreated == false)
 	{
 	  
 		bufferedImage = new  BufferedImage(m_panel.getWidth(),m_panel.getHeight(),BufferedImage.TYPE_INT_RGB);
+		Graphics graphics = bufferedImage.getGraphics();
+		graphics.setColor( color );
+		graphics.fillRect ( 0, 0, m_panel.getWidth(), m_panel.getHeight() );
 		m_imageCreated = true;
+
+
 	}
-	
-	if(_obj instanceof POIObject)
+	else
 	{
-		System.out.println("obiect");
-		Graphics g = bufferedImage.getGraphics();
-		((POIObject) _obj).paint(g, _matrix);
-		System.out.println("deseneaza un obiect" + ((POIObject) _obj).m_point.x + " " + ((POIObject) _obj).m_point.y);
-		return;
-	}
+		Graphics graphics = bufferedImage.getGraphics();
+
 	
 
 	
+		if(_obj instanceof POIObject)
+		{
+			System.out.println("obiect");
 		
-	if (_obj != null && _g != null && _matrix != null) 
+			((POIObject) _obj).paint(graphics, _matrix);
+			System.out.println("deseneaza un obiect" + ((POIObject) _obj).m_point.x + " " + ((POIObject) _obj).m_point.y);
+			return;
+		}
+	
+
+		if (_obj != null && _g != null && _matrix != null) 
 		{
 			type = _obj.getType();
-  		
-			Graphics g = bufferedImage.getGraphics();
 
-			
-  		
+
 			for(InterfaceDraw draw : _obj._components)
 			{	
 				draw.multiply(_matrix);
 
 				if(CoreData._hashMapFillColor.get(type) == null)
-					draw.setColorObject(g, Color.black,null);
+					draw.setColorObject(graphics, Color.black,null);
   	    	
-				draw.setColorObject(g, CoreData._hashMapFillColor.get(type), CoreData._hashMapBorderColor.get(type));
+				draw.setColorObject(graphics, CoreData._hashMapFillColor.get(type), CoreData._hashMapBorderColor.get(type));
 			}
   		
 			
 
 		}
 		
-		System.out.println("mai intra in drawObject????");
-		
-	/*	_g.drawImage(bufferedImage, 0, 0, m_panel);
-	}
-	else
-	{
-		_g.drawImage(bufferedImage, 0, 0, m_panel);
-		System.out.println("mai intra in drawObject????");
-	}*/
-	
-	/*  	else
-	    	  System.out.println("encountered null object");
-	}
-	_g.drawImage(bufferedImage, 0, 0, m_panel);*/
-	/*else
-	{
-		_g.drawImage(bufferedImage, 0, 0, m_panel);
-	}*/
 								 
+	}
+  
   }
-  
-  
   
 }
 

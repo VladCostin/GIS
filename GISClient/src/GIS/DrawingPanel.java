@@ -322,50 +322,6 @@ public class DrawingPanel extends Panel {
 	 *
 	 * @see java.awt.Graphics
 	 */
- /* public void paint(Graphics _g) 
-  {
-  	if (m_objects != null && m_matrix != null) 
-  	{
-  		ArrayList<Notifications> objects = GISComponent.m_notifications.get(TypesNotification.POI_OBJECT);
-  		Image img;
-  		_g.clearRect(0, 0, getWidth(), getHeight());
-  		
-
-  		if(DrawingContext.m_imageCreated == false)
-  		{
-  			for (int i = 0 ; i < m_objects.size() ; i++) 
-  			{
-  				GeoObject obj = (GeoObject)m_objects.elementAt(i);
-  				DrawingContext.drawObject(obj, _g, m_matrix);
-  			}
-  		
-  		
-  		
-  		
-  			for(Notifications object :  objects)
-  			{
-  				POIObject poiObject = (POIObject) object;
-  				img = getImage(poiObject);
-  	
-  				poiObject.setM_image(img); 
-  				DrawingContext.drawObject(poiObject,_g,m_matrix);
-  			}
-  		}
-
-  		
-  		_g.drawImage(DrawingContext.bufferedImage, 0, 0, this);
-  		
-  		*/
-  		
-  	/*	if (m_pois != null) {
-  			for (int j = 0 ; j < m_pois.size() ; j++) {
-  				GeoObject obj = (GeoObject) m_pois.elementAt(j);
-  				DrawingContext.drawObject(obj,_g,m_matrix);
-  			} // for j
-  		}*/ /// if m_pois
- // 	} // if poly and matrix
-  //}
-  
   public void paint(Graphics g) {
 	    update(g);
   }
@@ -394,8 +350,20 @@ public class DrawingPanel extends Panel {
 	  				poiObject.setM_image(img); 
 	  				DrawingContext.drawObject(poiObject,_g,m_matrix);
 	  			}
-	  		}
+	  			
+	  			System.out.println("A desenat totul, ar trebui sa fie ok");
+	  			
 
+	  		}
+	  	
+	  	if(DrawingContext.bufferedImage == null)
+	  			System.out.println("1.ESTE NULL");	
+	  	if(_g == null)
+  			System.out.println("2.ESTE NULL");	
+	  	if(this == null)
+  			System.out.println("3.ESTE NULL");	
+	  
+	  	
 	  	_g.drawImage(DrawingContext.bufferedImage, 0, 0, this);
 	  	
     	
