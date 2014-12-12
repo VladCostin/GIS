@@ -111,7 +111,8 @@ public class OSMServer implements GeoServerInterface{
 				
 				//s.execute(" SELECT UpdateGeometrySRID('"+table.toString() + "','geom',4326)");
 				whereClause = createWhereClause(_types, _area, table.toString());
-
+				if(whereClause.equals(""))
+					continue;
 				
 				
 				queryForm = createSelectStatement(table) + createFromStatement(table) +  whereClause;
@@ -214,12 +215,14 @@ public class OSMServer implements GeoServerInterface{
 					//										+ _area.y + ")";
 		boolean identify = false;
 		//String whereClause = " where geom && ST_MakeEnvelope(13, 48, 15, 49) AND "+ 
-		String whereClause = " where geom && ST_MakeEnvelope(14.283194, 48.283194, 14.299116, 48.304786)";
+	//	String whereClause = " where geom && ST_MakeEnvelope(14.283194, 48.283194, 14.299116, 48.304786)";
 	//	String whereClause = " where geom && ST_MakeEnvelope(14.280192, 48.309576, 14.296318, 48.304681)";
 	//	String whereClause = " where geom && ST_MakeEnvelope(14.32265282, 48.32601192, 14.25038338, 48.27782371)";
 		
 	//	String whereClause = " where geom && ST_MakeEnvelope(14.352862, 48.299005, 14.323336, 48.303344)";
-	/*	CoreData._hashMapTypeColumn.get(Tables_Austria_OSM.valueOf(_tableName)) + " in (";
+		
+		String whereClause = " where geom && ST_MakeEnvelope(14.32265282, 48.32601192, 14.25038338, 48.27782371) AND " +
+		CoreData._hashMapTypeColumn.get(Tables_Austria_OSM.valueOf(_tableName)) + " in (";
 
 		for(String _type :_types)
 		{
@@ -232,15 +235,15 @@ public class OSMServer implements GeoServerInterface{
 				identify = true;
 			}
 
-		}*/
+		}
 		
-		//if(identify == false)
-		//	return "";
+		if(identify == false)
+			return "";
 			//return  " where geom && ST_MakeEnvelope(13, 48, 15, 49)";
 		
 		
-	//	whereClause = whereClause.substring(0, whereClause.length() -1);
-	//	whereClause += ")";
+		whereClause = whereClause.substring(0, whereClause.length() -1);
+		whereClause += ")";
 
 	//	return "";
 		return whereClause;

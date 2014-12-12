@@ -342,7 +342,10 @@ public class  GISComponent
     else
       copyToClipboard(getClipboardString(m_drawingPanel.getMapPoint(m_startPoint)));
   }
-	// user releases a mouse button
+
+	/*
+	 * the user releases the mouse to zoom an area
+	 */
 	public void mouseReleased(MouseEvent _event) {
 		m_stopPoint       = _event.getPoint();
 		int       delta   = 6; // 6 dots as delta ... if distance is greater than a drag movement has been detected
@@ -355,10 +358,13 @@ public class  GISComponent
 			zittern = true;
 		}
 		
-		switch (m_modus) {
-			case ZOOM : {
-				if (zittern) { // a zoom rectangle has been defined
-				  Point p1 = m_drawingPanel.getMapPoint(m_startPoint);
+		switch (m_modus) 
+		{
+			case ZOOM : 
+			{
+				if (zittern) 
+				{ // a zoom rectangle has been defined
+					Point p1 = m_drawingPanel.getMapPoint(m_startPoint);
 					Point p2 = m_drawingPanel.getMapPoint(m_stopPoint);
 					Rectangle mapBounds = new Rectangle(Integer.MAX_VALUE,
 					                                    Integer.MAX_VALUE,
@@ -368,28 +374,32 @@ public class  GISComponent
 					mapBounds.add(p2);
 					m_drawingPanel.zoomToFit(mapBounds);
 					m_drawingPanel.repaint();
-	    		int scale = m_drawingPanel.calculateScale();
-			    m_scale.setText(modifyScaleText(String.valueOf(scale)));
+					int scale = m_drawingPanel.calculateScale();
+					m_scale.setText(modifyScaleText(String.valueOf(scale)));
 				}
-			} break;
-			case DRAG : {
+			} 
+			break;
+			case DRAG : 
+			{
 			    // a drag movement has been initiated
 				int deltaX = - m_startPoint.x + m_stopPoint.x;
 				int deltaY = - m_startPoint.y + m_stopPoint.y;
 			  m_drawingPanel.scrollHorizontal(deltaX);
 			  m_drawingPanel.scrollVertical(deltaY);
 	  	  m_drawingPanel.repaint();
-	  	} break;
-	  	case SELECT : {
-	  		if (! zittern) {
-	  			GeoObject[] select = m_drawingPanel.initSelection(m_stopPoint);
-	  			if (select != null) {
-	  				for (int i = 0 ; i < select.length ; i++){
-	  					System.out.println(i + ". selected object --> " + select[i]);
-	  				} // for i
-	  			} // if select
-	  		} // if zittern
-	  	} break;
+			}
+			break;
+			case SELECT :
+			{
+				if (! zittern) {
+					GeoObject[] select = m_drawingPanel.initSelection(m_stopPoint);
+					if (select != null) {
+						for (int i = 0 ; i < select.length ; i++){
+							System.out.println(i + ". selected object --> " + select[i]);
+						} // for i
+					} // if select
+				} // if zittern
+			} break;
 		} // switch
 	  m_drawingPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	  m_zoomRectangle = null;
@@ -408,9 +418,12 @@ public class  GISComponent
 	
 	public void keyPressed(KeyEvent _event)  {}
 	
-	// a key event has been detected (in the scale text field)
+	/*
+	 * used when the user zooms an area 
+	*/
 	public void keyReleased(KeyEvent _event) {
-		if (_event.getKeyCode() == KeyEvent.VK_ENTER) {
+		if (_event.getKeyCode() == KeyEvent.VK_ENTER) 
+		{
 			String scaleS = m_scale.getText();
 			m_drawingPanel.zoomToScale(scanScaleText(scaleS));
 			int scale = m_drawingPanel.calculateScale();
@@ -528,6 +541,9 @@ public class  GISComponent
 
   /**
    *  Draws the rectangle in XOR mode onto the canvas with a distinct color 
+   * @param _rect : the rectangle created by the position where the user started to create the rectangle
+   * 				and the current position of the mouse
+   * @param _color : the color used to color the lines of the rectangle
    */
    public void drawXORRectangle(Rectangle _rect, Color _color) {
     if (_rect != null) {
@@ -544,19 +560,20 @@ public class  GISComponent
   /**
    *  moves the active zoom point to new position ...
    *  a new zoom rectangle is drawn, the old one is erased
+   * @param _point : the current position of the mouse cursor
    */
   public void generateZoomRect(Point _point) {
-    // System.out.println("moveZoomPoint");
-    // altes Rechteck mit XOR-Mode wieder loeschen
-    // neues Rechteck berechenen und anzeigen
-    if (m_startPoint != null) {
-    	Color col = new Color(Color.red.getRGB() ^ 
-    	  m_drawingPanel.getBackground().getRGB());
+
+    if (m_startPoint != null) 
+    {
+    	
+    	Color col = new Color(Color.red.getRGB() ^ m_drawingPanel.getBackground().getRGB());
     	if (m_zoomRectangle != null)
-      	drawXORRectangle(m_zoomRectangle, col);
-      m_zoomRectangle = new Rectangle(m_startPoint);
-      m_zoomRectangle.add(_point);
-      drawXORRectangle(m_zoomRectangle, col);
+    		drawXORRectangle(m_zoomRectangle, col);
+    	
+    	m_zoomRectangle = new Rectangle(m_startPoint);
+    	m_zoomRectangle.add(_point);
+    	drawXORRectangle(m_zoomRectangle, col);
     }
   }
 
@@ -597,10 +614,6 @@ public class  GISComponent
   	return _pt.x + " " + _pt.y;
   }
 
-
-  //public static void main(String[] _argv) {
-  //	GISComponent test = new GISComponent();
-  //}
 
   @Override
   public void itemStateChanged(ItemEvent e) {
@@ -668,9 +681,9 @@ public class  GISComponent
    */
   public void changeBackground()
   {
-	  System.out.println("schimba backgroundul HA HA HA");
-	  this.m_drawingPanel.drawing.color = new Color(255,240,240);
-	  this.m_drawingPanel.drawing.m_imageCreated = false;
+	//  System.out.println("schimba backgroundul HA HA HA");
+	//  this.m_drawingPanel.drawing.color = new Color(255,240,240);
+	//  this.m_drawingPanel.drawing.m_imageCreated = false;
   }
   
 }

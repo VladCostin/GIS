@@ -41,11 +41,11 @@ public class LineObj extends ObjectTeil{
 	@Override
 	public void setColorObject(Graphics _g, Color fill, Color border) {
 		
-	/*	Graphics2D g2d = (Graphics2D) _g;
+		Graphics2D g2d = (Graphics2D) _g;
 		
 		g2d.setColor(fill);
 		g2d.setStroke(new BasicStroke(2));
-		g2d.drawPolyline(x, y, x.length); */
+		g2d.drawPolyline(x, y, x.length); 
 		
 		_g.drawPolyline(x, y, x.length);
 		

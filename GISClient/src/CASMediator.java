@@ -1,4 +1,6 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,10 +9,14 @@ import java.util.HashMap;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.xml.parsers.DocumentBuilder;
@@ -265,6 +271,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	private void initFrame() {
 		m_frame = new JFrame();
 		m_frame = new JFrame("a test frame");
+		m_frame.setLayout( new BorderLayout());
 		m_frame.setSize(840,720);
 		
 		
@@ -279,14 +286,27 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	 * setting the menu
 	 */
 	public void setTheMenu() {
-		JMenuBar menuBar = new JMenuBar();
+		
+		JToolBar toolBar = new JToolBar("Formatting");
+		
+		
+		
+	//	toolBar.add(button1);
+		
+		
+	//	JMenuBar menuBar = new JMenuBar();
 		
 		for(String component : m_mapComponents.keySet())
 		{
-			JMenu menu = new JMenu(component);
+			JButton button1 = new JButton(component);
+			button1.setMargin(new Insets(20, 50, 20, 50));
+			button1.addActionListener(this); 
+			toolBar.add(button1);
+			
+			/*JMenu menu = new JMenu(component);
 			menu.addMenuListener(this);
 			menuBar.add(menu);
-			
+			*/
 		}
 		
 		
@@ -326,7 +346,12 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 		menuBar.add(menu);
 		
 		*/
-		m_frame.setJMenuBar(menuBar);
+		//m_frame.setJMenuBar(menuBar);
+		
+		m_currentPanel = new Panel();	
+		
+		m_frame.getContentPane().add(toolBar, BorderLayout.NORTH);
+		m_frame.getContentPane().add(m_currentPanel, BorderLayout.CENTER);
 		
 	}
 
@@ -346,9 +371,8 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	public void actionPerformed(ActionEvent e) {
 		
 	//	JRadioButtonMenuItem menuItem = (JRadioButtonMenuItem) e.getSource();
-		JMenu menu = (JMenu) e.getSource();	
-		System.out.println("intra aici" + menu.getText());
-		loadPanel(menu.getText());
+		JButton button = (JButton) e.getSource();	
+		loadPanel(button.getText());
 	}
 	
 	/**
@@ -358,8 +382,19 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	 */
 	public void loadPanel(String _aliasComponent)
 	{
-		m_frame.setContentPane(m_mapComponents.get(_aliasComponent).getPanel());
+		
+		m_frame.remove(m_currentPanel);
 		m_currentPanel = m_mapComponents.get(_aliasComponent).getPanel();
+		m_frame.getContentPane().add(m_currentPanel, BorderLayout.CENTER);
+	//	m_panel.removeAll();
+		
+		//m_currentPanel = m_mapComponents.get(_aliasComponent).getPanel();
+		//m_currentPanel.validate();
+		//m_currentPanel.repaint();
+		
+		
+	//	m_frame.setContentPane(m_mapComponents.get(_aliasComponent).getPanel(), BorderLayout.CENTER);
+		
 		m_frame.validate();
 		m_frame.repaint();
 	}

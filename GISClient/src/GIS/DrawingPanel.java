@@ -156,9 +156,12 @@ public class DrawingPanel extends Panel {
 	 * @param _mapBounds the map area that should be visible in the canvas
 	 */
 	public void zoomToFit(Rectangle _mapBounds) {
+		
 		Rectangle winBounds = getBounds();
 		m_matrix = GeoTransformationMatrix.zoomToFit(_mapBounds, winBounds);
 		m_matrixInv = m_matrix.invers();
+		DrawingContext.m_imageCreated = false;
+		
 	}
 	
 	/**
