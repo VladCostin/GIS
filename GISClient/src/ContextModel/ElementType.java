@@ -2,13 +2,13 @@ package ContextModel;
 
 public enum ElementType {
 
-	LOCATION,
+	LOC_CTXT,
 	
-	TEMPORAL_CONTEXT,
+	TEMP_CTXT,
 	
-	VELOCITY_CONTEXT,
+	VEL_CTXT,
 	
-	TEMPERATURE_CONTEXT;
+	TIME_CTXT;
 	
 	
 }

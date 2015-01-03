@@ -62,7 +62,7 @@ public class TemporalContext extends ContextElement{
 
 	@Override
 	public String getType() {
-		return ElementType.TEMPORAL_CONTEXT.name();
+		return ElementType.TEMP_CTXT.name();
 	}
 
 	

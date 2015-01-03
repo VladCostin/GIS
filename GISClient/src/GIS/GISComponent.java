@@ -57,10 +57,15 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import common.Notifications;
+import ContextManagementComponent.ContextSituation;
 import GeoObject.GeoObject;
 import Mediator.ComponentIf;
 import Mediator.TypesNotification;
 import Mediator.Subject;
+import RulesParsing.DemoCompiler;
+import RulesParsing.ParseException;
+import RulesParsing.RuleObject;
+import TreeNodeHierarchy.TreeNode;
 
 /** 
  * A class organizing the UI of this GIS client
@@ -146,9 +151,9 @@ public class  GISComponent
 	/**
 	 *  associate for each condition an action
 	 */
-	HashMap<String, Method> m_mapConditionAction;
+	//HashMap<String, Method> m_mapConditionAction;
 
-
+	ArrayList<RuleObject> m_GISrules;
 
 	/**
 	 * @param _subject
@@ -159,7 +164,7 @@ public class  GISComponent
 		m_panel = initGUI();
 		m_notifications = initNotifications();
 		m_subject = _subject;
-		m_mapConditionAction = initConditionsActions();
+		m_GISrules = initConditionsActions();
 
 		new CoreData();
 	}
@@ -168,13 +173,14 @@ public class  GISComponent
 	/** reads the GISRules file to parse the rules and the actions
 	 * @return : the map which associates each action to a condition
 	 */
-	public HashMap<String, Method> initConditionsActions() {
+	public ArrayList<RuleObject> initConditionsActions() {
 		
 		DocumentBuilderFactory factory =DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
 		Document document;
 		int indexStatement;
-		HashMap<String, Method> methods = new HashMap<String,Method>(); 
+		ArrayList<RuleObject> rules = new ArrayList<RuleObject>();
+		DemoCompiler rulesCompiler = new DemoCompiler();
 		
 		try {
 				builder =  factory.newDocumentBuilder();
@@ -194,9 +200,17 @@ public class  GISComponent
 					String conditionString = condition.getFirstChild().getNodeValue();
 					String actionString = action.getFirstChild().getNodeValue();
 					
+					
+					
 					Method method = this.getClass().getMethod(actionString, null);
-					methods.put(conditionString, method);
-
+					try {
+						TreeNode tree = rulesCompiler.evaluate(conditionString);
+						rules.add(new RuleObject(tree, method));
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					
 				}
 				
@@ -222,7 +236,7 @@ public class  GISComponent
 		}
 
 		
-		return methods;
+		return rules;
 	}
 
 
@@ -655,19 +669,10 @@ public class  GISComponent
 	 if(m_notifications.keySet().contains(_notification))
 	 {
 		 
-		 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
-		 System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAaaa");
-		 for(Method method : m_mapConditionAction.values())
-		 {
-			System.out.println(method.getName());
-			try {
-				method.invoke(this);
-			} catch (IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		 }
+	//	 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
+		
+		 checkMethodsToExecute(m_subject.communicateNotifications(TypesNotification.CONTEXT_SITUATION).get(0)); 
+		 
 		 if(m_subject.getPanel() == this.m_panel)
 			 m_drawingPanel.repaint();
 		 
@@ -677,6 +682,26 @@ public class  GISComponent
   }
   
   /**
+ * @param _notification : the current context received from context management
+   *  
+   */
+  public void checkMethodsToExecute(Notifications _notification) {
+	
+	  boolean conditionChecked;
+	  ContextSituation situation = (ContextSituation) _notification;
+	  
+	  
+	  for(RuleObject rule : m_GISrules)
+	  {
+		  conditionChecked = rule.valid(situation);
+		  if(conditionChecked == true)
+			  rule.execute();
+	  }
+	
+  }
+
+
+/**
    * action called when updating, if the condition is fulfilled
    */
   public void changeBackground()

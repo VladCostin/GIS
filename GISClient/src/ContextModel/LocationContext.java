@@ -80,7 +80,7 @@ public class LocationContext extends ContextElement{
 
 	@Override
 	public String getType() {
-		return ElementType.LOCATION.name();
+		return ElementType.LOC_CTXT.name();
 	}
 
 
