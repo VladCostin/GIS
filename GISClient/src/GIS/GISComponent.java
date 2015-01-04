@@ -151,8 +151,6 @@ public class  GISComponent
 	/**
 	 *  associate for each condition an action
 	 */
-	//HashMap<String, Method> m_mapConditionAction;
-
 	ArrayList<RuleObject> m_GISrules;
 
 	/**
@@ -204,6 +202,9 @@ public class  GISComponent
 					
 					Method method = this.getClass().getMethod(actionString, null);
 					try {
+						
+						System.out.println("Conditie string : " + conditionString);
+						
 						TreeNode tree = rulesCompiler.evaluate(conditionString);
 						rules.add(new RuleObject(tree, method));
 					} catch (ParseException e) {
@@ -671,7 +672,7 @@ public class  GISComponent
 		 
 	//	 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
 		
-		 checkMethodsToExecute(m_subject.communicateNotifications(TypesNotification.CONTEXT_SITUATION).get(0)); 
+	//	 checkMethodsToExecute(m_subject.getNotifications(TypesNotification.CONTEXT_SITUATION).get(0)); 
 		 
 		 if(m_subject.getPanel() == this.m_panel)
 			 m_drawingPanel.repaint();

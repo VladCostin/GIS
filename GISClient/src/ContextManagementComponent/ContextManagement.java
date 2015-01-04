@@ -260,10 +260,10 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 		  
 		 if(m_notifications.keySet().contains(_notification))
 		 {
-			 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
+			 m_notifications.put(_notification, m_subject.getNotifications(_notification));
 			 
 			 
-			ArrayList<Notifications> notifications =  m_subject.communicateNotifications(_notification);
+			ArrayList<Notifications> notifications =  m_subject.getNotifications(_notification);
 			LocationContext location = (LocationContext) notifications.get(0);
 			System.out.println( location.m_latitudeGrad + "  " + location.m_longitudeGrad);
 			textFieldLatitude.setText(location.m_latitudeGrad + "" + location.m_latitudeMinuten);

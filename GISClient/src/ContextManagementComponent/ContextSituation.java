@@ -20,8 +20,9 @@ public class ContextSituation implements Notifications{
 	/**
 	 * contains the context elements and the keys associated
 	 */
-	HashMap<ElementType,InterfaceContext> m_contextData;
+	private HashMap<ElementType,InterfaceContext> m_contextData;
 	
+
 	/**
 	 * initializing the data
 	 */
@@ -45,6 +46,22 @@ public class ContextSituation implements Notifications{
 		m_contextData.put(ElementType.TEMP_CTXT, _temperatur);
 		
 	}
+	
+	/**
+	 * @return the m_contextData
+	 */
+	public HashMap<ElementType, InterfaceContext> getM_contextData() {
+		return m_contextData;
+	}
+
+	/**
+	 * @param m_contextData the m_contextData to set
+	 */
+	public void setM_contextData(
+			HashMap<ElementType, InterfaceContext> m_contextData) {
+		this.m_contextData = m_contextData;
+	}
+
 	
 	
 }

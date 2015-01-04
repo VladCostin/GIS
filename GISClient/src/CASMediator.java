@@ -453,7 +453,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	
 
 	@Override
-	public ArrayList<Notifications> communicateNotifications(
+	public ArrayList<Notifications> getNotifications(
 			TypesNotification _notification) 
 	{
 		return m_notifications.get(_notification);

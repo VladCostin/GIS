@@ -38,7 +38,7 @@ public interface Subject {
 	 * @param _notification : the type of notification the observer is requesting
 	 * @return : the set of notifications of the type _notification
 	 */
-	public ArrayList<Notifications> communicateNotifications(TypesNotification _notification); 
+	public ArrayList<Notifications> getNotifications(TypesNotification _notification); 
 	
 	public Panel getPanel();
 	
