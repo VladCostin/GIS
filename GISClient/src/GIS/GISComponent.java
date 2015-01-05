@@ -245,6 +245,7 @@ public class  GISComponent
 		HashMap<TypesNotification, ArrayList<Notifications>> notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
 		
 		notifications.put(TypesNotification.POI_OBJECT, new ArrayList<Notifications>());
+		notifications.put(TypesNotification.CONTEXT_SITUATION, new ArrayList<Notifications>());
 		return notifications;
 	}
 	
@@ -665,21 +666,17 @@ public class  GISComponent
   @Override
   public void update(TypesNotification _notification) {
 	  
-	  System.out.println("intra si aici, in GISCompoent " + _notification);
-	  
 	 if(m_notifications.keySet().contains(_notification))
 	 {
 		 
-	//	 m_notifications.put(_notification, m_subject.communicateNotifications(_notification));
-		
-	//	 checkMethodsToExecute(m_subject.getNotifications(TypesNotification.CONTEXT_SITUATION).get(0)); 
+		 checkMethodsToExecute( m_subject.getNotifications(TypesNotification.CONTEXT_SITUATION).get(0)); 
 		 
 		 if(m_subject.getPanel() == this.m_panel)
 			 m_drawingPanel.repaint();
 		 
 	 }
 	 
-	 System.out.println(m_notifications.get(_notification));
+	
   }
   
   /**

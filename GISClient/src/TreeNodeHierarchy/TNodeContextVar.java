@@ -40,7 +40,10 @@ public class TNodeContextVar extends TreeNode{
 	@Override
 	public void setVariablesParameters(ContextSituation _contextElements) {
 	
+		
+	
 		m_context = _contextElements.getM_contextData().get(m_type);
+		System.out.println(m_context.getValue());
 	}
 
 }

@@ -412,7 +412,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	}
 
 	@Override
-	public void communicateContext(ArrayList<Notifications> _contextElements) 
+	public void communicateContextElement(ArrayList<Notifications> _contextElements) 
 	{
 		System.out.println("intra aici si aici si aici");
 
@@ -444,7 +444,11 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	 */
 	public void communicateContextSituation(ArrayList<Notifications> _contextSituations)
 	{
+
+		
 		m_notifications.put(TypesNotification.CONTEXT_SITUATION, _contextSituations);
+
+		
 		for(ComponentIf component : m_mapComponents.values())
 		{
 			component.update(TypesNotification.CONTEXT_SITUATION);

@@ -198,7 +198,7 @@ public class AALComponent implements ComponentIf, ItemListener, ActionListener{
 		m_indexContextsElement = 0;
 		setValuesToLabels(m_indexContextsElement); 
 		
-		m_subject.communicateContext(m_contextElements);
+		m_subject.communicateContextElement(m_contextElements);
 
 		
 	}

@@ -26,13 +26,19 @@ public interface Subject {
 	 * communicate to the components/modules what new context elements has the system detected from the environment
 	 * @param _obj : the context elements received by the system from the environment
 	 */
-	public void communicateContext(ArrayList<Notifications> _obj);
+	public void communicateContextElement(ArrayList<Notifications> _obj);
 	
 	
 	/**
 	 * @param _obj : the point of objects sent from POIComponent to other components, interested in it
 	 */
 	public void communicatePOI(ArrayList<Notifications> _obj);
+	
+	
+	/**
+	 * @param _sitation : the situation communicated by the context management to the other modules
+	 */
+	public void communicateContextSituation(ArrayList<Notifications> _sitation);
 	
 	/**
 	 * @param _notification : the type of notification the observer is requesting

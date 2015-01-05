@@ -23,6 +23,11 @@ public class TemporalContext extends ContextElement{
 	int m_minute;
 	
 	/**
+	 * if the day is night or day;
+	 */
+	String m_momentDay;
+	
+	/**
 	 * initiating the context, default constructor
 	 */
 	public TemporalContext() {
@@ -53,11 +58,22 @@ public class TemporalContext extends ContextElement{
 		
 		m_minute = _minute;
 	}
+	
+	/**
+	 * @param _momentDay
+	 */
+	public TemporalContext(String _momentDay)
+	{
+		m_momentDay = _momentDay;
+	}
 
 	@Override
 	public String getValue() {
+		
+		return m_momentDay;
+		
 		// TODO Auto-generated method stub
-		return Integer.toString(m_day)+":"+ Integer.toString(m_hour)+":"+Integer.toString(m_minute);
+		//return Integer.toString(m_day)+":"+ Integer.toString(m_hour)+":"+Integer.toString(m_minute);
 	}
 
 	@Override

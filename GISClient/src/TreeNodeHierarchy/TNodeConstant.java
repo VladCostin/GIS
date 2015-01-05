@@ -33,6 +33,7 @@ public class TNodeConstant extends TreeNode{
 	public void setVariablesParameters(ContextSituation _contextElements) {
 		
 		
+		
 	}
 
 }

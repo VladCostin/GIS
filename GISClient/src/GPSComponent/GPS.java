@@ -238,7 +238,7 @@ public class GPS implements ComponentIf, Observer{
 		contextElements.clear();	
 		contextElements.add(
 		new LocationContext( m_info.getLatitudeGrad(),m_info.getLatitudeMinuten(), m_info.getLongitudeGrad(), m_info.getLongitudeMinuten() ));
-		m_subject.communicateContext(m_notifications.get(TypesNotification.CONTEXT_ELEMENT));
+		m_subject.communicateContextElement(m_notifications.get(TypesNotification.CONTEXT_ELEMENT));
 		
 	}
 	

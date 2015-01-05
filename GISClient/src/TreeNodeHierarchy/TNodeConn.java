@@ -54,6 +54,8 @@ public class TNodeConn extends TreeNode {
 	@Override
 	public void setVariablesParameters(ContextSituation _contextElements) {
 		
+		
+		
 		this.m_childs[0].setVariablesParameters(_contextElements);
 		this.m_childs[1].setVariablesParameters(_contextElements);
 		

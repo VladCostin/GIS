@@ -13,6 +13,8 @@ import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
@@ -22,6 +24,7 @@ import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.DefaultButtonModel;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -32,7 +35,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.text.LabelView;
 
 import common.Notifications;
+import ContextModel.ElementType;
 import ContextModel.LocationContext;
+import ContextModel.TemporalContext;
 import Mediator.ComponentIf;
 import Mediator.Subject;
 import Mediator.TypesNotification;
@@ -42,7 +47,7 @@ import Mediator.TypesNotification;
  * @author Vlad Herescu
  *
  */
-public class ContextManagement  implements ComponentIf, ChangeListener{
+public class ContextManagement  implements ComponentIf, ChangeListener, ActionListener{
 
 	/**
 	 * the instance of the mediator, that will share all the data from each observer 
@@ -127,14 +132,26 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 	*/
 	public Panel initGUI() {
 		
-		Panel gui = new Panel(new GridLayout(5,1));
+		Panel gui = new Panel(new GridLayout(6,1));
 		gui.add(initPanelNightDay());
 		gui.add(initPanelFrequency());
 		gui.add(initPanelVelocity());
 		gui.add(initPosition());
+		gui.add(initButton());
 		return gui;
 	}
 	
+
+	/**
+	 * @return : the button for sending the Context Situation
+	 */
+	public Component initButton() {
+		JPanel panel = new JPanel();
+		JButton button = new JButton("Simulate Context");
+		button.addActionListener(this);
+		panel.add(button);
+		return panel;
+	}
 
 	/**
 	 * @return : the panel where 
@@ -191,9 +208,9 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 
 		JPanel panel = new JPanel();
 
-		JLabel labelTimeSelect =  new JLabel("Select frequency :  ");
+		JLabel labelTimeSelect =  new JLabel("Select frequency (ms) :  ");
 		JLabel labelCurrentTime =  new JLabel("              Current frequency : ");
-		labelFrequency = new JLabel("25 ms");
+		labelFrequency = new JLabel("25");
 		
 		sliderFrequency = new JSlider(JSlider.HORIZONTAL, 0, 50, 25);
 	    sliderFrequency.setMinorTickSpacing(2);
@@ -217,18 +234,18 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 	{
 		JPanel panel = new JPanel();
 
-		JLabel labelTimeSelect =  new JLabel("Select velocity :  ");
+		JLabel labelTimeSelect =  new JLabel("Select velocity (km/h) : ");
 		JLabel labelCurrentTime =  new JLabel("              Current velocity : ");
-		labelVelocity = new JLabel("25 ms");
+		labelVelocity = new JLabel("25");
 		
-		sliderVelocity = new JSlider(JSlider.HORIZONTAL, 0, 80, 10);
+		sliderVelocity = new JSlider(JSlider.HORIZONTAL, 0, 80, 40);
 	    sliderVelocity.setMinorTickSpacing(2);
 	    sliderVelocity.setMajorTickSpacing(10);
 	    sliderVelocity.setPaintTicks(true);
 	    sliderVelocity.setPaintLabels(true);
 
 		    // We'll just use the standard numeric labels for now...
-		sliderVelocity.setLabelTable(sliderVelocity.createStandardLabels(45));
+		sliderVelocity.setLabelTable(sliderVelocity.createStandardLabels(40));
 		sliderVelocity.addChangeListener(this);
 		
 		panel.add(labelTimeSelect);
@@ -286,9 +303,29 @@ public class ContextManagement  implements ComponentIf, ChangeListener{
 		
 		JSlider slider = (JSlider) e.getSource();
 		if(slider == sliderFrequency)
-			labelFrequency.setText(sliderFrequency.getValue() + " ms");
+			labelFrequency.setText(sliderFrequency.getValue()+"");
 		if(slider == sliderVelocity)
-			labelVelocity.setText(sliderVelocity.getValue() + " ms");
+			labelVelocity.setText(sliderVelocity.getValue()+"");
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	
+		System.out.println("Frequency: " + labelVelocity.getText() );
+		System.out.println("Time: " + labelTimeCurrent.getText() );
+	
+		
+		ContextSituation situation = new ContextSituation();
+		ArrayList<Notifications> contextElements = new ArrayList<Notifications>();
+		TemporalContext temporalContext = new TemporalContext(labelTimeCurrent.getText());
+		
+		
+		situation.getM_contextData().put(ElementType.TIME_CTXT, temporalContext);
+		
+		
+		contextElements.add(situation);
+		m_subject.communicateContextSituation(contextElements);
+		
 	}
 
 }
