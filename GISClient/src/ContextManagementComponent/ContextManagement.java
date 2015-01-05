@@ -37,7 +37,9 @@ import javax.swing.text.LabelView;
 import common.Notifications;
 import ContextModel.ElementType;
 import ContextModel.LocationContext;
+import ContextModel.TemperatureContext;
 import ContextModel.TemporalContext;
+import ContextModel.VelocityContext;
 import Mediator.ComponentIf;
 import Mediator.Subject;
 import Mediator.TypesNotification;
@@ -74,17 +76,22 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 	/**
 	 * label where the current time is shown
 	 */
-	static JLabel labelTimeCurrent;
+	static JLabel m_labelTimeCurrent;
 	
 	/**
 	 * label where the frequency to update the map is shown
 	 */
-	JLabel labelFrequency;
+	JLabel m_labelFrequency;
 	
 	/**
 	 * label where the velocity of the user is shown
 	 */
-	JLabel labelVelocity;
+	JLabel m_labelVelocity;
+	
+	/**
+	 * the label where the temperature set by the user is shown
+	 */
+	JLabel m_labelTemperature;
 	
 	
 	/**
@@ -101,12 +108,17 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 	/**
 	 * slider where the user can select the frequency to update the map
 	 */
-	JSlider sliderFrequency;
+	JSlider m_sliderFrequency;
 	
 	/**
 	 *  slider where the user can select the velocity of the map
 	 */
-	JSlider sliderVelocity;
+	JSlider m_sliderVelocity;
+	
+	/**
+	 * the slider where the user specifies the temperature
+	 */
+	JSlider m_sliderTemperature;
 	
 	
 	/**
@@ -132,15 +144,45 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 	*/
 	public Panel initGUI() {
 		
-		Panel gui = new Panel(new GridLayout(6,1));
+		Panel gui = new Panel(new GridLayout(7,1));
 		gui.add(initPanelNightDay());
 		gui.add(initPanelFrequency());
 		gui.add(initPanelVelocity());
+		gui.add(initPanelTemperature());
 		gui.add(initPosition());
 		gui.add(initButton());
 		return gui;
 	}
 	
+
+	/**
+	 *  @return : the panel where the user sets the temperature
+	 */
+	public JPanel initPanelTemperature() {
+		
+		JPanel panel = new JPanel();
+
+		JLabel labelTimeSelect =  new JLabel("Select temperature (C) :  ");
+		JLabel labelCurrentTime =  new JLabel("              Current temperature :");
+		m_labelTemperature = new JLabel("20");
+		
+		m_sliderTemperature = new JSlider(JSlider.HORIZONTAL, -10, 50, 20);
+		m_sliderTemperature.setMinorTickSpacing(2);
+	    m_sliderTemperature.setMajorTickSpacing(10);
+		m_sliderTemperature.setPaintTicks(true);
+		m_sliderTemperature.setPaintLabels(true);
+
+		
+		m_sliderTemperature.setLabelTable( m_sliderTemperature.createStandardLabels(10));
+		m_sliderTemperature.addChangeListener(this);
+		
+		panel.add(labelTimeSelect);
+		panel.add(  m_sliderTemperature );
+		panel.add(labelCurrentTime);
+		panel.add(m_labelTemperature);
+
+		return panel;
+	}
 
 	/**
 	 * @return : the button for sending the Context Situation
@@ -187,15 +229,15 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 
 		JLabel labelTimeSelect =  new JLabel("Select night or day :  ");
 		JLabel labelCurrentTime =  new JLabel("              Current time : ");
-		labelTimeCurrent = new JLabel("day");
+		m_labelTimeCurrent = new JLabel("day");
 		
-		JSwitchBox box = new JSwitchBox( "night", "day" );
+		JSwitchBox box = new JSwitchBox( "Nacht", "Tag" );
 		
 		
 		panel.add(labelTimeSelect);
 		panel.add( box );
 		panel.add(labelCurrentTime);
-		panel.add(labelTimeCurrent);
+		panel.add(m_labelTimeCurrent);
 
 		return panel;
 	}
@@ -210,22 +252,22 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 
 		JLabel labelTimeSelect =  new JLabel("Select frequency (ms) :  ");
 		JLabel labelCurrentTime =  new JLabel("              Current frequency : ");
-		labelFrequency = new JLabel("25");
+		m_labelFrequency = new JLabel("25");
 		
-		sliderFrequency = new JSlider(JSlider.HORIZONTAL, 0, 50, 25);
-	    sliderFrequency.setMinorTickSpacing(2);
-	    sliderFrequency.setMajorTickSpacing(10);
-	    sliderFrequency.setPaintTicks(true);
-	    sliderFrequency.setPaintLabels(true);
+		m_sliderFrequency = new JSlider(JSlider.HORIZONTAL, 0, 50, 25);
+	    m_sliderFrequency.setMinorTickSpacing(2);
+	    m_sliderFrequency.setMajorTickSpacing(10);
+	    m_sliderFrequency.setPaintTicks(true);
+	    m_sliderFrequency.setPaintLabels(true);
 
 		
-		sliderFrequency.setLabelTable(sliderFrequency.createStandardLabels(10));
-		sliderFrequency.addChangeListener(this);
+		m_sliderFrequency.setLabelTable(m_sliderFrequency.createStandardLabels(10));
+		m_sliderFrequency.addChangeListener(this);
 		
 		panel.add(labelTimeSelect);
-		panel.add( sliderFrequency );
+		panel.add( m_sliderFrequency );
 		panel.add(labelCurrentTime);
-		panel.add(labelFrequency);
+		panel.add(m_labelFrequency);
 
 		return panel;
 	}
@@ -236,22 +278,22 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 
 		JLabel labelTimeSelect =  new JLabel("Select velocity (km/h) : ");
 		JLabel labelCurrentTime =  new JLabel("              Current velocity : ");
-		labelVelocity = new JLabel("25");
+		m_labelVelocity = new JLabel("25");
 		
-		sliderVelocity = new JSlider(JSlider.HORIZONTAL, 0, 80, 40);
-	    sliderVelocity.setMinorTickSpacing(2);
-	    sliderVelocity.setMajorTickSpacing(10);
-	    sliderVelocity.setPaintTicks(true);
-	    sliderVelocity.setPaintLabels(true);
+		m_sliderVelocity = new JSlider(JSlider.HORIZONTAL, 0, 80, 40);
+	    m_sliderVelocity.setMinorTickSpacing(2);
+	    m_sliderVelocity.setMajorTickSpacing(10);
+	    m_sliderVelocity.setPaintTicks(true);
+	    m_sliderVelocity.setPaintLabels(true);
 
 		    // We'll just use the standard numeric labels for now...
-		sliderVelocity.setLabelTable(sliderVelocity.createStandardLabels(40));
-		sliderVelocity.addChangeListener(this);
+		m_sliderVelocity.setLabelTable(m_sliderVelocity.createStandardLabels(40));
+		m_sliderVelocity.addChangeListener(this);
 		
 		panel.add(labelTimeSelect);
-		panel.add( sliderVelocity );
+		panel.add( m_sliderVelocity );
 		panel.add(labelCurrentTime);
-		panel.add(labelVelocity);
+		panel.add(m_labelVelocity);
 
 		return panel;
 	}
@@ -301,26 +343,36 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		
+	
+		
 		JSlider slider = (JSlider) e.getSource();
-		if(slider == sliderFrequency)
-			labelFrequency.setText(sliderFrequency.getValue()+"");
-		if(slider == sliderVelocity)
-			labelVelocity.setText(sliderVelocity.getValue()+"");
+		if(slider == m_sliderFrequency)
+			m_labelFrequency.setText(m_sliderFrequency.getValue()+"");
+		if(slider == m_sliderVelocity)
+			m_labelVelocity.setText(m_sliderVelocity.getValue()+"");
+		if(slider == m_sliderTemperature)
+		{
+			System.out.println("intra aici" + m_sliderTemperature.getValue());
+			m_labelTemperature.setText(m_sliderTemperature.getValue()+"");
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	
-		System.out.println("Frequency: " + labelVelocity.getText() );
-		System.out.println("Time: " + labelTimeCurrent.getText() );
+		System.out.println("Frequency: " + m_labelVelocity.getText() );
+		System.out.println("Time: " + m_labelTimeCurrent.getText() );
 	
 		
 		ContextSituation situation = new ContextSituation();
 		ArrayList<Notifications> contextElements = new ArrayList<Notifications>();
-		TemporalContext temporalContext = new TemporalContext(labelTimeCurrent.getText());
-		
+		TemporalContext temporalContext = new TemporalContext(m_labelTimeCurrent.getText());
+		VelocityContext velocityContext = new VelocityContext(Integer.parseInt( m_labelVelocity.getText()));
+		TemperatureContext temperatureContext = new TemperatureContext(m_labelTemperature.getText());
 		
 		situation.getM_contextData().put(ElementType.TIME_CTXT, temporalContext);
+		situation.getM_contextData().put(ElementType.VEL_CTXT, velocityContext);
+		situation.getM_contextData().put(ElementType.TEMP_CTXT, temperatureContext);
 		
 		
 		contextElements.add(situation);
@@ -468,12 +520,12 @@ class JSwitchBox extends AbstractButton{
         
         if(night == true)
         {
-        	ContextManagement.labelTimeCurrent.setText("night");
+        	ContextManagement.m_labelTimeCurrent.setText("Nacht");
         	g2.setColor(Color.white);
         }
         else
         {
-        	ContextManagement.labelTimeCurrent.setText("day");
+        	ContextManagement.m_labelTimeCurrent.setText("Tag");
         	g2.setColor(Color.BLACK);
         }
         g2.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON );

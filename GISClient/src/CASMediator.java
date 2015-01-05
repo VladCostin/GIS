@@ -72,6 +72,9 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	 */
 	String m_fileModuleNameStructure;
 	
+	/**
+	 * represents the current panel from a component of the application
+	 */
 	Panel m_currentPanel;
 	
 	/**
@@ -81,8 +84,6 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	public CASMediator(String fileName) 
 	{
 		m_fileModuleNameStructure = fileName;
-		
-
 		m_mapComponents = new HashMap<String, ComponentIf>();
 		m_notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
 	}
