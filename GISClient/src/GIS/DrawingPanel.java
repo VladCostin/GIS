@@ -34,6 +34,12 @@ public class DrawingPanel extends Panel {
 	
 	
 	/**
+	 * specifies if the map should be redrawn
+	 */
+	public boolean m_reDrawMap = true;
+	
+	
+	/**
 	 * instance which will paint the map
 	 */
 	DrawingContext drawing;
@@ -45,6 +51,7 @@ public class DrawingPanel extends Panel {
 		super();
 		setBackground(Color.lightGray);
 		drawing = new DrawingContext(this);
+		m_reDrawMap  = false;
 		
 		
 	}
@@ -334,7 +341,8 @@ public class DrawingPanel extends Panel {
 	  	{
 	  		ArrayList<Notifications> objects = GISComponent.m_notifications.get(TypesNotification.POI_OBJECT);
 	 		Image img;
-	 // 		_g.clearRect(0, 0, getWidth(), getHeight());
+	 		if(m_reDrawMap == true)
+	 			_g.clearRect(0, 0, getWidth(), getHeight());
 	  		
 
 	  		if(DrawingContext.m_imageCreated == false)

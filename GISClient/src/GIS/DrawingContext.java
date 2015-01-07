@@ -66,9 +66,6 @@ public class DrawingContext {
 	{
 		Graphics graphics = bufferedImage.getGraphics();
 
-	
-
-	
 		if(_obj instanceof POIObject)
 		{
 			System.out.println("obiect");

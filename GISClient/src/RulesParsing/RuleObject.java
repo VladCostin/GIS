@@ -25,7 +25,12 @@ public class RuleObject
 	/**
 	 * the method to be executed in case the condition is fulfilled by the current context
 	 */
-	Method m_command;
+	Method m_action;
+	
+	/**
+	 * the method to be executed in case the condition is no longer fulfilled by the current context 
+	 */
+	Method m_reverse;
 	
 	
 	/**
@@ -39,17 +44,28 @@ public class RuleObject
 	 */
 	Object m_invokeObject;
 	
+	
+	/**
+	 * true if the condition was fulfilled, false if the condition was not fulfilled
+	 */
+	boolean m_lastConditionState;
+
+
 	/**
 	 * @param _conditionFromFile : received the tree made by the aprser
 	 * @param _command : the Method to be called if the condition is fulfilled
+	 * @param reverseAction 
 	 * @param _name_condition : name of the condition which should trigger a method
 	 */
-	public RuleObject(TreeNode _conditionFromFile, Method _command, String _name_condition, Object m_classInvokeMethod)
+	public RuleObject(TreeNode _conditionFromFile, Method _command,
+					  Method reverseAction, String _name_condition, Object m_classInvokeMethod)
 	{
 		m_condition = _conditionFromFile;
-		m_command = _command;
+		m_action = _command;
+		m_reverse = reverseAction;
 		m_name_condition = _name_condition;
 		m_invokeObject = m_classInvokeMethod;
+		m_lastConditionState = false;
 
 	}
 	
@@ -61,17 +77,13 @@ public class RuleObject
 	{
 		
 		boolean result;
-		
 		HashMap<ElementType, InterfaceContext>  aa = _situation.getM_contextData();
-//		System.out.println(aa.get(ElementType.TEMP_CTXT).getValue() + " " + aa.get(ElementType.TIME_CTXT).getValue() + " " + aa.get(ElementType.VEL_CTXT).getValue());
 
 		m_condition.setVariablesParameters(_situation); 
-		
 		result = (Boolean) m_condition.calculate();
-		System.out.println(result + " " + m_name_condition);
+
 		return result;
-		
-	//	return false;
+
 	}
 	
 	/**
@@ -81,7 +93,11 @@ public class RuleObject
 	{
 		
 		try {
-			m_command.invoke(m_invokeObject, null);
+			if(m_lastConditionState == true)
+				m_action.invoke(m_invokeObject, null);
+			else
+				m_reverse.invoke(m_invokeObject, null);
+			
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,13 +109,22 @@ public class RuleObject
 			e.printStackTrace();
 		}
 		
-	/*	Class cls = Class.forName("GIS.GISComponent");
-		Object obj = cls.newInstance();
- 
-		//call the printIt method
-		Method method = cls.getDeclaredMethod("printIt", );
-		method.invoke(obj, null);
-		*/
+
+	}
+	
+	
+	/**
+	 * @return the m_lastConditionState
+	 */
+	public boolean isM_lastConditionState() {
+		return m_lastConditionState;
+	}
+
+	/**
+	 * @param m_lastConditionState the m_lastConditionState to set
+	 */
+	public void setM_lastConditionState(boolean m_lastConditionState) {
+		this.m_lastConditionState = m_lastConditionState;
 	}
 	
 }

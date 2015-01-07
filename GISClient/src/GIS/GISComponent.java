@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.swing.DefaultListModel;
@@ -194,19 +193,24 @@ public class  GISComponent
 					Node node = statements.item(indexStatement);
 					Node condition = ((Element) node).getElementsByTagName("condition").item(0);
 					Node action = ((Element) node).getElementsByTagName("action").item(0);
+					Node actionReverse = ((Element) node).getElementsByTagName("action").item(1);
 					
 					String conditionString = condition.getFirstChild().getNodeValue();
 					String actionString = action.getFirstChild().getNodeValue();
+					String reverseString = actionReverse.getFirstChild().getNodeValue();
+					
+					System.out.println(actionString + " " + reverseString);
+					
+				    conditionString = conditionString.replaceAll("\n", "");
 					
 					
-					
-					Method method = this.getClass().getMethod(actionString, null);
+					Method methodAction = this.getClass().getMethod(actionString, null);
+					Method reverseAction =  this.getClass().getMethod(reverseString, null);
 				
-						conditionString = conditionString.replaceAll("\n", "");
-						System.out.println("Conditie string : " + conditionString);
+
 						
-						TreeNode tree = rulesCompiler.evaluate(conditionString);
-						rules.add(new RuleObject(tree, method, conditionString,this));
+					TreeNode tree = rulesCompiler.evaluate(conditionString);
+					rules.add(new RuleObject(tree, methodAction,reverseAction, conditionString,this));
 					
 					
 					
@@ -709,21 +713,34 @@ public class  GISComponent
 	  for(RuleObject rule : m_GISrules)
 	  {
 		  conditionChecked = rule.valid(situation);
-		  if(conditionChecked == true)
+		  if(conditionChecked != rule.isM_lastConditionState())
+		  {
+			  rule.setM_lastConditionState(conditionChecked);
 			  rule.execute();
+		  }
 	  }
 	
   }
 
 
-/**
+  /**
    * action called when updating, if the condition is fulfilled
    */
   public void changeBackground()
   {
 	  System.out.println("schimba backgroundul HA HA HA");
-	//  this.m_drawingPanel.drawing.color = new Color(255,240,240);
-	//  this.m_drawingPanel.drawing.m_imageCreated = false;
+	  m_drawingPanel.drawing.color = new Color(255,240,240);
+	  m_drawingPanel.drawing.m_imageCreated = false;
+  
+  }
+  /**
+   * action called when updating, if the condition is fulfilled
+   */
+  public void resetBackground()
+  {
+	  System.out.println("schimba backgroundul HA HA HA");
+	  m_drawingPanel.drawing.color = new Color(0,0,0);
+	  m_drawingPanel.drawing.m_imageCreated = false;
   }
   
 }
