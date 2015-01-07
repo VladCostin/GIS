@@ -129,7 +129,7 @@ public class  GISComponent
 	/**
 	 * loads the methods of the current interface to which the use has check his credentials
 	 */
-	GeoServerInterface _currentInterface;
+	GeoServerInterface m_currentInterface;
 	
 	/**
 	 * the panel where the map is drawn
@@ -457,9 +457,8 @@ public class  GISComponent
 
 		
 		if (source.equals(m_ldButton)) {
-			
 
-			SpecifyData dialog = new SpecifyData(m_frame,_currentInterface);
+			SpecifyData dialog = new SpecifyData(m_frame,m_currentInterface);
 			dialog.setVisible(true);
 
 		}
@@ -636,13 +635,31 @@ public class  GISComponent
 
   	
   	
-     if(m_mapOptionsServer.get(e.getItem()).getPassword() == null || m_mapOptionsServer.get(e.getItem()).getUsername() == null) 
+  /*   if(m_mapOptionsServer.get(e.getItem()).getPassword() == null || m_mapOptionsServer.get(e.getItem()).getUsername() == null) 
      {
     	 CheckCredentialsDialog dialog = new CheckCredentialsDialog(m_frame, m_mapOptionsServer.get(e.getItem()));
     	 dialog.setVisible(true);
     	 
      }
-     _currentInterface = m_mapOptionsServer.get(e.getItem());
+  */
+	  
+	  Checkbox check = (Checkbox) e.getSource();
+	  if(check.getLabel().equals("OSMServer"))
+	  {
+		  m_mapOptionsServer.get(e.getItem()).checkCredentials("gisuser","gisuser");
+		  m_currentInterface = m_mapOptionsServer.get(e.getItem());
+		  List<String> selectedItems =m_currentInterface.getTypes();
+		  Vector<GeoObject> objectContainer = m_currentInterface.typeAreaQuery(selectedItems, null); 
+		  GISComponent.m_drawingPanel.setGeoObjects(objectContainer); 
+			
+		  m_drawingPanel.zoomToFit();
+		  int scale = m_drawingPanel.calculateScale();
+		  m_scale.setText(modifyScaleText(String.valueOf(scale)));
+		  m_drawingPanel.repaint();
+		
+	  }
+	  else
+      m_currentInterface = m_mapOptionsServer.get(e.getItem());
 
 	  
   }
