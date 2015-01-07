@@ -104,6 +104,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 				Document document =builder.parse(
 				ClassLoader.getSystemResourceAsStream(m_fileModuleNameStructure));
 				
+				
 				root = document.getDocumentElement();
 				modules = root.getElementsByTagName("module");
 				
@@ -361,6 +362,9 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	 */
 	public static void main(String arg[])
 	{
+		
+		if(arg[0] == null)
+			System.out.println("este null");
 
 		CASMediator mediator = new CASMediator(arg[0]);	
 		mediator.initComponents();

@@ -202,11 +202,11 @@ public class  GISComponent
 					
 					Method method = this.getClass().getMethod(actionString, null);
 					try {
-						
+						conditionString = conditionString.replaceAll("\n", "");
 						System.out.println("Conditie string : " + conditionString);
 						
 						TreeNode tree = rulesCompiler.evaluate(conditionString);
-						rules.add(new RuleObject(tree, method));
+						rules.add(new RuleObject(tree, method, conditionString));
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

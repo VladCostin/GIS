@@ -38,7 +38,7 @@ public class TNodeComparison extends TreeNode{
 			String valueVar = (String) var.calculate();
 			String valueConst = (String) constant.calculate();
 			
-			System.out.println("valorile sunt :" + valueVar + " " + valueConst);
+		//	System.out.println("valorile sunt :" + valueVar + " " + valueConst);
 			
 			if(var.m_type == ElementType.TIME_CTXT)
 				return calculateValueString(valueVar, valueConst);
@@ -53,7 +53,7 @@ public class TNodeComparison extends TreeNode{
 			String valueVar = (String) var.calculate();
 			String valueConst = (String) constant.calculate();
 			
-			System.out.println("valorile sunt :" + valueVar + " " + valueConst);
+	//		System.out.println("valorile sunt :" + valueVar + " " + valueConst);
 			
 			if(var.m_type == ElementType.TIME_CTXT)
 				return calculateValueString(valueVar, valueConst);
@@ -74,20 +74,20 @@ public class TNodeComparison extends TreeNode{
 	private Object calculateValueFloat(Float value1, Float value2)
 	{
 				
-		System.out.println("valorile float sunt : " + value1 + " " + value2 + " -" + m_compareValue+"-");
+	//	System.out.println("valorile float sunt : " + value1 + " " + value2 + " -" + m_compareValue+"-");
 		
 		
 		switch(m_compareValue)
 		{
-			case "<":
+			case "LESS":
 				if(value1 < value2)
 					return true;
 				return false;
-			case ">":
+			case "GR":
 				if(value1 > value2)
 					return true;
 				return false;
-			case "==":
+			case "EQ":
 				if(value1 == value2)
 					return true;
 				return false;
@@ -100,7 +100,7 @@ public class TNodeComparison extends TreeNode{
 	@Override
 	public void setVariablesParameters(ContextSituation _contextElements) {
 		
-		System.out.println(m_compareValue);
+	//	System.out.println("    Comparison:" + m_compareValue);
 		this.m_childs[0].setVariablesParameters(_contextElements);
 		this.m_childs[1].setVariablesParameters(_contextElements);
 		

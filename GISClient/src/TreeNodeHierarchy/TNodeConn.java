@@ -56,6 +56,8 @@ public class TNodeConn extends TreeNode {
 		
 		
 		
+		//System.out.println("Connection:" + m_ConnectionValue);
+		
 		this.m_childs[0].setVariablesParameters(_contextElements);
 		this.m_childs[1].setVariablesParameters(_contextElements);
 		

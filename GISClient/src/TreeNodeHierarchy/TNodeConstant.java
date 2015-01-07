@@ -32,7 +32,7 @@ public class TNodeConstant extends TreeNode{
 	@Override
 	public void setVariablesParameters(ContextSituation _contextElements) {
 		
-		
+	//	System.out.println("    		Constant:" + m_value);
 		
 	}
 

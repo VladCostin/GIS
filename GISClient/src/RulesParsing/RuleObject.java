@@ -1,5 +1,6 @@
 package RulesParsing;
 
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
@@ -24,14 +25,22 @@ public class RuleObject
 	 */
 	Method m_command;
 	
+	
+	/**
+	 * name of the condition, only for testing
+	 */
+	String m_name_condition;
+	
 	/**
 	 * @param _conditionFromFile : received the tree made by the aprser
 	 * @param _command : the Method to be called if the condition is fulfilled
+	 * @param _name_condition : name of the condition which should trigger a method
 	 */
-	public RuleObject(TreeNode _conditionFromFile, Method _command)
+	public RuleObject(TreeNode _conditionFromFile, Method _command, String _name_condition)
 	{
 		m_condition = _conditionFromFile;
 		m_command = _command;
+		m_name_condition = _name_condition;
 	}
 	
 	/**
@@ -49,10 +58,10 @@ public class RuleObject
 		m_condition.setVariablesParameters(_situation); 
 		
 		result = (Boolean) m_condition.calculate();
-		System.out.println(result);
-		
-		
+		System.out.println(result + " " + m_name_condition);
 		return result;
+		
+	//	return false;
 	}
 	
 	/**

@@ -43,7 +43,7 @@ public class TNodeContextVar extends TreeNode{
 		
 	
 		m_context = _contextElements.getM_contextData().get(m_type);
-		System.out.println(m_context.getValue());
+	//	System.out.println("   				Context Var:" +  m_context.getValue());
 	}
 
 }

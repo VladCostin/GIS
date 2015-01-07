@@ -351,10 +351,7 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 		if(slider == m_sliderVelocity)
 			m_labelVelocity.setText(m_sliderVelocity.getValue()+"");
 		if(slider == m_sliderTemperature)
-		{
-			System.out.println("intra aici" + m_sliderTemperature.getValue());
 			m_labelTemperature.setText(m_sliderTemperature.getValue()+"");
-		}
 	}
 
 	@Override
