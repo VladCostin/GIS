@@ -1,12 +1,14 @@
 package RulesParsing;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import ContextManagementComponent.ContextSituation;
 import ContextModel.ElementType;
 import ContextModel.InterfaceContext;
+import GIS.GISComponent;
 import TreeNodeHierarchy.TreeNode;
 
 /**
@@ -31,16 +33,24 @@ public class RuleObject
 	 */
 	String m_name_condition;
 	
+	
+	/**
+	 * the class the methods are called on
+	 */
+	Object m_invokeObject;
+	
 	/**
 	 * @param _conditionFromFile : received the tree made by the aprser
 	 * @param _command : the Method to be called if the condition is fulfilled
 	 * @param _name_condition : name of the condition which should trigger a method
 	 */
-	public RuleObject(TreeNode _conditionFromFile, Method _command, String _name_condition)
+	public RuleObject(TreeNode _conditionFromFile, Method _command, String _name_condition, Object m_classInvokeMethod)
 	{
 		m_condition = _conditionFromFile;
 		m_command = _command;
 		m_name_condition = _name_condition;
+		m_invokeObject = m_classInvokeMethod;
+
 	}
 	
 	/**
@@ -70,6 +80,26 @@ public class RuleObject
 	public void execute()
 	{
 		
+		try {
+			m_command.invoke(m_invokeObject, null);
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	/*	Class cls = Class.forName("GIS.GISComponent");
+		Object obj = cls.newInstance();
+ 
+		//call the printIt method
+		Method method = cls.getDeclaredMethod("printIt", );
+		method.invoke(obj, null);
+		*/
 	}
 	
 }

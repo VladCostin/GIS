@@ -201,16 +201,13 @@ public class  GISComponent
 					
 					
 					Method method = this.getClass().getMethod(actionString, null);
-					try {
+				
 						conditionString = conditionString.replaceAll("\n", "");
 						System.out.println("Conditie string : " + conditionString);
 						
 						TreeNode tree = rulesCompiler.evaluate(conditionString);
-						rules.add(new RuleObject(tree, method, conditionString));
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						rules.add(new RuleObject(tree, method, conditionString,this));
+					
 					
 					
 				}
@@ -232,6 +229,9 @@ public class  GISComponent
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -721,7 +721,7 @@ public class  GISComponent
    */
   public void changeBackground()
   {
-	//  System.out.println("schimba backgroundul HA HA HA");
+	  System.out.println("schimba backgroundul HA HA HA");
 	//  this.m_drawingPanel.drawing.color = new Color(255,240,240);
 	//  this.m_drawingPanel.drawing.m_imageCreated = false;
   }
