@@ -1,6 +1,5 @@
 package ContextManagementComponent;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -25,6 +24,7 @@ import java.util.Set;
 import javax.swing.AbstractButton;
 import javax.swing.DefaultButtonModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -34,12 +34,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.LabelView;
 
+import common.ConstantsId;
 import common.Notifications;
 import ContextModel.ElementType;
 import ContextModel.LocationContext;
 import ContextModel.TemperatureContext;
 import ContextModel.TemporalContext;
 import ContextModel.VelocityContext;
+import GeoObject.POIObject;
 import Mediator.ComponentIf;
 import Mediator.Subject;
 import Mediator.TypesNotification;
@@ -120,6 +122,17 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 	 */
 	JSlider m_sliderTemperature;
 	
+	/**
+	 * list of pois gotten from POI Component
+	 * in case the user selects a poi and simulates the map, if the distance is too short, it will zoom
+	 */
+	JComboBox<String> m_pois;
+	
+	/**
+	 * the pois received from the poiS component
+	 */
+	HashMap<String,POIObject> m_POIobjects;
+	
 	
 	/**
 	 * @param _subject : the instance of Mediator, to which the data will be transmitted 
@@ -129,12 +142,14 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 		m_contextElements = new ArrayList<>();
 		m_panel = initGUI();
 		m_notifications = initNotificationsInterested();
+		m_POIobjects = new HashMap<String,POIObject>();
 	}
 	
 	private HashMap<TypesNotification, ArrayList<Notifications>> initNotificationsInterested() {
 		HashMap<TypesNotification, ArrayList<Notifications>> notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
 		
 		notifications.put(TypesNotification.CONTEXT_ELEMENT, new ArrayList<Notifications>());
+		notifications.put(TypesNotification.POI_OBJECT, new ArrayList<Notifications>());
 		return notifications;
 	}
 	
@@ -144,7 +159,8 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 	*/
 	public Panel initGUI() {
 		
-		Panel gui = new Panel(new GridLayout(7,1));
+		Panel gui = new Panel(new GridLayout(8,1));
+		gui.add(initPanelPOIS());
 		gui.add(initPanelNightDay());
 		gui.add(initPanelFrequency());
 		gui.add(initPanelVelocity());
@@ -154,6 +170,22 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 		return gui;
 	}
 	
+
+	/**
+	 * @return : the panel where the user specifies the POI of interest
+	 */
+	public Component initPanelPOIS() {
+		
+		JPanel panel = new JPanel();
+		JLabel labelTimeSelect =  new JLabel("Select a POI used for zoom");
+		m_pois = new JComboBox<String>();
+		
+		panel.add(labelTimeSelect);
+		panel.add(m_pois);
+		
+		return panel;
+		
+	}
 
 	/**
 	 *  @return : the panel where the user sets the temperature
@@ -204,8 +236,11 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 		m_Latitude = new JTextField();
 		m_Longitude = new JTextField();
 		
-		m_Latitude.setEditable(false);
-		m_Longitude.setEditable(false);
+	//	m_Latitude.setEditable(false);
+	//	m_Longitude.setEditable(false);
+		
+		m_Latitude.setText("4830.7382"); 
+		m_Longitude.setText("1428.9431"); 
 		
 		m_Latitude.setBackground(Color.white);
 		m_Longitude.setBackground(Color.white);
@@ -314,25 +349,57 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 
 	@Override
 	public void update(TypesNotification _notification) {
-		  
-		  System.out.println("intra si aici, in Contextmanagement " + _notification);
-		  
+		 
 		 if(m_notifications.keySet().contains(_notification))
 		 {
-			 m_notifications.put(_notification, m_subject.getNotifications(_notification));
 			 
+			 if(_notification.equals(TypesNotification.CONTEXT_ELEMENT))
+			 {
+				 m_notifications.put(_notification, m_subject.getNotifications(_notification));
+				 ArrayList<Notifications> notifications =  m_subject.getNotifications(_notification);
+				 LocationContext location = (LocationContext) notifications.get(0);
+				 m_Latitude.setText(location.m_latitudeGrad + "" + location.m_latitudeMinuten);
+				 m_Longitude.setText(location.m_longitudeGrad + "" + location.m_longitudeMinuten);
+			 }
 			 
-			ArrayList<Notifications> notifications =  m_subject.getNotifications(_notification);
-			LocationContext location = (LocationContext) notifications.get(0);
-			System.out.println( location.m_latitudeGrad + "  " + location.m_longitudeGrad);
-			m_Latitude.setText(location.m_latitudeGrad + "" + location.m_latitudeMinuten);
-			m_Longitude.setText(location.m_longitudeGrad + "" + location.m_longitudeMinuten);
-			
+			 if(_notification.equals(TypesNotification.POI_OBJECT))
+			 {
+				 addPoisToComboBox();
+				 
+				
+				
+				
+			 }
+			 
 			 
 		 }
 		 
 		 System.out.println(m_notifications.get(_notification));
 	  }
+
+	/**
+	 * the management component has received the POIS from the pois component
+	 */
+	public void addPoisToComboBox() {
+		ArrayList<Notifications> notifications = m_subject.getNotifications(TypesNotification.POI_OBJECT);
+		if(notifications.size() == 1)
+		{
+			POIObject object = (POIObject) notifications.get(0);
+			if(object.getType() == ConstantsId.user)
+				return;
+		}
+		
+		for(Notifications not : notifications)
+		{
+			POIObject object = (POIObject) not;
+			
+			
+			m_POIobjects.put(object.getId(), object);
+		}
+		
+		
+		
+	}
 
 	@Override
 	public Set<TypesNotification> getNotificationsTypes() {
@@ -366,17 +433,44 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 		TemporalContext temporalContext = new TemporalContext(m_labelTimeCurrent.getText());
 		VelocityContext velocityContext = new VelocityContext(Integer.parseInt( m_labelVelocity.getText()));
 		TemperatureContext temperatureContext = new TemperatureContext(m_labelTemperature.getText());
-		LocationContext locationContext = new LocationContext(m_Longitude.getText(), m_Latitude.getText());
+		//LocationContext locationContext = new LocationContext(m_Longitude.getText(), m_Latitude.getText());
+		
+		LocationContext locationContext = new LocationContext(48.307382, 14.289431);
+		LocationContext poiContext = null; //= new LocationContext(48.305382,  14.285431);
 		
 		System.out.println("POZITIA USEULUI ESTE :" + m_Longitude.getText() + " " + m_Latitude.getText());
+		
+		
+		POIObject object = m_POIobjects.get( m_pois.getSelectedItem());
+		if(object != null)
+		{
+			poiContext = new LocationContext( ((double) object.m_point.y)/1000000 , ((double) object.m_point.x)/1000000);
+			System.out.println(poiContext.m_latitude + " " + poiContext.m_longitude);
+		}
+		
+		
 		
 		situation.getM_contextData().put(ElementType.TIME_CTXT, temporalContext);
 		situation.getM_contextData().put(ElementType.VEL_CTXT, velocityContext);
 		situation.getM_contextData().put(ElementType.TEMP_CTXT, temperatureContext);
 		situation.getM_contextData().put(ElementType.LOC_CTXT, locationContext);
+		situation.getM_contextData().put(ElementType.POI_CTXT, poiContext);
+		
 		
 		contextElements.add(situation);
 		m_subject.communicateContextSituation(contextElements);
+	
+		
+	}
+
+	@Override
+	public void updateNotifiactionsReceived() {
+		
+		for(String id_POI : m_POIobjects.keySet())
+		{
+			m_pois.addItem( id_POI);
+		}
+		
 		
 	}
 

@@ -86,6 +86,8 @@ public interface ConstantsId {
 	
 	int school			= 8006;
 	
+	int user			= 8007;
+	
 
 	
 	

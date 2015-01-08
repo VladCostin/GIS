@@ -42,6 +42,8 @@ import java.lang.reflect.Method;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -158,6 +160,17 @@ public class  GISComponent
 	 *  associate for each condition an action
 	 */
 	ArrayList<RuleObject> m_GISrules;
+	
+	
+	/**
+	 * it specifies whether a message should appear, telling the user to slow down
+	 */
+	boolean m_showDangerMessage;
+	
+	 /**
+	 * show the awareness dialog
+	 */
+	AwarenessDialog m_dialog;
 
 
 	/**
@@ -171,7 +184,9 @@ public class  GISComponent
 		m_subject = _subject;
 		m_GISrules = initConditionsActions();
 
+		m_showDangerMessage = false;
 		new CoreData();
+		
 	}
   
 	
@@ -761,7 +776,6 @@ public class  GISComponent
    */
   public void changeBackground()
   {
-	  System.out.println("schimba backgroundul HA HA HA");
 	  m_drawingPanel.drawing.color = new Color(255,240,240);
 	  m_drawingPanel.drawing.m_imageCreated = false;
   
@@ -771,7 +785,6 @@ public class  GISComponent
    */
   public void resetBackground()
   {
-	  System.out.println("schimba backgroundul HA HA HA");
 	  m_drawingPanel.drawing.color = new Color(0,0,0);
 	  m_drawingPanel.drawing.m_imageCreated = false;
   }
@@ -827,7 +840,8 @@ public class  GISComponent
   */
   public void awareSpeed()
   {
-	  
+	  System.out.println("intra in atentionarea utilizatorului legat de viteza");
+	  m_showDangerMessage = true;
   }
   
   /**
@@ -835,10 +849,35 @@ public class  GISComponent
   */
   public void stopAwareSpeed()
   {
+	  m_showDangerMessage = false;
+	  m_dialog.dispose();
+  }
+
+
+  @Override
+  public void updateNotifiactionsReceived() {
 	  
+	  if(m_showDangerMessage == true)
+	  {
+		  m_dialog = new AwarenessDialog(m_frame);
+		  m_dialog.setVisible(true);
+	  }
+	
   }
   
 }
+
+
+class AwarenessDialog extends JFrame
+{
+	public AwarenessDialog(Frame parent) 
+	{
+		// super(parent, true); 
+		 add(new Label("Slow Down, your speed is too high"));
+		 pack();
+	}
+}
+
 
 /**
  * the user specifies which types should be shown on the map : rivers, roads, 

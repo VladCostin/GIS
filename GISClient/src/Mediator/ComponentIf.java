@@ -31,6 +31,10 @@ public interface ComponentIf {
 	 * @return : the notifications that the component is interested in;
 	 */
 	public Set<TypesNotification> getNotificationsTypes();
+
+
+
+	public void updateNotifiactionsReceived();
 	
 
 }

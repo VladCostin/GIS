@@ -388,6 +388,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 		m_frame.remove(m_currentPanel);
 		m_currentPanel = m_mapComponents.get(_aliasComponent).getPanel();
 		m_frame.getContentPane().add(m_currentPanel, BorderLayout.CENTER);
+		m_mapComponents.get(_aliasComponent).updateNotifiactionsReceived();
 	//	m_panel.removeAll();
 		
 		//m_currentPanel = m_mapComponents.get(_aliasComponent).getPanel();

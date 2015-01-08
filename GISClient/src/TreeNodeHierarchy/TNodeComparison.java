@@ -27,11 +27,12 @@ public class TNodeComparison extends TreeNode{
 	@Override
 	public Object calculate() {
 		
-		TNodeContextVar var;
 		TNodeConstant constant;
 		
 		if(m_childs[0]  instanceof TNodeContextVar)
 		{
+			TNodeContextVar var;
+			
 			var = (TNodeContextVar) m_childs[0];
 			constant = (TNodeConstant) m_childs[1];
 			
@@ -45,20 +46,37 @@ public class TNodeComparison extends TreeNode{
 			return calculateValueFloat(Float.valueOf(valueVar), Float.valueOf(valueConst));
 			
 		}
-		else
+		if(m_childs[1] instanceof TNodeContextVar)
 		{
+			TNodeContextVar var;
+		
+			
 			var = (TNodeContextVar) m_childs[1];
 			constant = (TNodeConstant) m_childs[0];
 			
 			String valueVar = (String) var.calculate();
 			String valueConst = (String) constant.calculate();
 			
-	//		System.out.println("valorile sunt :" + valueVar + " " + valueConst);
-			
 			if(var.m_type == ElementType.TIME_CTXT)
 				return calculateValueString(valueVar, valueConst);
 			return calculateValueFloat(Float.valueOf(valueConst), Float.valueOf(valueVar));
 		}
+		if(m_childs[0] instanceof TNodeDistance)
+		{
+			TNodeDistance var;
+			
+			var = (TNodeDistance) m_childs[0];
+			constant = (TNodeConstant) m_childs[1];
+			
+			String valueVar = (String) var.calculate();
+			String valueConst = (String) constant.calculate();
+
+
+			return calculateValueFloat(Float.valueOf(valueVar), Float.valueOf(valueConst));
+		}
+		return true;
+		
+		
 		
 		
 	}

@@ -253,4 +253,10 @@ public class AALComponent implements ComponentIf, ItemListener, ActionListener{
 		
 	}
 
+	@Override
+	public void updateNotifiactionsReceived() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

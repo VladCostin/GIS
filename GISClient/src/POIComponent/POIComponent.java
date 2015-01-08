@@ -250,16 +250,6 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 		m_poi.addAll(m_panelAdd.getM_newPOI());
 		m_panelAdd.getM_newPOI().clear();
 		
-		
-	/*	for(Notifications notification : m_poi)
-		{
-			POIObject object = (POIObject) notification;
-			if(object.getId().equals(poisDeleted))
-			{
-				
-			}
-		}
-	*/
 		for(String delete : poisDeleted)
 		{
 			for(Notifications notification : m_poi)
@@ -322,6 +312,9 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 				for( Notifications notification : m_poi)
 				{
 						POIObject poi = (POIObject) notification;
+						
+						System.out.println(poi.m_point.x + " " + poi.m_point.y);
+						
 						if(selectedItemsId.contains(poi.getType()))
 							sendPOI.add(poi);
 				}
@@ -354,6 +347,13 @@ public class POIComponent implements ComponentIf, ItemListener, ActionListener{
 
 	public void setM_panelAdd(AddPanel m_panelAdd) {
 		this.m_panelAdd = m_panelAdd;
+	}
+
+
+	@Override
+	public void updateNotifiactionsReceived() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

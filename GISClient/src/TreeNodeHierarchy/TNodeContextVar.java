@@ -39,7 +39,7 @@ public class TNodeContextVar extends TreeNode{
 	@Override
 	public Object calculate() {
 	
-		if(m_type.equals(ElementType.LOC_CTXT) || m_type.equals(ElementType.LOC_CTXT)  )
+		if(m_type.equals(ElementType.LOC_CTXT) || m_type.equals(ElementType.POI_CTXT)  )
 			return m_context;
 			
 		return m_context.getValue();

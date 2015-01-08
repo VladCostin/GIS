@@ -35,7 +35,9 @@ public class POIObject extends GeoObject {
    super(_id,_type,null);
     m_image = _image;
     m_point = _pt;
-   
+    
+    
+    System.out.println("Coordonatele sunt : " + m_point.x +" " + m_point.y);
   }
   
   
@@ -56,6 +58,8 @@ public class POIObject extends GeoObject {
   {
 	  super(_id, _type, null);
 	  m_point = new Point((int)  latitude, (int) longitude);
+	  
+	
 	  
   }
   

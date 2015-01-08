@@ -218,7 +218,7 @@ public class GPS implements ComponentIf, Observer{
 		
 		contextElements.clear();	
 		
-		contextElements.add(new  POIObject("999",ConstantsId.police, longitude,latitude ));
+		contextElements.add(new  POIObject("999",ConstantsId.user, longitude,latitude ));
 		
 		System.out.println( ((POIObject) contextElements.get(0)).m_point.x + " " + ((POIObject) contextElements.get(0)).m_point.y);
 		m_subject.communicatePOI(m_notifications.get(TypesNotification.POI_OBJECT));
@@ -282,6 +282,12 @@ public class GPS implements ComponentIf, Observer{
 
 			ResultSet r = s.executeQuery(queryForm);
 		*/
+	}
+
+	@Override
+	public void updateNotifiactionsReceived() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
