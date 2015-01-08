@@ -58,6 +58,7 @@ import org.xml.sax.SAXException;
 import common.Notifications;
 import ContextManagementComponent.ContextSituation;
 import GeoObject.GeoObject;
+import GeoObject.POIObject;
 import Mediator.ComponentIf;
 import Mediator.TypesNotification;
 import Mediator.Subject;
@@ -100,6 +101,12 @@ public class  GISComponent
 	private Point     m_startPoint      = null;
 	/// store a specific interaction end point
 	private Point     m_stopPoint       = null;
+	
+	/**
+	 * the location of the user on the map
+	 */
+	Point	 m_user_current_location = null;
+	
 	/// store the current zoom rectangle 
 	private Rectangle m_zoomRectangle   = null;
 	/// store the current sticky rectangle (boundary for loading objects)
@@ -151,6 +158,7 @@ public class  GISComponent
 	 *  associate for each condition an action
 	 */
 	ArrayList<RuleObject> m_GISrules;
+
 
 	/**
 	 * @param _subject
@@ -704,7 +712,12 @@ public class  GISComponent
 		 		checkMethodsToExecute( m_subject.getNotifications(TypesNotification.CONTEXT_SITUATION).get(0));
 		 		break;
 		 	case POI_OBJECT:
-		 		System.out.println("primeste POI_OBJECT");
+		 		
+		 		POIObject object = (POIObject) m_subject.getNotifications(TypesNotification.POI_OBJECT).get(0);
+		 		
+		 		System.out.println("userul se afla in locul " + object.m_point.x + " " + object.m_point.y);
+		 		m_user_current_location = DrawingPanel.m_matrix.multiply(object.m_point);	
+		 		
 		 		
 		 		
 		 		m_notifications.get(TypesNotification.POI_OBJECT).clear();
@@ -777,17 +790,21 @@ public class  GISComponent
 	  
 	  System.out.println("intra aici");
 	   
+	  
+	   int x = m_user_current_location.x;
+	   int y = m_user_current_location.y;
 	   
-		Point p1 = m_drawingPanel.getMapPoint(new Point(350, 350));
-		Point p2 = m_drawingPanel.getMapPoint(new Point(500, 500));
+		Point p1 = m_drawingPanel.getMapPoint(new Point(x- 50, y - 50));
+		Point p2 = m_drawingPanel.getMapPoint(new Point(x + 50, y + 50));
 		Rectangle mapBounds = new Rectangle(Integer.MAX_VALUE,
 		                                    Integer.MAX_VALUE,
 		                                    Integer.MIN_VALUE,
 		                                    Integer.MIN_VALUE);
 		mapBounds.add(p1);
 		mapBounds.add(p2);
-		m_drawingPanel.zoomToFit(mapBounds);
 		m_drawingPanel.drawing.m_imageCreated = false;
+		m_drawingPanel.zoomToFit(mapBounds);
+
 		int scale = m_drawingPanel.calculateScale();
 		m_scale.setText(modifyScaleText(String.valueOf(scale)));
 		

@@ -26,7 +26,7 @@ public class DrawingPanel extends Panel {
 	/// the static POIs to paint
 	private Vector                  m_pois      = null;	
 	/// the transformation matrix
-	private GeoTransformationMatrix m_matrix    = null;
+	static GeoTransformationMatrix m_matrix    = null;
 	/// the invers transformation matrix
 	private GeoTransformationMatrix m_matrixInv = null;
 	/// the dpi amount of the screen
