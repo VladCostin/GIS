@@ -116,7 +116,7 @@ public class OSMServer implements GeoServerInterface{
 				
 				
 				queryForm = createSelectStatement(table) + createFromStatement(table) +  whereClause;
-				System.out.println(queryForm);
+			//	System.out.println(queryForm);
 
 				ResultSet r = s.executeQuery(queryForm);
 				while( r.next() ) { 
@@ -128,7 +128,7 @@ public class OSMServer implements GeoServerInterface{
 					//System.out.println(table.toString()+"."+_type);
 					if(CoreData._hashMapTypeOSM.get(table.toString()+"."+_type) == null)
 					{
-						System.out.println(table.toString()+"."+_type);
+					//	System.out.println(table.toString()+"."+_type);
 						continue;
 					}
 					_typeInteger = CoreData._hashMapTypeOSM.get(table.toString()+"."+_type);
@@ -150,7 +150,7 @@ public class OSMServer implements GeoServerInterface{
 							
 							org.postgis.Point point = (org.postgis.Point) g;
 							
-							System.out.println(point.x + " " + point.y);
+						//	System.out.println(point.x + " " + point.y);
 						//	object._components.add(new PointObj((int)  point.x,(int) point.y));
 							object._components.add(new PointObj((int) (1000000 * point.x),(int) (1000000 * point.y)));
 							
@@ -295,7 +295,6 @@ public class OSMServer implements GeoServerInterface{
 			{
 				 x = _multi.getPolygon(j).getPoint(i).x;
 				 y = _multi.getPolygon(j).getPoint(i).y;
-			//	 _poligon.addPoint(   (int)  x,(int)  y);
 				_poligon.addPoint(   (int) (1000000 * x),(int) (1000000 * y));
 			}
 			area.set_polygon(_poligon);

@@ -362,9 +362,6 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	 */
 	public static void main(String arg[])
 	{
-		
-		if(arg[0] == null)
-			System.out.println("este null");
 
 		CASMediator mediator = new CASMediator(arg[0]);	
 		mediator.initComponents();
@@ -472,7 +469,6 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	public void menuSelected(MenuEvent e) {
 		
 		JMenu menu = (JMenu) e.getSource();	
-		System.out.println("intra aici" + menu.getText());
 		loadPanel(menu.getText());
 		
 	}

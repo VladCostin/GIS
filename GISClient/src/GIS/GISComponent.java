@@ -384,12 +384,18 @@ public class  GISComponent
 			{
 				if (zittern) 
 				{ // a zoom rectangle has been defined
+					
+					System.out.println("A FACUT ZOOM " + m_startPoint.x + " " + m_startPoint.y +  " " + m_stopPoint.x + " " + m_stopPoint.y); 
+					
 					Point p1 = m_drawingPanel.getMapPoint(m_startPoint);
 					Point p2 = m_drawingPanel.getMapPoint(m_stopPoint);
 					Rectangle mapBounds = new Rectangle(Integer.MAX_VALUE,
 					                                    Integer.MAX_VALUE,
 					                                    Integer.MIN_VALUE,
 					                                    Integer.MIN_VALUE);
+					
+					System.out.println(p1.x + " " + p1.y +  " " + p2.x + " " + p2.y);
+					
 					mapBounds.add(p1);
 					mapBounds.add(p2);
 					m_drawingPanel.zoomToFit(mapBounds);
@@ -444,6 +450,7 @@ public class  GISComponent
 	public void keyReleased(KeyEvent _event) {
 		if (_event.getKeyCode() == KeyEvent.VK_ENTER) 
 		{
+			
 			String scaleS = m_scale.getText();
 			m_drawingPanel.zoomToScale(scanScaleText(scaleS));
 			int scale = m_drawingPanel.calculateScale();
@@ -741,6 +748,48 @@ public class  GISComponent
 	  System.out.println("schimba backgroundul HA HA HA");
 	  m_drawingPanel.drawing.color = new Color(0,0,0);
 	  m_drawingPanel.drawing.m_imageCreated = false;
+  }
+  
+  /**
+  * action called when the temperature is too little and the velocity is too high 
+  */
+  public void zoomIn()
+  {
+	  
+	//   System.out.println("FACE ZOOM de 2");
+	//   m_drawingPanel.zoom(2);
+	//   int scale = m_drawingPanel.calculateScale();
+	//   m_scale.setText(modifyScaleText(String.valueOf(scale)));
+	//   m_drawingPanel.drawing.m_imageCreated = false;
+	  
+	  System.out.println("intra aici");
+	   
+	   
+		Point p1 = m_drawingPanel.getMapPoint(new Point(350, 350));
+		Point p2 = m_drawingPanel.getMapPoint(new Point(500, 500));
+		Rectangle mapBounds = new Rectangle(Integer.MAX_VALUE,
+		                                    Integer.MAX_VALUE,
+		                                    Integer.MIN_VALUE,
+		                                    Integer.MIN_VALUE);
+		mapBounds.add(p1);
+		mapBounds.add(p2);
+		m_drawingPanel.zoomToFit(mapBounds);
+		m_drawingPanel.drawing.m_imageCreated = false;
+		int scale = m_drawingPanel.calculateScale();
+		m_scale.setText(modifyScaleText(String.valueOf(scale)));
+		
+		
+  }
+  
+  /**
+  * action called when there is no concern regarding user's velocity
+  */
+  public void zoomOut()
+  {
+		m_drawingPanel.zoomToFit();
+		int scale = m_drawingPanel.calculateScale();
+		m_scale.setText(modifyScaleText(String.valueOf(scale)));
+		m_drawingPanel.drawing.m_imageCreated = false;
   }
   
 }
