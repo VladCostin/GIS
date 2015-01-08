@@ -23,19 +23,30 @@ public class TNodeContextVar extends TreeNode{
 	 */
 	InterfaceContext m_context;
 	
+	
 	/**
 	 * @param _token : specifiyng the type of the context 
 	 */
 	public TNodeContextVar(String _token)
 	{
 		m_type = ElementType.valueOf(_token);
+		
+		System.out.println("VALOAREA PRIMITA DIN XML ESTE " + m_type);
+		
+			
 	}
 	
 	@Override
 	public Object calculate() {
 	
+		if(m_type.equals(ElementType.LOC_CTXT) || m_type.equals(ElementType.LOC_CTXT)  )
+			return m_context;
+			
 		return m_context.getValue();
+		
+		
 	}
+
 
 	@Override
 	public void setVariablesParameters(ContextSituation _contextElements) {

@@ -97,13 +97,13 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 	/**
 	 * text field where the latitude is shown;
 	 */
-	JTextField textFieldLatitude;
+	JTextField m_Latitude;
 	
 	
 	/**
 	 * text field where the longitude is shown;
 	 */
-	JTextField textFieldLongitude;
+	JTextField m_Longitude;
 	
 	/**
 	 * slider where the user can select the frequency to update the map
@@ -201,19 +201,19 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 	public JPanel initPosition() {
 		
 		JPanel panel = new JPanel(new GridLayout(2,2));
-		textFieldLatitude = new JTextField();
-		textFieldLongitude = new JTextField();
+		m_Latitude = new JTextField();
+		m_Longitude = new JTextField();
 		
-		textFieldLatitude.setEditable(false);
-		textFieldLongitude.setEditable(false);
+		m_Latitude.setEditable(false);
+		m_Longitude.setEditable(false);
 		
-		textFieldLatitude.setBackground(Color.white);
-		textFieldLongitude.setBackground(Color.white);
+		m_Latitude.setBackground(Color.white);
+		m_Longitude.setBackground(Color.white);
 		
 		panel.add(new JLabel("Latitude"));
-		panel.add(textFieldLatitude);
+		panel.add(m_Latitude);
 		panel.add(new JLabel("Longitude"));
-		panel.add(textFieldLongitude);
+		panel.add(m_Longitude);
 		
 		return panel;
 		
@@ -325,8 +325,8 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 			ArrayList<Notifications> notifications =  m_subject.getNotifications(_notification);
 			LocationContext location = (LocationContext) notifications.get(0);
 			System.out.println( location.m_latitudeGrad + "  " + location.m_longitudeGrad);
-			textFieldLatitude.setText(location.m_latitudeGrad + "" + location.m_latitudeMinuten);
-			textFieldLongitude.setText(location.m_longitudeGrad + "" + location.m_longitudeMinuten);
+			m_Latitude.setText(location.m_latitudeGrad + "" + location.m_latitudeMinuten);
+			m_Longitude.setText(location.m_longitudeGrad + "" + location.m_longitudeMinuten);
 			
 			 
 		 }
@@ -366,11 +366,14 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 		TemporalContext temporalContext = new TemporalContext(m_labelTimeCurrent.getText());
 		VelocityContext velocityContext = new VelocityContext(Integer.parseInt( m_labelVelocity.getText()));
 		TemperatureContext temperatureContext = new TemperatureContext(m_labelTemperature.getText());
+		LocationContext locationContext = new LocationContext(m_Longitude.getText(), m_Latitude.getText());
+		
+		System.out.println("POZITIA USEULUI ESTE :" + m_Longitude.getText() + " " + m_Latitude.getText());
 		
 		situation.getM_contextData().put(ElementType.TIME_CTXT, temporalContext);
 		situation.getM_contextData().put(ElementType.VEL_CTXT, velocityContext);
 		situation.getM_contextData().put(ElementType.TEMP_CTXT, temperatureContext);
-		
+		situation.getM_contextData().put(ElementType.LOC_CTXT, locationContext);
 		
 		contextElements.add(situation);
 		m_subject.communicateContextSituation(contextElements);

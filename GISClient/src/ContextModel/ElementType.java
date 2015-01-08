@@ -8,7 +8,9 @@ public enum ElementType {
 	
 	VEL_CTXT,
 	
-	TIME_CTXT;
+	TIME_CTXT,
+	
+	POI_CTXT;
 	
 	
 }

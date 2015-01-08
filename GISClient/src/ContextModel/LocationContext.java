@@ -58,6 +58,17 @@ public class LocationContext extends ContextElement{
 		m_longitude = _longitude;
 	}
 	
+	/**
+	 * intitializing the location data
+	 * @param _longitude 
+	 * @param _latitude
+	 */
+	public LocationContext(String _longitude, String _latitude)
+	{
+		m_latitude = Double.parseDouble(_latitude);
+		m_longitude = Double.parseDouble(_longitude);
+	}
+	
 	
 	/**
 	 * initializing the location data

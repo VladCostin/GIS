@@ -822,6 +822,22 @@ public class  GISComponent
 		m_drawingPanel.drawing.m_imageCreated = false;
   }
   
+  /**
+  *  it will aware the user that the speed is to high
+  */
+  public void awareSpeed()
+  {
+	  
+  }
+  
+  /**
+  *  it will stop awaring the user that his speed is too high
+  */
+  public void stopAwareSpeed()
+  {
+	  
+  }
+  
 }
 
 /**

@@ -101,8 +101,8 @@ public class TNodeComparison extends TreeNode{
 	public void setVariablesParameters(ContextSituation _contextElements) {
 		
 	//	System.out.println("    Comparison:" + m_compareValue);
-		this.m_childs[0].setVariablesParameters(_contextElements);
-		this.m_childs[1].setVariablesParameters(_contextElements);
+		m_childs[0].setVariablesParameters(_contextElements);
+		m_childs[1].setVariablesParameters(_contextElements);
 		
 	}
 
