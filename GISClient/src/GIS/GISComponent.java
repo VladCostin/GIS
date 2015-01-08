@@ -694,11 +694,24 @@ public class  GISComponent
   @Override
   public void update(TypesNotification _notification) {
 	  
+	  
 	 if(m_notifications.keySet().contains(_notification))
 	 {
 		 
-		 checkMethodsToExecute( m_subject.getNotifications(TypesNotification.CONTEXT_SITUATION).get(0)); 
-		 
+		 switch(_notification)
+		 {
+		 	case CONTEXT_SITUATION: 
+		 		checkMethodsToExecute( m_subject.getNotifications(TypesNotification.CONTEXT_SITUATION).get(0));
+		 		break;
+		 	case POI_OBJECT:
+		 		System.out.println("primeste POI_OBJECT");
+		 		
+		 		
+		 		m_notifications.get(TypesNotification.POI_OBJECT).clear();
+		 		m_notifications.get(TypesNotification.POI_OBJECT).addAll(m_subject.getNotifications(TypesNotification.POI_OBJECT));
+		 		
+		 		break;
+		 }
 		 if(m_subject.getPanel() == this.m_panel)
 			 m_drawingPanel.repaint();
 		 

@@ -367,12 +367,6 @@ public class DrawingPanel extends Panel {
 
 	  		}
 	  	
-	  	if(DrawingContext.bufferedImage == null)
-	  			System.out.println("1.ESTE NULL");	
-	  	if(_g == null)
-  			System.out.println("2.ESTE NULL");	
-	  	if(this == null)
-  			System.out.println("3.ESTE NULL");	
 	  
 	  	
 	  	_g.drawImage(DrawingContext.bufferedImage, 0, 0, this);
