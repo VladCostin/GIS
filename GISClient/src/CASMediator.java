@@ -376,7 +376,6 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	@Override
 	public void communicateContextElement(ArrayList<Notifications> _contextElements) 
 	{
-		System.out.println("intra aici si aici si aici");
 
 		m_notifications.put(TypesNotification.CONTEXT_ELEMENT, _contextElements);
 		for(ComponentIf component : m_mapComponents.values())
@@ -389,8 +388,6 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	@Override
 	public void communicatePOI(ArrayList<Notifications> _POIObjects) {
 		
-		
-		System.out.println("intra aici");
 		
 		m_notifications.put(TypesNotification.POI_OBJECT, _POIObjects);
 		for(ComponentIf component : m_mapComponents.values())

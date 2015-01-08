@@ -98,7 +98,7 @@ public class GPS implements ComponentIf, Observer{
 		m_notifications.put(TypesNotification.POI_OBJECT, new ArrayList<Notifications>());
 		m_info = new NMEAInfo();
 		
-		System.out.println("a instantiat gps-ul");
+		//System.out.println("a instantiat gps-ul");
 
 	}
 
@@ -123,7 +123,7 @@ public class GPS implements ComponentIf, Observer{
 
 	@Override
 	public Panel getPanel() {
-		System.out.println("a intrat in startToDisplayData");
+	//	System.out.println("a intrat in startToDisplayData");
 		// TODO Auto-generated method stub
 		startToDisplayData();
 		startToUpdatePanel();
@@ -163,7 +163,7 @@ public class GPS implements ComponentIf, Observer{
 		parser.addObserver(this); 
 		
 		new Thread(parser).start();
-		System.out.println("a intrat in startToDisplayData");
+		//System.out.println("a intrat in startToDisplayData");
 		
 	}
 
@@ -188,7 +188,7 @@ public class GPS implements ComponentIf, Observer{
 	@Override
 	public void update(Observable o, Object _arg) {
 		
-		System.out.println("intra in observerul de aici");
+		//System.out.println("intra in observerul de aici");
 
 		if (m_info != null)
 			m_info = (NMEAInfo) _arg;
@@ -214,13 +214,13 @@ public class GPS implements ComponentIf, Observer{
 		//System.out.println(m_info.getLatitudeGrad() + " " + m_info.getLatitudeMinuten());
 		//System.out.println(m_info.getLongitudeGrad() + " " + m_info.getLongitudeMinuten());
 		
-		System.out.println("coordonate :" + latitude + " " + longitude);
+		//System.out.println("coordonate :" + latitude + " " + longitude);
 		
 		contextElements.clear();	
 		
 		contextElements.add(new  POIObject("999",ConstantsId.user, longitude,latitude ));
 		
-		System.out.println( ((POIObject) contextElements.get(0)).m_point.x + " " + ((POIObject) contextElements.get(0)).m_point.y);
+		//System.out.println( ((POIObject) contextElements.get(0)).m_point.x + " " + ((POIObject) contextElements.get(0)).m_point.y);
 		m_subject.communicatePOI(m_notifications.get(TypesNotification.POI_OBJECT));
 	}
 

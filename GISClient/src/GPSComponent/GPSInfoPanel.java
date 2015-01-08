@@ -61,7 +61,7 @@ public class GPSInfoPanel extends JPanel  {
 		
 		String str = "";
 		
-		System.out.println("intra in paintCOmponent");
+	//	System.out.println("intra in paintCOmponent");
 
 		m_fontMet = _g.getFontMetrics();
 

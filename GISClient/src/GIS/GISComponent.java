@@ -57,6 +57,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import common.ConstantsId;
 import common.Notifications;
 import ContextManagementComponent.ContextSituation;
 import GeoObject.GeoObject;
@@ -156,6 +157,12 @@ public class  GISComponent
 	 */
 	static HashMap<TypesNotification, ArrayList<Notifications>> m_notifications;
 	
+	
+	/**
+	 *  the pois shown on the map
+	 */
+	static ArrayList<Notifications> m_POIS;
+	
 	/**
 	 *  associate for each condition an action
 	 */
@@ -183,6 +190,7 @@ public class  GISComponent
 	public GISComponent(Subject _subject, HashMap<String,GeoServerInterface> _servers) {
 	  
 		m_mapOptionsServer = _servers;
+		m_POIS = new ArrayList<Notifications>();
 		m_panel = initGUI();
 		m_notifications = initNotifications();
 		m_subject = _subject;
@@ -415,7 +423,7 @@ public class  GISComponent
 				if (zittern) 
 				{ // a zoom rectangle has been defined
 					
-					System.out.println("A FACUT ZOOM " + m_startPoint.x + " " + m_startPoint.y +  " " + m_stopPoint.x + " " + m_stopPoint.y); 
+					
 					
 					Point p1 = m_drawingPanel.getMapPoint(m_startPoint);
 					Point p2 = m_drawingPanel.getMapPoint(m_stopPoint);
@@ -424,7 +432,7 @@ public class  GISComponent
 					                                    Integer.MIN_VALUE,
 					                                    Integer.MIN_VALUE);
 					
-					System.out.println(p1.x + " " + p1.y +  " " + p2.x + " " + p2.y);
+				
 					
 					mapBounds.add(p1);
 					mapBounds.add(p2);
@@ -735,14 +743,10 @@ public class  GISComponent
 		 		break;
 		 	case POI_OBJECT:
 		 		
-		 		POIObject object = (POIObject) m_subject.getNotifications(TypesNotification.POI_OBJECT).get(0);
+		 		checkIfUserData();
+		 		checkIfPOIData();
 		 		
-		 		System.out.println("userul se afla in locul " + object.m_point.x + " " + object.m_point.y);
-		 		m_user_current_location = DrawingPanel.m_matrix.multiply(object.m_point);	
-		 		
-		 		
-		 		m_notifications.get(TypesNotification.POI_OBJECT).clear();
-		 		m_notifications.get(TypesNotification.POI_OBJECT).addAll(m_subject.getNotifications(TypesNotification.POI_OBJECT));
+
 		 		
 		 		break;
 		 }
@@ -754,7 +758,37 @@ public class  GISComponent
 	
   }
   
-  /**
+  public void checkIfPOIData() {
+	  
+		POIObject object = (POIObject) m_subject.getNotifications(TypesNotification.POI_OBJECT).get(0);
+		if(object.getType() != ConstantsId.user)
+		{
+			 m_drawingPanel.drawing.m_imageCreated = false;
+		 	 m_POIS.clear();
+		 	 m_POIS.addAll(m_subject.getNotifications(TypesNotification.POI_OBJECT));
+		}
+		
+		
+		
+	
+  }
+
+
+  public void checkIfUserData() {
+		POIObject object = (POIObject) m_subject.getNotifications(TypesNotification.POI_OBJECT).get(0);
+ 		
+		if(object.getType() == ConstantsId.user)
+		{
+			m_user_current_location = DrawingPanel.m_matrix.multiply(object.m_point);	
+		}
+ 		m_notifications.get(TypesNotification.POI_OBJECT).clear();
+ 		m_notifications.get(TypesNotification.POI_OBJECT).addAll(m_subject.getNotifications(TypesNotification.POI_OBJECT));
+	
+		
+  }
+
+
+/**
  * @param _notification : the current context received from context management
    *  
    */
@@ -803,14 +837,7 @@ public class  GISComponent
   */
   public void zoomIn()
   {
-	  
-	//   System.out.println("FACE ZOOM de 2");
-	//   m_drawingPanel.zoom(2);
-	//   int scale = m_drawingPanel.calculateScale();
-	//   m_scale.setText(modifyScaleText(String.valueOf(scale)));
-	//   m_drawingPanel.drawing.m_imageCreated = false;
-	  
-	  System.out.println("intra aici");
+
 	   
 	  
 	   int x = m_user_current_location.x;

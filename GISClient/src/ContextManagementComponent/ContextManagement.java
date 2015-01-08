@@ -374,7 +374,7 @@ public class ContextManagement  implements ComponentIf, ChangeListener, ActionLi
 			 
 		 }
 		 
-		 System.out.println(m_notifications.get(_notification));
+		
 	  }
 
 	/**

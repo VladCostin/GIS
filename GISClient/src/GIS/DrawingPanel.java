@@ -342,6 +342,7 @@ public class DrawingPanel extends Panel {
 	  if (m_objects != null && m_matrix != null) 
 	  	{
 	  		ArrayList<Notifications> objects = GISComponent.m_notifications.get(TypesNotification.POI_OBJECT);
+	  		ArrayList<Notifications> pois = GISComponent.m_POIS;
 	 		Image img;
 	 		if(m_reDrawMap == true)
 	 			_g.clearRect(0, 0, getWidth(), getHeight());
@@ -355,7 +356,7 @@ public class DrawingPanel extends Panel {
 	  				DrawingContext.drawObject(obj, _g, m_matrix);		
 	  			}
 
-	  			for(Notifications object :  objects)
+	  			for(Notifications object :  pois)
 	  			{
 
 	  				
