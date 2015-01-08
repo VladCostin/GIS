@@ -39,7 +39,8 @@ public class TNodeComparison extends TreeNode{
 			String valueVar = (String) var.calculate();
 			String valueConst = (String) constant.calculate();
 			
-		//	System.out.println("valorile sunt :" + valueVar + " " + valueConst);
+			if(valueVar == null || valueConst == null)
+				return null;
 			
 			if(var.m_type == ElementType.TIME_CTXT)
 				return calculateValueString(valueVar, valueConst);
@@ -57,6 +58,9 @@ public class TNodeComparison extends TreeNode{
 			String valueVar = (String) var.calculate();
 			String valueConst = (String) constant.calculate();
 			
+			if(valueVar == null || valueConst == null)
+				return null;
+			
 			if(var.m_type == ElementType.TIME_CTXT)
 				return calculateValueString(valueVar, valueConst);
 			return calculateValueFloat(Float.valueOf(valueConst), Float.valueOf(valueVar));
@@ -70,6 +74,9 @@ public class TNodeComparison extends TreeNode{
 			
 			String valueVar = (String) var.calculate();
 			String valueConst = (String) constant.calculate();
+			
+			if(valueVar == null || valueConst == null)
+				return null;
 
 
 			return calculateValueFloat(Float.valueOf(valueVar), Float.valueOf(valueConst));

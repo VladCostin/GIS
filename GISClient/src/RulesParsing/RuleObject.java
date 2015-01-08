@@ -73,15 +73,17 @@ public class RuleObject
 	 * @param _situation : the situation given by context Management
 	 * @return : true if the situation fullfis the conditions to execute the method of the rule
 	 */
-	public boolean valid(ContextSituation _situation)
+	public Boolean valid(ContextSituation _situation)
 	{
 		
-		boolean result;
+		Boolean result;
 		HashMap<ElementType, InterfaceContext>  aa = _situation.getM_contextData();
 
 		m_condition.setVariablesParameters(_situation); 
 		result = (Boolean) m_condition.calculate();
 
+
+		
 		return result;
 
 	}

@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -30,7 +32,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import common.Notifications;
+import GIS.GISComponent;
 import GIS.GeoServerInterface;
+import GeoObject.GeoObject;
 import Mediator.ComponentIf;
 import Mediator.MediatorIF;
 import Mediator.TypesNotification;
@@ -50,8 +54,6 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	 * the list of components that collaborate using the MediatorIf
 	 */
 	HashMap<String, ComponentIf> m_mapComponents;
-	
-	
 	
 	/**
 	 * specifying the components and adding them into the list
@@ -77,12 +79,15 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 	 */
 	Panel m_currentPanel;
 	
+
+	
 	/**
 	 * initializing the window and the components of the mediator 
 	 * @param fileName : the name of the xml file where the structure is specified
 	 */
 	public CASMediator(String fileName) 
 	{
+
 		m_fileModuleNameStructure = fileName;
 		m_mapComponents = new HashMap<String, ComponentIf>();
 		m_notifications = new HashMap<TypesNotification, ArrayList<Notifications>>();
@@ -125,8 +130,11 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 			e.printStackTrace();
 		}
 		
+		
 	}
 	
+
+
 	/**
 	 * parses the data from one module
 	 * @param _node : the current node (Module) from the XML file to be parsed
@@ -282,6 +290,7 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 		m_frame.setVisible(true);
 
 		
+		loadPanel("GIS"); 
 	}
 
 	/**
@@ -292,63 +301,15 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 		JToolBar toolBar = new JToolBar("Formatting");
 		
 		
-		
-	//	toolBar.add(button1);
-		
-		
-	//	JMenuBar menuBar = new JMenuBar();
-		
 		for(String component : m_mapComponents.keySet())
 		{
 			JButton button1 = new JButton(component);
 			button1.setMargin(new Insets(20, 50, 20, 50));
 			button1.addActionListener(this); 
 			toolBar.add(button1);
-			
-			/*JMenu menu = new JMenu(component);
-			menu.addMenuListener(this);
-			menuBar.add(menu);
-			*/
+
 		}
 		
-		
-		/*
-		
-		JRadioButtonMenuItem menuItemGIS, menuItemAAL, menuItemPOI, menuItemManage,  menuItemGPS;
-		ButtonGroup group;
-		
-		menuBar = new JMenuBar();
-		menu = new JMenu("Options");
-		group = new ButtonGroup();
-		menuItemGIS = new JRadioButtonMenuItem("GIS");
-		menuItemAAL = new JRadioButtonMenuItem("AAL");
-		menuItemPOI = new JRadioButtonMenuItem("POI");
-		menuItemManage = new JRadioButtonMenuItem("Manager");
-		menuItemGPS = new JRadioButtonMenuItem("GPS");
-		
-		
-		menuItemGIS.addActionListener(this);
-		menuItemAAL.addActionListener(this);
-		menuItemPOI.addActionListener(this);
-		menuItemManage.addActionListener(this); 
-		menuItemGPS.addActionListener(this); 
-		
-		menu.add(menuItemGIS);
-		menu.add(menuItemAAL);
-		menu.add(menuItemPOI);
-		menu.add(menuItemManage);
-		menu.add(menuItemGPS);
-		
-		group.add(menuItemAAL);
-		group.add(menuItemGIS);
-		group.add(menuItemPOI);
-		group.add(menuItemManage);
-		group.add(menuItemGPS);
-		
-		menuBar.add(menu);
-		
-		*/
-		//m_frame.setJMenuBar(menuBar);
 		
 		m_currentPanel = new Panel();	
 		
@@ -387,16 +348,14 @@ public class CASMediator implements MediatorIF, ActionListener, Subject, MenuLis
 		
 		m_frame.remove(m_currentPanel);
 		m_currentPanel = m_mapComponents.get(_aliasComponent).getPanel();
+		
+		
+
+		
+		
 		m_frame.getContentPane().add(m_currentPanel, BorderLayout.CENTER);
 		m_mapComponents.get(_aliasComponent).updateNotifiactionsReceived();
-	//	m_panel.removeAll();
-		
-		//m_currentPanel = m_mapComponents.get(_aliasComponent).getPanel();
-		//m_currentPanel.validate();
-		//m_currentPanel.repaint();
-		
-		
-	//	m_frame.setContentPane(m_mapComponents.get(_aliasComponent).getPanel(), BorderLayout.CENTER);
+
 		
 		m_frame.validate();
 		m_frame.repaint();

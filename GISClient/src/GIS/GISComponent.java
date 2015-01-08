@@ -171,6 +171,10 @@ public class  GISComponent
 	 * show the awareness dialog
 	 */
 	AwarenessDialog m_dialog;
+	
+	boolean m_firstLoad;
+	
+	 CheckboxGroup cg1;
 
 
 	/**
@@ -183,9 +187,12 @@ public class  GISComponent
 		m_notifications = initNotifications();
 		m_subject = _subject;
 		m_GISrules = initConditionsActions();
-
+		m_firstLoad = true;
 		m_showDangerMessage = false;
 		new CoreData();
+		
+		
+
 		
 	}
   
@@ -300,7 +307,7 @@ public class  GISComponent
   public Panel initOptionsServer() {
 	
 	  Panel options = new Panel(new FlowLayout());
-	  CheckboxGroup cg1 = new CheckboxGroup ();     
+	  cg1 = new CheckboxGroup ();     
 	  
 	  for(String server : m_mapOptionsServer.keySet())
 	  {
@@ -693,7 +700,7 @@ public class  GISComponent
 		
 	  }
 	  else
-      m_currentInterface = m_mapOptionsServer.get(e.getItem());
+		  m_currentInterface = m_mapOptionsServer.get(e.getItem());
 
 	  
   }
@@ -754,13 +761,16 @@ public class  GISComponent
    */
   public void checkMethodsToExecute(Notifications _notification) {
 	
-	  boolean conditionChecked;
+	  Boolean conditionChecked;
 	  ContextSituation situation = (ContextSituation) _notification;
 	  
 	  
 	  for(RuleObject rule : m_GISrules)
 	  {
 		  conditionChecked = rule.valid(situation);
+		  if(conditionChecked == null)
+			  continue;
+		  
 		  if(conditionChecked != rule.isM_lastConditionState())
 		  {
 			  rule.setM_lastConditionState(conditionChecked);
@@ -862,12 +872,33 @@ public class  GISComponent
 		  m_dialog = new AwarenessDialog(m_frame);
 		  m_dialog.setVisible(true);
 	  }
+	  if(m_firstLoad == true)
+	  {
+		//    cg1.setSelectedCheckbox(cg1.);
+			m_mapOptionsServer.get("OSMServer").checkCredentials("gisuser","gisuser");
+			m_currentInterface = m_mapOptionsServer.get("OSMServer");
+			List<String> selectedItems =m_currentInterface.getTypes();
+			Vector<GeoObject> objectContainer = m_currentInterface.typeAreaQuery(selectedItems, null); 
+			GISComponent.m_drawingPanel.setGeoObjects(objectContainer); 
+				
+			m_drawingPanel.zoomToFit();
+			int scale = m_drawingPanel.calculateScale();
+			m_scale.setText(modifyScaleText(String.valueOf(scale)));
+			m_drawingPanel.repaint();
+			  
+			m_firstLoad = false;
+	  }
 	
   }
   
 }
 
 
+/**
+ * frame which appears then the user a huge velocity
+ * @author Vlad Herescu
+ *
+ */
 class AwarenessDialog extends JFrame
 {
 	public AwarenessDialog(Frame parent) 
@@ -875,6 +906,7 @@ class AwarenessDialog extends JFrame
 		// super(parent, true); 
 		 add(new Label("Slow Down, your speed is too high"));
 		 pack();
+		 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
 

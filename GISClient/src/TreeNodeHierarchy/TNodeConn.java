@@ -28,8 +28,11 @@ public class TNodeConn extends TreeNode {
 	public Object calculate() {
 		
 		
-		boolean node1Value = (Boolean) this.m_childs[0].calculate();
-		boolean node2Value = (Boolean) this.m_childs[1].calculate();
+		Boolean node1Value = (Boolean) this.m_childs[0].calculate();
+		Boolean node2Value = (Boolean) this.m_childs[1].calculate();
+		
+		if(node1Value == null || node2Value == null)
+			return null;
 		
 		switch(m_ConnectionValue)
 		{

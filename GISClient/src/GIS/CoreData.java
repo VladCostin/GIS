@@ -67,6 +67,7 @@ public class CoreData {
 		m_hashMapTypePOI_NameMarker.put(ConstantsId.pharmacy, "img/hospital.png");
 		m_hashMapTypePOI_NameMarker.put(ConstantsId.post_office, "img/post.png");
 		m_hashMapTypePOI_NameMarker.put(ConstantsId.police, "img/police.png");
+		m_hashMapTypePOI_NameMarker.put(ConstantsId.user, "img/police.png");
 		
 	}
 
