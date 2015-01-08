@@ -11,11 +11,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import common.ConstantsId;
 import common.Notifications;
 import GISCalculation.GeoDoublePoint;
 import GISCalculation.GeoTransformationMatrix;
 import GeoObject.GeoObject;
 import GeoObject.POIObject;
+import Mediator.ComponentIf;
 import Mediator.TypesNotification;
 
 
@@ -350,19 +352,23 @@ public class DrawingPanel extends Panel {
 	  			for (int i = 0 ; i < m_objects.size() ; i++) 
 	  			{
 	  				GeoObject obj = (GeoObject)m_objects.elementAt(i);
-	  				DrawingContext.drawObject(obj, _g, m_matrix);
+	  				DrawingContext.drawObject(obj, _g, m_matrix);		
 	  			}
 
 	  			for(Notifications object :  objects)
 	  			{
+
+	  				
 	  				POIObject poiObject = (POIObject) object;
+	  				System.out.println("ID-ul ESTE :" + poiObject.getType());
+					//if(poiObject.getType() ==  ConstantsId.user)
+					//	continue;
+	  				
 	  				img = getImage(poiObject);
 	  	
 	  				poiObject.setM_image(img); 
 	  				DrawingContext.drawObject(poiObject,_g,m_matrix);
 	  			}
-	  			
-	  			System.out.println("A desenat totul, ar trebui sa fie ok");
 	  			
 
 	  		}
@@ -375,8 +381,14 @@ public class DrawingPanel extends Panel {
 	  	
 	 	for(Notifications object :  objects)
 		{
+	 			
+	 		
 				POIObject poiObject = (POIObject) object;
-				img = getImage(poiObject);
+				if(poiObject.getType() !=  ConstantsId.user)
+					continue;
+				
+				
+			//	img = getImage(poiObject);
 	
 				System.out.println("INTRA IN FORUL ASTA" + " " + poiObject.m_point.x + " " + poiObject.m_point.y);
 			//	poiObject.setM_image(img); 
@@ -385,6 +397,9 @@ public class DrawingPanel extends Panel {
 				Point pt = m_matrix.multiply(poiObject.m_point);	
 				_g.setColor(Color.red);
 				_g.fillOval(pt.x, pt.y, 15, 15);
+			//	DrawingContext.drawObject(poiObject,_g,m_matrix);
+				
+  			//	poiObject.paint(_g, m_matrix);
 		}
 	  	
 	  	}

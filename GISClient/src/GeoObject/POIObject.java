@@ -103,6 +103,8 @@ public class POIObject extends GeoObject {
     if (_g != null && _matrix != null) 
     {
     	Point pt = _matrix.multiply(m_point);	
+    	
+    	System.out.println("INTRA AICI, il picteaza");
     	_g.drawImage(m_image, pt.x, pt.y, new Panel());
     }
   }

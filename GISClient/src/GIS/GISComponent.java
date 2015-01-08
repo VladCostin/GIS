@@ -741,7 +741,6 @@ public class  GISComponent
 		 		m_user_current_location = DrawingPanel.m_matrix.multiply(object.m_point);	
 		 		
 		 		
-		 		
 		 		m_notifications.get(TypesNotification.POI_OBJECT).clear();
 		 		m_notifications.get(TypesNotification.POI_OBJECT).addAll(m_subject.getNotifications(TypesNotification.POI_OBJECT));
 		 		
